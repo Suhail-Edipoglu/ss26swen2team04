@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.3"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\SWEN2TourPlanner.Bll\SWEN2TourPlanner.Bll.csproj" />
+      <ProjectReference Include="..\SWEN2TourPlanner.Models\SWEN2TourPlanner.Models.csproj" />
+    </ItemGroup>
+
+</Project>

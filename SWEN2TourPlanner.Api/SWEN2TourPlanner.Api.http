@@ -1,0 +1,6 @@
+@SWEN2TourPlanner.Api_HostAddress = http://localhost:5282
+
+GET {{SWEN2TourPlanner.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

@@ -1,0 +1,40 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWEN2TourPlanner.Api", "SWEN2TourPlanner.Api\SWEN2TourPlanner.Api.csproj", "{97606BEE-2F1A-4AA2-9DFC-06F26AE7E9DE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWEN2TourPlanner.Models", "SWEN2TourPlanner.Models\SWEN2TourPlanner.Models.csproj", "{A98FB8EC-82F1-418D-8270-ADCF6F92BC04}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWEN2TourPlanner.Bll", "SWEN2TourPlanner.Bll\SWEN2TourPlanner.Bll.csproj", "{7BF20FDB-BC9B-49B3-99C2-2C4970331652}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWEN2TourPlanner.Dal", "SWEN2TourPlanner.Dal\SWEN2TourPlanner.Dal.csproj", "{6E625FFF-101D-4A9F-93A0-3997A913DC0E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClassLibrary1", "ClassLibrary1\ClassLibrary1.csproj", "{7D1F9530-4EF0-422A-ADD3-27B47A7BDF6B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{97606BEE-2F1A-4AA2-9DFC-06F26AE7E9DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{97606BEE-2F1A-4AA2-9DFC-06F26AE7E9DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{97606BEE-2F1A-4AA2-9DFC-06F26AE7E9DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{97606BEE-2F1A-4AA2-9DFC-06F26AE7E9DE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A98FB8EC-82F1-418D-8270-ADCF6F92BC04}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A98FB8EC-82F1-418D-8270-ADCF6F92BC04}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A98FB8EC-82F1-418D-8270-ADCF6F92BC04}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A98FB8EC-82F1-418D-8270-ADCF6F92BC04}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7BF20FDB-BC9B-49B3-99C2-2C4970331652}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7BF20FDB-BC9B-49B3-99C2-2C4970331652}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7BF20FDB-BC9B-49B3-99C2-2C4970331652}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7BF20FDB-BC9B-49B3-99C2-2C4970331652}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6E625FFF-101D-4A9F-93A0-3997A913DC0E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E625FFF-101D-4A9F-93A0-3997A913DC0E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E625FFF-101D-4A9F-93A0-3997A913DC0E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E625FFF-101D-4A9F-93A0-3997A913DC0E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7D1F9530-4EF0-422A-ADD3-27B47A7BDF6B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7D1F9530-4EF0-422A-ADD3-27B47A7BDF6B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7D1F9530-4EF0-422A-ADD3-27B47A7BDF6B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7D1F9530-4EF0-422A-ADD3-27B47A7BDF6B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

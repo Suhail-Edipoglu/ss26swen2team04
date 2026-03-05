@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\SWEN2TourPlanner.Dal\SWEN2TourPlanner.Dal.csproj" />
+      <ProjectReference Include="..\SWEN2TourPlanner.Models\SWEN2TourPlanner.Models.csproj" />
+    </ItemGroup>
+
+</Project>
