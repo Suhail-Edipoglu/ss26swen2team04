@@ -1,0 +1,15 @@
+body {
+    margin: 0;
+}
+.float {
+    background-color: white;
+    border-radius: .5rem;
+    box-shadow: 0 0 .5rem rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-content: center;
+    align-items: center;
+    justify-content: center;
+}
+.float > * {
+    padding: .5rem;
+}
