@@ -1,11 +1,11 @@
 ﻿@inject INavMenuViewModel NavMenuViewModel
 @using SWEN2TourPlanner.Frontend.ViewModels.Interfaces
-<div class="float navmenu">
-    <span class="navicon"></span>
+<div class="float nav-container">
+    <div class="navicon navbar-item"></div>
     @if (NavMenuViewModel.GetCurrentTour() is not null) {
-        <p>@NavMenuViewModel.GetCurrentTour()</p>
+        <div class="navbar-item"><p>@NavMenuViewModel.GetCurrentTour()</p></div>
     }
     @if (NavMenuViewModel.GetCurrentTourLog() is not null) {
-        <p>@NavMenuViewModel.GetCurrentTourLog()</p>
+        <div class="navbar-item"><p>@NavMenuViewModel.GetCurrentTourLog()</p></div>
     }
 </div>

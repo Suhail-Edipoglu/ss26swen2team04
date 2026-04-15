@@ -1,15 +1,28 @@
 body {
     margin: 0;
+    font-size: 1.5em;
 }
 .float {
     background-color: white;
-    border-radius: .5rem;
-    box-shadow: 0 0 .5rem rgba(0, 0, 0, 0.5);
-    display: flex;
+    border-radius: .5em;
+    box-shadow: 0 0 .5em rgba(0, 0, 0, 0.5);
+    display: grid;
+    align-content: stretch;
+    align-items: stretch;
+    justify-content: stretch;
+    justify-items: stretch;
+    height: 2em;    
+}
+.float > * {
+    padding: 0 .5em;
+    margin: 0;
+    display: grid;
     align-content: center;
     align-items: center;
     justify-content: center;
+    justify-items: center;
+
 }
-.float > * {
-    padding: .5rem;
+p {
+    margin: 0;
 }

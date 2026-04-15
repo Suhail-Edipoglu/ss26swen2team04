@@ -1,7 +1,20 @@
-div {
+.nav-container {
     position: absolute;
-    top: .5rem;
-    left: .5rem;
-    font-size: 1rem;
-    height: 2rem;
+    top: .5em;
+    left: .5em;
+    font-size: 1em;
+    grid-template-columns: auto auto auto;
+
+}
+.navicon {
+    width: 2em;
+    height: 2em;
+    padding: 0;
+}
+.navbar-item {
+    border-right: 1px solid black;
+    border-radius: .5em;
+}
+.navbar-item:last-child {
+    border-right: none;
 }
