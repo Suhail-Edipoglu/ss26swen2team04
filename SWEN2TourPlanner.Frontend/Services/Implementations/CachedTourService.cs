@@ -33,17 +33,26 @@ public class CachedTourService : ITourService
     
     public List<Tour>? GetTours(int userId)
     {
-        return _tours;
+        return _tours?.Where(t => t.UserId == userId).ToList();
     }
 
     public void CreateTour(Tour tour)
     {
+        tour.Id = _tours?.Count > 0 ? _tours.Max(t => t.Id) + 1 : 0;
+        
         _tours?.Add(tour);
     }
 
     public void UpdateTour(Tour tour)
     {
-        _tours?.Where(t => t.Id == tour.Id).ToList().ForEach(t => t = tour);
+        if (_tours == null) return;
+        
+        var index = _tours.FindIndex(t => t.Id == tour.Id);
+
+        if (index >= 0)
+        { 
+            _tours[index] = tour;
+        }
     }
 
     public void DeleteTour(int tourId)

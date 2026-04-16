@@ -29,12 +29,21 @@ public class CachedLogService : ILogService
 
     public void CreateLog(Log log)
     {
+        log.Id = _logs?.Count > 0 ? _logs.Max(l => l.Id) + 1 : 0;
+        
         _logs?.Add(log);
     }
 
     public void UpdateLog(Log log)
     {
-        _logs?.Where(l => l.Id == log.Id).ToList().ForEach(l => l = log);
+        if (_logs == null) return;
+        
+        var index = _logs.FindIndex(l => l.Id == log.Id);
+        
+        if (index >= 0) 
+        {
+            _logs[index] = log;
+        }
     }
 
     public void DeleteLog(int logId)
