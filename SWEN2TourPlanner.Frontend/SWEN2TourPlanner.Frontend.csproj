@@ -11,4 +11,8 @@
     <None Include="wwwroot\style.css" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Blazing.Mvvm" Version="3.2.1" />
+  </ItemGroup>
+
 </Project>

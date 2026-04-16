@@ -1,11 +1,13 @@
-﻿@inject INavMenuViewModel NavMenuViewModel
+﻿@inject INavMenuViewModel ViewModel
 @using SWEN2TourPlanner.Frontend.ViewModels.Interfaces
 <div class="float nav-container">
-    <div class="navicon navbar-item"></div>
-    @if (NavMenuViewModel.GetCurrentTour() is not null) {
-        <div class="navbar-item"><p>@NavMenuViewModel.GetCurrentTour()</p></div>
+    <div class="navbar-item" style="padding: 0;" @onclick="() => ViewModel.ToggleDetailsCommand.Execute(null)">
+        <span class="navicon @(ViewModel.IsMenuExpanded ? "toggle" : "")"></span>
+    </div>
+    @if (ViewModel.CurrentTour is not null) {
+        <div class="navbar-item"><p>@ViewModel.CurrentTour</p></div>
     }
-    @if (NavMenuViewModel.GetCurrentTourLog() is not null) {
-        <div class="navbar-item"><p>@NavMenuViewModel.GetCurrentTourLog()</p></div>
+    @if (ViewModel.CurrentTourLog is not null) {
+        <div class="navbar-item"><p>@ViewModel.CurrentTourLog</p></div>
     }
 </div>
