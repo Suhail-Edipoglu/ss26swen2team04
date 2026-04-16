@@ -1,5 +1,40 @@
-<h3>CurrentTour</h3>
+@using SWEN2TourPlanner.Frontend.ViewModels.Interfaces
+@inject ICurrentTourViewModel ViewModel
 
-@code {
-    
-}
+<form class="float container">
+    <div class="external-form-element" style="grid-area: img;">
+        <img alt="descriptive image of the tour"/>
+    </div>
+    <div class="form-element" style="grid-area: name;">
+        <input type="text" name="tourname" id="tourname"/>
+        <label for="tourname">Name of the Tour</label>
+    </div>
+    <div class="form-element" style="grid-area: description;">
+        <input type="text" name="tourdescription" id="tourdescription"/>
+        <label for="tourdescription">Short Description of the Tour</label>
+    </div>
+    <div class="form-element" style="grid-area: from;">
+        <input type="text" name="tourfrom" id="tourfrom"/>
+        <label for="tourfrom">From</label>
+    </div>
+    <div class="form-element" style="grid-area: to;">
+        <input type="text" name="tourto" id="tourto"/>
+        <label for="tourto">To</label>
+    </div>
+    <div class="form-element" style="grid-area: type;">
+        <input type="text" name="tourtype" id="tourtype"/>
+        <label for="tourtype">Type of Transportation</label>
+    </div>
+    <div class="computed-form-element" style="grid-area: distance;">
+        <p>@ViewModel.Distance</p>
+    </div>
+    <div class="computed-form-element" style="grid-area: time;">
+        <p>@ViewModel.Time</p>
+    </div>
+    <div class="button-form-element" style="grid-area: submit;">
+        <btn>Edit</btn>
+    </div>
+    <div class="external-form-element" style="grid-area: logs;">
+        <!-- TODO: Add List of Tour Logs -->
+    </div>
+</form>

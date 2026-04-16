@@ -1,0 +1,32 @@
+.container  {
+    display: grid;
+    grid-template-columns: 2fr 2fr 2fr 2fr 1fr;
+    grid-template-rows: 3fr 1.5fr 1.5fr 1.5fr 1.5fr auto;
+    grid-template-areas:
+        "img img img img img"
+        "name name name name name"
+        "description description description description description" 
+        "from from to to type"
+        "distance time . submit submit"
+        "logs logs logs logs logs";
+    position: absolute;
+    top: 4.5em;
+    left: .5em;
+    font-size: 1rem;
+    max-width: 40em;
+    height: auto;
+}
+.form-element {
+    display: flex;
+    flex-direction: column;
+    justify-content: stretch;
+    align-items: stretch;
+    padding: 1em;
+}
+.form-element > label {
+    font-size: .5em;
+}
+.external-form-element {
+    width: 100%;
+    padding: 0;
+}
