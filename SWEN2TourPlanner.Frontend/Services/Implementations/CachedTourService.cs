@@ -35,6 +35,11 @@ public class CachedTourService : ITourService
     {
         return _tours?.Where(t => t.UserId == userId).ToList();
     }
+    
+    public Tour? GetTourById(int tourId)
+    {
+        return _tours?.FirstOrDefault(t => t.Id == tourId);
+    }
 
     public void CreateTour(Tour tour)
     {
