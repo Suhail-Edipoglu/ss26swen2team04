@@ -22,7 +22,7 @@ public class CachedLogService : ILogService
         };
     }
     
-    public List<Log>? GetLogs(int tourId)
+    public List<Log>? GetLogs(int? tourId)
     {
         return _logs?.Where(l => l.TourId == tourId).ToList();
     }
@@ -46,7 +46,7 @@ public class CachedLogService : ILogService
         }
     }
 
-    public void DeleteLog(int logId)
+    public void DeleteLog(int? logId)
     {
         _logs?.RemoveAll(l => l.Id == logId);
     }
