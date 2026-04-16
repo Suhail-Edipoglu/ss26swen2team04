@@ -9,6 +9,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWEN2TourPlanner.Dal", "SWEN2TourPlanner.Dal\SWEN2TourPlanner.Dal.csproj", "{6E625FFF-101D-4A9F-93A0-3997A913DC0E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWEN2TourPlanner.Frontend", "SWEN2TourPlanner.Frontend\SWEN2TourPlanner.Frontend.csproj", "{431F7CBB-D2C6-4EFF-97B9-F5E37056E021}"
+	ProjectSection(ProjectDependencies) = postProject
+		{A98FB8EC-82F1-418D-8270-ADCF6F92BC04} = {A98FB8EC-82F1-418D-8270-ADCF6F92BC04}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

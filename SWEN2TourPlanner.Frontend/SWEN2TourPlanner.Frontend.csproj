@@ -10,6 +10,10 @@
   <ItemGroup>
     <None Include="wwwroot\style.css" />
   </ItemGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\SWEN2TourPlanner.Models\SWEN2TourPlanner.Models.csproj"/>
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Blazing.Mvvm" Version="3.2.1" />
