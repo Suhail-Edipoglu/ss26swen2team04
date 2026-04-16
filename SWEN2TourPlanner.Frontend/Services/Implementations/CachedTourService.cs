@@ -36,7 +36,7 @@ public class CachedTourService : ITourService
         return _tours?.Where(t => t.UserId == userId).ToList();
     }
     
-    public Tour? GetTourById(int? tourId)
+    public Tour? GetTourById(int tourId)
     {
         return _tours?.FirstOrDefault(t => t.Id == tourId);
     }
@@ -60,7 +60,7 @@ public class CachedTourService : ITourService
         }
     }
 
-    public void DeleteTour(int? tourId)
+    public void DeleteTour(int tourId)
     {
         _tours?.RemoveAll(t => t.Id == tourId);
     }
