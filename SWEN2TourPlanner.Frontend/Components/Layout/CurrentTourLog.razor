@@ -1,5 +1,8 @@
 @using SWEN2TourPlanner.Frontend.ViewModels.Interfaces
+@using SWEN2TourPlanner.Models
 @inject ICurrentTourLogViewModel ViewModel
+@inject INavMenuViewModel NavViewModel
+@inject NavigationManager NavigationManager
 
 <EditForm Model="ViewModel.CurrentTourLog"
           FormName="CurrentTourLogForm"
@@ -50,11 +53,20 @@
         if (Id is { } id)
         {
             ViewModel.LoadTourLogById(id);
+        }         else
+        {
+            ViewModel.CurrentTourLog = new Log();
+        }
+
+        if (Id is null && NavViewModel.CurrentTourId is null)
+        {
+            NavigationManager.NavigateTo("/");
         }
     }
 
     private void HandleValidSubmit() {
         ViewModel.CurrentTourLog.Id = Id;
+        ViewModel.CurrentTourLog.TourId = NavViewModel.CurrentTourId!.Value ;
         ViewModel.SaveCommand.Execute(null);
     }
 }

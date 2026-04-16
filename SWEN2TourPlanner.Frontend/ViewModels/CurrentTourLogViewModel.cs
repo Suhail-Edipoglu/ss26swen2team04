@@ -15,11 +15,16 @@ public sealed partial class CurrentTourLogViewModel : ViewModelBase, ICurrentTou
 
     private readonly ILogService _logService;
     private readonly NavigationManager _navigationManager;
+    private readonly INavMenuViewModel _navMenuViewModel;
 
-    public CurrentTourLogViewModel(ILogService logService, NavigationManager navigationManager)
+    public CurrentTourLogViewModel(
+        ILogService logService,
+        NavigationManager navigationManager,
+        INavMenuViewModel navMenuViewModel)
     {
         _logService = logService;
         _navigationManager = navigationManager;
+        _navMenuViewModel = navMenuViewModel;
     }
 
     [RelayCommand]
@@ -27,7 +32,6 @@ public sealed partial class CurrentTourLogViewModel : ViewModelBase, ICurrentTou
     {
         if (CurrentTourLog.Id is null)
         {
-            
             int? id = _logService.CreateLog(CurrentTourLog);
             if (id is not null)
             {
@@ -46,11 +50,12 @@ public sealed partial class CurrentTourLogViewModel : ViewModelBase, ICurrentTou
         if (loadedLog is not null)
         {
             CurrentTourLog = loadedLog;
+            _navMenuViewModel.CurrentTourId = CurrentTourLog.TourId;
         }
         else
         {
             _navigationManager.NavigateTo("/");
-        }   
+        }
         return CurrentTourLog;
 
     }

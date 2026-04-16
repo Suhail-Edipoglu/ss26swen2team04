@@ -52,7 +52,22 @@
         }
     </div>
     <div class="external-form-element" style="grid-area: logs;">
-        <!-- TODO: Add List of Tour Logs -->
+        @if (ViewModel.CurrentTour.Logs is null || ViewModel.CurrentTour.Logs.Count == 0)
+        {
+            <p>No logs yet</p>
+        }
+        else
+        {
+            @foreach (var log in ViewModel.CurrentTour.Logs)
+            {
+                <a class="logs" href="./log?id=@log.Id">
+                    <p>@log.Time.ToString("dd.MM.yyyy hh.mm")</p>
+                    @{ var length = Math.Min(log.Comment.Length, 40); }
+                    <p>@log.Comment.Substring(0, length)</p>
+                </a>
+            }
+
+        }
     </div>
 </EditForm>
 
@@ -62,6 +77,10 @@
     protected override void OnParametersSet() {
         if (Id is { } id) {
             ViewModel.LoadTourById(id);
+        }
+        else
+        {
+            ViewModel.CurrentTour = new Tour();
         }
     }
     

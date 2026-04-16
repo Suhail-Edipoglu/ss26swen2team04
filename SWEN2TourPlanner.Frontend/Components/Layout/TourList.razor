@@ -1,0 +1,34 @@
+@using SWEN2TourPlanner.Frontend.ViewModels.Interfaces
+@inject ITourListViewModel ViewModel
+
+<div class="float container">
+    @if (ViewModel.Tours is null)
+    {
+        <p>Loading...</p>
+    } else if (ViewModel.Tours.Count == 0)
+    {
+        <p>No tours yet</p>
+    }
+    else
+    {
+        @foreach (var tour in ViewModel.Tours)
+        {
+            <a class="tourlist" href="./tour?id=@tour.Id">
+                <p>@tour.Name</p>
+                <p>@tour.Description</p>
+                <p>@tour.From -> @tour.To</p>
+                <p>@tour.EstimatedTime.ToString("HH:mm") @tour.Distance km @tour.TransportType</p>
+            </a>
+        }
+    }
+</div>
+
+@code {
+
+    protected override void OnParametersSet()
+    {
+        ViewModel.LoadTours();
+    }
+
+
+}

@@ -18,7 +18,7 @@ public class CachedLogService : ILogService
                 4.0f, 1),
             new Log(2, new DateTime(2026, 4, 16, 20, 0, 0), 
                 "Das ist ein Kommentar", 1.7f, 305, new TimeOnly(3, 0), 
-                4.8f, 2)
+                4.8f, 1)
         };
     }
     

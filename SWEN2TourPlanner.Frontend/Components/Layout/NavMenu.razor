@@ -9,10 +9,11 @@
         <span class="navicon @(ViewModel.IsMenuExpanded ? "toggle" : "")"></span>
     </div>
     <div class="navbar-item" @onclick='() => NavigationManager.NavigateTo("/")'><p>My Tours</p></div>
-    @if (State >= UiState.Tour) {
-        <div class="navbar-item" @onclick='() => NavigationManager.NavigateTo("/tour")'><p>@ViewModel.CurrentTour</p></div>
+    @if (State == UiState.Tour) {
+        <div class="navbar-item"><p>@ViewModel.CurrentTour</p></div>
     }
-    @if (State >= UiState.TourLog) {
+    @if (State == UiState.TourLog) {
+        <div class="navbar-item" @onclick='() => NavigationManager.NavigateTo("/tour?id=" + ViewModel.CurrentTourId)'><p>@ViewModel.CurrentTour</p></div>
         <div class="navbar-item"><p>@ViewModel.CurrentTourLog</p></div>
     }
 </div>

@@ -8,12 +8,18 @@ namespace SWEN2TourPlanner.Frontend.ViewModels;
 [ViewModelDefinition(Lifetime = ServiceLifetime.Singleton)]
 public sealed partial class NavMenuViewModel : ViewModelBase, INavMenuViewModel
 {
-    [ObservableProperty] private string currentTour = "CurrentTourName";
-    [ObservableProperty] private string currentTourLog = "SelectedTourLogName";
-    [ObservableProperty] private bool isMenuExpanded = true;
+    [ObservableProperty] private string _currentTour = "CurrentTourName";
+    [ObservableProperty] private string _currentTourLog = "SelectedTourLogName";
+    [ObservableProperty] private bool _isMenuExpanded = true;
+    [ObservableProperty] private int? _currentTourId;
+    
         
     [RelayCommand]
     private void ToggleDetails()
         => IsMenuExpanded = !IsMenuExpanded;
-    
+
+    public void UpdateCurrentTourId(int? id)
+    {
+        CurrentTourId = id;
+    } 
 }

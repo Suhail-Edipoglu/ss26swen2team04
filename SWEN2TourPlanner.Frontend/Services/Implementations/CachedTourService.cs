@@ -8,9 +8,9 @@ public class CachedTourService : ITourService
     
     private List<Tour>? _tours;
 
-    public CachedTourService()
+    public CachedTourService(ILogService logService)
     {
-        _logService = new CachedLogService();
+        _logService = logService;
         _tours = new List<Tour>()
         {
             new Tour(0, "TestTour1", "Das ist die erste Test Tour", 
