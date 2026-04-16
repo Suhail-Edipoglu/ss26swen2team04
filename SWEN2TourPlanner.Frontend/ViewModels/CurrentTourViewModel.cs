@@ -10,7 +10,6 @@ namespace SWEN2TourPlanner.Frontend.ViewModels;
 [ViewModelDefinition(Lifetime = ServiceLifetime.Singleton)]
 public sealed partial class CurrentTourViewModel : ViewModelBase, ICurrentTourViewModel
 {
-    [ObservableProperty] private bool _editMode = true;
     [ObservableProperty] private Tour _currentTour = new();
 
     private readonly ITourService _tourService;
@@ -23,7 +22,7 @@ public sealed partial class CurrentTourViewModel : ViewModelBase, ICurrentTourVi
     [RelayCommand]
     private void Save()
     {
-        if (_tourService.GetTourById(CurrentTour.Id) is null)
+        if (CurrentTour.Id is null)
         {
             _tourService.CreateTour(CurrentTour);
         }
@@ -31,8 +30,6 @@ public sealed partial class CurrentTourViewModel : ViewModelBase, ICurrentTourVi
         {
             _tourService.UpdateTour(CurrentTour);
         }
-
-        EditMode = false;
     }
 
     public Tour LoadTourById(int id)
@@ -40,10 +37,13 @@ public sealed partial class CurrentTourViewModel : ViewModelBase, ICurrentTourVi
         var loadedTour = _tourService.GetTourById(id);
         if (loadedTour is not null)
         {
-            CurrentTour = loadedTour;
-            EditMode = false;
+            CurrentTour = loadedTour; 
         }
-
         return CurrentTour;
+    }
+
+    public void Delete(int id)
+    {
+        _tourService.DeleteTour(id);
     }
 }

@@ -27,8 +27,16 @@ body {
 p {
     margin: 0;
 }
-.tour-container  {
+.tour-container, .log-container  {
     display: grid;
+    position: absolute;
+    top: 4.5em;
+    left: .5em;
+    font-size: 1rem;
+    max-width: 40em;
+    height: auto;
+}
+.tour-container {
     grid-template-columns: 4fr 4fr 4fr 4fr 10%;
     grid-template-rows: 5fr 1.5fr 1.5fr 1.5fr 1.5fr auto;
     grid-template-areas:
@@ -38,10 +46,13 @@ p {
         "from from to to type"
         "distance time . submit submit"
         "logs logs logs logs logs";
-    position: absolute;
-    top: 4.5em;
-    left: .5em;
-    font-size: 1rem;
-    max-width: 40em;
-    height: auto;
+}
+.log-container {
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1.5fr 1.5fr 1.5fr;
+    grid-template-areas:
+        "logtimestamp logtimestamp logtimestamp"
+        "lograting logcomment logcomment"
+        "logdifficulty logdistance logtime"
+        ". submit submit";
 }

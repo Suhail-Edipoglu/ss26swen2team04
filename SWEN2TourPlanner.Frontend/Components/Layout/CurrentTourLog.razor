@@ -1,5 +1,63 @@
-<h3>CurrentTourLog</h3>
+@using SWEN2TourPlanner.Frontend.ViewModels.Interfaces
+@using Microsoft.AspNetCore.WebUtilities
+@using SWEN2TourPlanner.Models
+@inject NavigationManager NavigationManager
+@inject ICurrentTourLogViewModel ViewModel
+
+<EditForm Model="ViewModel.CurrentTourLog"
+          FormName="CurrentTourLogForm"
+          OnValidSubmit="HandleValidSubmit"
+          class="float log-container">
+    <div class="form-element" style="grid-area: logtimestamp;">
+        <InputDate name="logtimestamp" id="logtimestamp" @bind-Value="ViewModel.CurrentTourLog.Time" />
+        <label for="logtimestamp">Date</label>
+    </div>
+    <div class="form-element" style="grid-area: logcomment;">
+        <InputText name="logcomment" id="logcomment" @bind-Value="ViewModel.CurrentTourLog.Comment" />
+        <label for="logcomment">Comment</label>
+    </div>
+    <div class="form-element" style="grid-area: logdifficulty;">
+        <InputNumber name="logdifficulty" id="logdifficulty" @bind-Value="ViewModel.CurrentTourLog.Difficulty" />
+        <label for="logdifficulty">Difficulty</label>
+    </div>
+    <div class="form-element" style="grid-area: logdistance;">
+        <InputNumber name="logdistance" id="logdistance" @bind-Value="ViewModel.CurrentTourLog.TotalDistance" />
+        <label for="logdistance">Distance</label>
+    </div>
+    <div class="form-element" style="grid-area: logtime;">
+        <InputDate name="logtime" id="logtime" @bind-Value="ViewModel.CurrentTourLog.TotalTime" />
+        <label for="logtime">Total Time</label>
+    </div>
+    <div class="form-element" style="grid-area: lograting;">
+        <InputNumber name="lograting" id="lograting" @bind-Value="ViewModel.CurrentTourLog.Rating" />
+        <label for="lograting">Rating</label>
+    </div>
+    <div class="button-form-element" style="grid-area: submit;">
+        @if (Id is null)
+        {
+            <button type="submit">Create</button>
+        }
+        else
+        {
+            <button type="submit">Update</button>
+            <button type="button">Delete</button>
+        }
+    </div>
+</EditForm>
 
 @code {
+    [Parameter] public int? Id { get; set; }
     
+    protected override void OnParametersSet() {
+        if (Id == null) {
+            // TODO: Create new Log
+        } else {
+            ViewModel.LoadTourLogById(Id.Value);
+        }
+    }
+    
+    private void HandleValidSubmit() {
+        ViewModel.CurrentTourLog.Id = Id.Value;
+        ViewModel.SaveCommand.Execute(null);
+    }
 }

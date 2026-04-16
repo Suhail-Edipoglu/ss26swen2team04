@@ -19,15 +19,12 @@ builder.Services.AddSingleton<INavMenuViewModel, NavMenuViewModel>();
 
 // Wire Models
 builder.Services.AddSingleton<ITourService, CachedTourService>();
+builder.Services.AddSingleton<ILogService, CachedLogService>();
 
 builder.Services.AddMvvm(options =>
 { 
     options.HostingModelType = BlazorHostingModelType.Server;
 });
-
-// Wire Models (Not yet Implemented)
-// builder.Services.AddSingleton<IMapService, MapService>();
-// builder.Services.AddSingleton<IApiService, ApiService>();
 
 var app = builder.Build();
 
