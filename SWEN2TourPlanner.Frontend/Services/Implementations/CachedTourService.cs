@@ -41,11 +41,13 @@ public class CachedTourService : ITourService
         return _tours?.FirstOrDefault(t => t.Id == tourId);
     }
 
-    public void CreateTour(Tour tour)
+    public int? CreateTour(Tour tour)
     {
         tour.Id = _tours?.Count > 0 ? _tours.Max(t => t.Id) + 1 : 0;
         
         _tours?.Add(tour);
+        
+        return tour.Id;
     }
 
     public void UpdateTour(Tour tour)

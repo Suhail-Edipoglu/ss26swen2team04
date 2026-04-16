@@ -32,11 +32,13 @@ public class CachedLogService : ILogService
         return _logs?.FirstOrDefault(t => t.Id == logId);
     }
 
-    public void CreateLog(Log log)
+    public int? CreateLog(Log log)
     {
         log.Id = _logs?.Count > 0 ? _logs.Max(l => l.Id) + 1 : 0;
         
         _logs?.Add(log);
+        
+        return log.Id;
     }
 
     public void UpdateLog(Log log)
