@@ -29,12 +29,12 @@ public class CachedLogService : ILogService
 
     public void CreateLog(Log log)
     {
-        throw new NotImplementedException();
+        _logs?.Add(log);
     }
 
     public void UpdateLog(Log log)
     {
-        throw new NotImplementedException();
+        _logs?.Where(l => l.Id == log.Id).ToList().ForEach(l => l = log);
     }
 
     public void DeleteLog(int logId)
