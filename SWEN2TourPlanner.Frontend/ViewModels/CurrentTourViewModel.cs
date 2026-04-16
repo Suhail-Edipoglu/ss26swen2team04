@@ -27,7 +27,11 @@ public sealed partial class CurrentTourViewModel : ViewModelBase, ICurrentTourVi
     {
         if (CurrentTour.Id is null)
         {
-            _tourService.CreateTour(CurrentTour);
+            int? id = _tourService.CreateTour(CurrentTour);
+            if (id is not null)
+            {
+                _navigationManager.NavigateTo("/tour?id=" + id);
+            }
         }
         else
         {

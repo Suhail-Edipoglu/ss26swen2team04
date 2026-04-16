@@ -27,7 +27,12 @@ public sealed partial class CurrentTourLogViewModel : ViewModelBase, ICurrentTou
     {
         if (CurrentTourLog.Id is null)
         {
-            _logService.CreateLog(CurrentTourLog);
+            
+            int? id = _logService.CreateLog(CurrentTourLog);
+            if (id is not null)
+            {
+                _navigationManager.NavigateTo("/log?id=" + id);
+            }
         }
         else
         {
