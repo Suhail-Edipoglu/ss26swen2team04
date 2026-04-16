@@ -12,6 +12,13 @@
     width: 100%;
     padding: 0;
 }
+.button-form-element {
+    display: flex;
+    flex-direction: row;
+    justify-content: stretch;
+    align-items: stretch;
+    padding: .5em;
+}
 input {
     padding: .5em;
     border: 1px solid black;
