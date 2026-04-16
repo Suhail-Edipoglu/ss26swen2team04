@@ -37,10 +37,10 @@
         {
             <button type="submit">Create</button>
         }
-        else
+        else if (Id is { } id)
         {
             <button type="submit">Update</button>
-            <button type="button">Delete</button>
+            <button type="button" @onclick="() => ViewModel.Delete(id)">Delete</button>
         }
     </div>
 </EditForm>
@@ -49,15 +49,18 @@
     [Parameter] public int? Id { get; set; }
     
     protected override void OnParametersSet() {
-        if (Id == null) {
+        if (Id is null) {
             // TODO: Create new Log
-        } else {
-            ViewModel.LoadTourLogById(Id.Value);
+        } else if (Id is { } id){
+            ViewModel.LoadTourLogById(id);
         }
     }
     
     private void HandleValidSubmit() {
-        ViewModel.CurrentTourLog.Id = Id.Value;
+        if (Id is { } id)
+        {
+            ViewModel.CurrentTourLog.Id = id;
+        }
         ViewModel.SaveCommand.Execute(null);
     }
 }

@@ -1,7 +1,5 @@
 @using SWEN2TourPlanner.Frontend.ViewModels.Interfaces
-@using Microsoft.AspNetCore.WebUtilities
 @using SWEN2TourPlanner.Models
-@inject NavigationManager NavigationManager
 @inject ICurrentTourViewModel ViewModel
 
 <EditForm Model="ViewModel.CurrentTour"
@@ -47,10 +45,10 @@
         {
             <button type="submit">Create</button>
         }
-        else
+        else if (Id is { } id)
         {
             <button type="submit">Update</button>
-            <button type="button" @onclick="ViewModel.Delete(Id)">Delete</button>
+            <button type="button" @onclick="() => ViewModel.Delete(id)">Delete</button>
         }
     </div>
     <div class="external-form-element" style="grid-area: logs;">
@@ -62,15 +60,19 @@
     [Parameter] public int? Id { get; set; }
     
     protected override void OnParametersSet() {
-        if (Id == null) {
+        if (Id is null) {
             // TODO: Create new Tour
-        } else {
-            ViewModel.LoadTourById(Id.Value);
+        } else if (Id is { } id) {
+            ViewModel.LoadTourById(id);
         }
     }
     
     private void HandleValidSubmit() {
-        ViewModel.CurrentTour.Id = Id.Value;
+        if (Id is { } id)
+        {
+            ViewModel.CurrentTour.Id = id;
+        }
+
         ViewModel.SaveCommand.Execute(null);
     }
 }
