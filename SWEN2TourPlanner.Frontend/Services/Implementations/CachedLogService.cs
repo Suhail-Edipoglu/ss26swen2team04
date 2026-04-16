@@ -51,8 +51,9 @@ public class CachedLogService : ILogService
         }
     }
 
-    public void DeleteLog(int logId)
+    public void DeleteLog(int? logId)
     {
+        if (logId == null) return;
         _logs?.RemoveAll(l => l.Id == logId);
     }
 }

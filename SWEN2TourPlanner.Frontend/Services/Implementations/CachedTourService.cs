@@ -62,6 +62,7 @@ public class CachedTourService : ITourService
 
     public void DeleteTour(int tourId)
     {
+        _logService?.GetLogs(tourId)?.ForEach(l => _logService.DeleteLog(l.Id));
         _tours?.RemoveAll(t => t.Id == tourId);
     }
 }

@@ -8,5 +8,5 @@ public interface ILogService
     public Log? GetLogById(int logId);
     public void CreateLog(Log log);
     public void UpdateLog(Log log);
-    public void DeleteLog(int logId);
+    public void DeleteLog(int? logId);
 }
