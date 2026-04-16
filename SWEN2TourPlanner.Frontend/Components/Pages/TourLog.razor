@@ -1,0 +1,12 @@
+@page "/log"
+
+<NavMenu State=NavMenu.UiState.TourLog></NavMenu>
+<LogoutButton></LogoutButton>
+<CurrentTourLog Id=@Id></CurrentTourLog>
+<CreateNew></CreateNew>
+<StaticMap></StaticMap>
+
+@code {
+    [SupplyParameterFromQuery(Name = "id")]
+    public int? Id { get; set; }
+}

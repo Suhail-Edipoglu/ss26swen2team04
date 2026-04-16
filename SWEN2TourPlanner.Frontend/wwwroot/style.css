@@ -1,0 +1,58 @@
+body {
+    margin: 0;
+    font-size: 1.5em;
+}
+.float {
+    background-color: white;
+    border-radius: .5em;
+    box-shadow: 0 0 .5em rgba(0, 0, 0, 0.5);
+    display: grid;
+    grid-template-rows: auto;
+    align-content: stretch;
+    align-items: stretch;
+    justify-content: stretch;
+    justify-items: stretch;
+    height: 2em;
+    grid-auto-flow: column;
+}
+.float > * {
+    padding: 0 .5em;
+    margin: 0;
+    display: grid;
+    align-content: center;
+    align-items: center;
+    justify-content: center;
+    justify-items: center;
+}
+p {
+    margin: 0;
+}
+.tour-container, .log-container  {
+    display: grid;
+    position: absolute;
+    top: 4.5em;
+    left: .5em;
+    font-size: 1rem;
+    max-width: 40em;
+    height: auto;
+}
+.tour-container {
+    grid-template-columns: 4fr 4fr 4fr 4fr 10%;
+    grid-template-rows: 5fr 1.5fr 1.5fr 1.5fr 1.5fr auto;
+    grid-template-areas:
+        "img img img img img"
+        "name name name name name"
+        "description description description description description" 
+        "from from to to type"
+        "distance time . submit submit"
+        "logs logs logs logs logs";
+}
+.log-container {
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1.5fr 1.5fr 1.5fr;
+    grid-template-areas:
+        "logtimestamp logtimestamp logtimestamp"
+        "lograting logcomment logcomment"
+        "logdifficulty logdistance logtime"
+        ". submit submit";
+}

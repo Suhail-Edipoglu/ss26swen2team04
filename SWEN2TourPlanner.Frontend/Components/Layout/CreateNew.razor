@@ -1,0 +1,29 @@
+@using SWEN2TourPlanner.Frontend.ViewModels.Interfaces
+@using Microsoft.AspNetCore.WebUtilities
+@inject INavMenuViewModel ViewModel
+@inject NavigationManager NavigationManager
+
+<div class="float container" @onclick="Create">
+    <div>
+        <p>+</p>
+    </div>
+</div>
+@code {
+    private void Create()
+    {
+        if (NavigationManager.Uri.EndsWith("/"))
+        {
+            NavigationManager.NavigateTo("/tour");
+        }
+        else if (NavigationManager.Uri.Contains("/tour?id="))
+        {
+            var uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
+            var query = QueryHelpers.ParseQuery(uri.Query);
+            if (query.TryGetValue("id", out var idValue) && int.TryParse(idValue, out var tourId))
+            {
+                ViewModel.CurrentTourId = tourId;
+            }
+            NavigationManager.NavigateTo("/log");
+        }
+    }
+}
