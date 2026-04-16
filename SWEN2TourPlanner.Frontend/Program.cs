@@ -16,6 +16,8 @@ builder.Services.AddScoped<ICurrentTourLogViewModel, CurrentTourLogViewModel>();
 builder.Services.AddScoped<ICurrentTourViewModel, CurrentTourViewModel>();
 builder.Services.AddScoped<IMapViewModel, MapViewModel>();
 builder.Services.AddSingleton<INavMenuViewModel, NavMenuViewModel>();
+
+// Wire Models
 builder.Services.AddSingleton<ITourService, CachedTourService>();
 
 builder.Services.AddMvvm(options =>

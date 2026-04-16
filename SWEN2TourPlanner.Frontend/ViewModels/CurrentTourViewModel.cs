@@ -9,5 +9,5 @@ public class CurrentTourViewModel : ICurrentTourViewModel {
     public bool EditMode { get; set; }
     public Tour? CurrentTour { get; set; }
     [Inject]
-    public ITourService? TourService { get; set; }
+    public ITourService TourService { get; set; }
 }

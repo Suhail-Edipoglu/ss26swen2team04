@@ -1,40 +1,53 @@
 @using SWEN2TourPlanner.Frontend.ViewModels.Interfaces
+@using SWEN2TourPlanner.Models
 @inject ICurrentTourViewModel ViewModel
 
-<form class="float container">
+<EditForm Model="ViewModel.CurrentTour" OnValidSubmit="ViewModel.Save" class="float tour-container">
     <div class="external-form-element" style="grid-area: img;">
-        <img alt="descriptive image of the tour"/>
+        <img src="@ViewModel.CurrentTour.ImgPath" alt="descriptive image of the tour" />
     </div>
     <div class="form-element" style="grid-area: name;">
-        <input type="text" name="tourname" id="tourname"/>
+        <InputText type="text" name="tourname" id="tourname" @bind-Value="ViewModel.CurrentTour.Name" />
         <label for="tourname">Name of the Tour</label>
     </div>
     <div class="form-element" style="grid-area: description;">
-        <input type="text" name="tourdescription" id="tourdescription"/>
+        <InputText type="text" name="tourdescription" id="tourdescription" @bind-Value="ViewModel.CurrentTour.Description" />
         <label for="tourdescription">Short Description of the Tour</label>
     </div>
     <div class="form-element" style="grid-area: from;">
-        <input type="text" name="tourfrom" id="tourfrom"/>
+        <InputText type="text" name="tourfrom" id="tourfrom" @bind-Value="ViewModel.CurrentTour.From" />
         <label for="tourfrom">From</label>
     </div>
     <div class="form-element" style="grid-area: to;">
-        <input type="text" name="tourto" id="tourto"/>
+        <InputText type="text" name="tourto" id="tourto" @bind-Value="ViewModel.CurrentTour.To" />
         <label for="tourto">To</label>
     </div>
     <div class="form-element" style="grid-area: type;">
-        <input type="text" name="tourtype" id="tourtype"/>
+        <InputSelect name="tourtype" id="tourtype" @bind-Value="ViewModel.CurrentTour.TransportType">
+            @foreach (var type in Enum.GetValues<TransportType>())
+            {
+                <option value="@type">@type</option>
+            }
+        </InputSelect>
         <label for="tourtype">Type of Transportation</label>
     </div>
     <div class="computed-form-element" style="grid-area: distance;">
-        <p>@ViewModel.CurrentTour.Distance</p>
+        <p>@ViewModel.CurrentTour.Distance km</p>
     </div>
     <div class="computed-form-element" style="grid-area: time;">
-        <p>@ViewModel.CurrentTour.EstimatedTime</p>
+        <p>@ViewModel.CurrentTour.EstimatedTime.ToString("HH:mm")</p>
     </div>
     <div class="button-form-element" style="grid-area: submit;">
-        <btn>Edit</btn>
+        <button type="submit">Save</button>
     </div>
     <div class="external-form-element" style="grid-area: logs;">
         <!-- TODO: Add List of Tour Logs -->
     </div>
-</form>
+</EditForm>
+
+@code {
+    private void OnValidSubmit()
+    {
+        ViewModel.EditMode = false;
+    }
+}
