@@ -2,7 +2,7 @@
 
 public class Tour
 {
-    public int Id { get; set; }
+    public int? Id { get; set; }
     public string Name { get; set; }
     public string Description { get; set; }
     public string From { get; set; }
@@ -19,7 +19,7 @@ public class Tour
     {
     }
 
-    public Tour(int id, string name, string description, string from, string to, TransportType transportType, int distance,
+    public Tour(int? id, string name, string description, string from, string to, TransportType transportType, int distance,
         TimeOnly estimatedTime, string routeInformation, string imgPath, int userId, List<Log>? logs) : this()
     {
         Id = id;
