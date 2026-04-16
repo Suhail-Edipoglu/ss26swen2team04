@@ -1,13 +1,43 @@
 ﻿@inject INavMenuViewModel ViewModel
+@inject NavigationManager NavigationManager
 @using SWEN2TourPlanner.Frontend.ViewModels.Interfaces
+@using System.ComponentModel
+@implements IDisposable
+
 <div class="float nav-container">
     <div class="navbar-item" style="padding: 0;" @onclick="() => ViewModel.ToggleDetailsCommand.Execute(null)">
         <span class="navicon @(ViewModel.IsMenuExpanded ? "toggle" : "")"></span>
     </div>
-    @if (ViewModel.CurrentTour is not null) {
-        <div class="navbar-item"><p>@ViewModel.CurrentTour</p></div>
+    <div class="navbar-item" @onclick='() => NavigationManager.NavigateTo("/")'><p>My Tours</p></div>
+    @if (State >= UiState.Tour) {
+        <div class="navbar-item" @onclick='() => NavigationManager.NavigateTo("/tour")'><p>@ViewModel.CurrentTour</p></div>
     }
-    @if (ViewModel.CurrentTourLog is not null) {
+    @if (State >= UiState.TourLog) {
         <div class="navbar-item"><p>@ViewModel.CurrentTourLog</p></div>
     }
 </div>
+
+@code {
+    [Parameter] public UiState State { get; set; }
+    public enum UiState {
+        List,
+        Tour,
+        TourLog
+    }
+    
+    protected override void OnInitialized()
+    {
+        ViewModel.PropertyChanged += OnViewModelPropertyChanged;
+    }
+    private void OnViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(INavMenuViewModel.IsMenuExpanded))
+            _ = InvokeAsync(StateHasChanged);
+    }
+    public void Dispose()
+    {
+        ViewModel.PropertyChanged -= OnViewModelPropertyChanged;
+    }
+
+}
+}

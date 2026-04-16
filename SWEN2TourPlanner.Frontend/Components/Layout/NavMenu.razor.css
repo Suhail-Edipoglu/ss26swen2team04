@@ -3,8 +3,6 @@
     top: .5em;
     left: .5em;
     font-size: 1em;
-    grid-template-columns: auto auto auto;
-
 }
 .navicon {
     width: 2em;
@@ -15,6 +13,7 @@
     background-repeat: no-repeat;
     background-position: center;
     display: inline-block;
+    transition: all 0.5s ease-out allow-discrete;
 }
 .toggle {
     transform: rotate(180deg);

@@ -7,11 +7,13 @@ body {
     border-radius: .5em;
     box-shadow: 0 0 .5em rgba(0, 0, 0, 0.5);
     display: grid;
+    grid-template-rows: auto;
     align-content: stretch;
     align-items: stretch;
     justify-content: stretch;
     justify-items: stretch;
-    height: 2em;    
+    height: 2em;
+    grid-auto-flow: column;
 }
 .float > * {
     padding: 0 .5em;
