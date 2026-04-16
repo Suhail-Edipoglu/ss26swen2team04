@@ -11,13 +11,13 @@ public class CachedLogService : ILogService
         _logs = new List<Log>()
         {
             new Log(0, new DateTime(2026, 4, 16, 14, 0, 0), 
-                "Das ist ein Kommentar", 1.2f, 185, 90, 
+                "Das ist ein Kommentar", 1.2f, 185, new TimeOnly(1, 30), 
                 4.5f, 0),
             new Log(1, new DateTime(2026, 4, 16, 16, 0, 0), 
-                "Das ist ein Kommentar", 1.5f, 185, 90, 
+                "Das ist ein Kommentar", 1.5f, 185, new TimeOnly(1, 30), 
                 4.0f, 1),
             new Log(2, new DateTime(2026, 4, 16, 20, 0, 0), 
-                "Das ist ein Kommentar", 1.7f, 305, 180, 
+                "Das ist ein Kommentar", 1.7f, 305, new TimeOnly(3, 0), 
                 4.8f, 2)
         };
     }
