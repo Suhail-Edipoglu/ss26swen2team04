@@ -1,7 +1,4 @@
 @using SWEN2TourPlanner.Frontend.ViewModels.Interfaces
-@using Microsoft.AspNetCore.WebUtilities
-@using SWEN2TourPlanner.Models
-@inject NavigationManager NavigationManager
 @inject ICurrentTourLogViewModel ViewModel
 
 <EditForm Model="ViewModel.CurrentTourLog"
@@ -47,20 +44,17 @@
 
 @code {
     [Parameter] public int? Id { get; set; }
-    
-    protected override void OnParametersSet() {
-        if (Id is null) {
-            // TODO: Create new Log
-        } else if (Id is { } id){
+
+    protected override void OnParametersSet()
+    {
+        if (Id is { } id)
+        {
             ViewModel.LoadTourLogById(id);
         }
     }
-    
+
     private void HandleValidSubmit() {
-        if (Id is { } id)
-        {
-            ViewModel.CurrentTourLog.Id = id;
-        }
+        ViewModel.CurrentTourLog.Id = Id;
         ViewModel.SaveCommand.Execute(null);
     }
 }

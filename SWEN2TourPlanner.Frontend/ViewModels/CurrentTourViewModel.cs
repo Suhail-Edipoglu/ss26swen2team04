@@ -1,22 +1,25 @@
 using Blazing.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.AspNetCore.Components;
 using SWEN2TourPlanner.Frontend.Services;
 using SWEN2TourPlanner.Frontend.ViewModels.Interfaces;
 using SWEN2TourPlanner.Models;
 
 namespace SWEN2TourPlanner.Frontend.ViewModels;
 
-[ViewModelDefinition(Lifetime = ServiceLifetime.Singleton)]
+[ViewModelDefinition(Lifetime = ServiceLifetime.Scoped)]
 public sealed partial class CurrentTourViewModel : ViewModelBase, ICurrentTourViewModel
 {
     [ObservableProperty] private Tour _currentTour = new();
 
     private readonly ITourService _tourService;
+    private readonly NavigationManager _navigationManager;
 
-    public CurrentTourViewModel(ITourService tourService)
+    public CurrentTourViewModel(ITourService tourService, NavigationManager navigationManager)
     {
         _tourService = tourService;
+        _navigationManager = navigationManager;
     }
 
     [RelayCommand]
@@ -39,11 +42,18 @@ public sealed partial class CurrentTourViewModel : ViewModelBase, ICurrentTourVi
         {
             CurrentTour = loadedTour; 
         }
+        else
+        {
+            _navigationManager.NavigateTo("/");
+        }
         return CurrentTour;
+        
     }
 
     public void Delete(int id)
     {
         _tourService.DeleteTour(id);
+        _navigationManager.NavigateTo("/");
+
     }
 }

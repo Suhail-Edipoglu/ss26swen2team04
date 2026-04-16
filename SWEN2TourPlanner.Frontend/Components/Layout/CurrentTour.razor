@@ -60,19 +60,13 @@
     [Parameter] public int? Id { get; set; }
     
     protected override void OnParametersSet() {
-        if (Id is null) {
-            // TODO: Create new Tour
-        } else if (Id is { } id) {
+        if (Id is { } id) {
             ViewModel.LoadTourById(id);
         }
     }
     
     private void HandleValidSubmit() {
-        if (Id is { } id)
-        {
-            ViewModel.CurrentTour.Id = id;
-        }
-
+        ViewModel.CurrentTour.Id = Id;
         ViewModel.SaveCommand.Execute(null);
     }
 }
