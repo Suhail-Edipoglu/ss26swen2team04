@@ -2,6 +2,8 @@ using SWEN2TourPlanner.Frontend.Components;
 using SWEN2TourPlanner.Frontend.ViewModels;
 using SWEN2TourPlanner.Frontend.ViewModels.Interfaces;
 using Blazing.Mvvm;
+using SWEN2TourPlanner.Frontend.Services;
+using SWEN2TourPlanner.Frontend.Services.Implementations;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +16,7 @@ builder.Services.AddScoped<ICurrentTourLogViewModel, CurrentTourLogViewModel>();
 builder.Services.AddScoped<ICurrentTourViewModel, CurrentTourViewModel>();
 builder.Services.AddScoped<IMapViewModel, MapViewModel>();
 builder.Services.AddSingleton<INavMenuViewModel, NavMenuViewModel>();
+builder.Services.AddSingleton<ITourService, CachedTourService>();
 
 builder.Services.AddMvvm(options =>
 { 
