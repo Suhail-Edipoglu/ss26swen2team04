@@ -7,7 +7,7 @@ public class Log
     public string Comment { get; set; }
     public float Difficulty { get; set; }
     public int TotalDistance { get; set; }
-    public int TotalTime { get; set; }
+    public TimeOnly TotalTime { get; set; }
     public float Rating { get; set; }
     public int TourId { get; set; }
 
@@ -15,7 +15,7 @@ public class Log
     {
     }
     
-    public Log(int id, DateTime time, string comment, float difficulty, int totalDistance, int totalTime, float rating, int tourId) : this()
+    public Log(int id, DateTime time, string comment, float difficulty, int totalDistance, TimeOnly totalTime, float rating, int tourId) : this()
     {
         Id = id;
         Time = time;
