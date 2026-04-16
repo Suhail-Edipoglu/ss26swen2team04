@@ -6,7 +6,7 @@
 
 <EditForm Model="ViewModel.CurrentTour"
           FormName="CurrentTourForm"
-          OnValidSubmit="() => ViewModel.SaveCommand.Execute(null)"
+          OnValidSubmit="HandleValidSubmit"
           class="float tour-container">
     <div class="external-form-element" style="grid-area: img;">
         <img src="@ViewModel.CurrentTour.ImgPath" alt="descriptive image of the tour" />
@@ -43,7 +43,15 @@
         <p>@ViewModel.CurrentTour.EstimatedTime.ToString("HH:mm")</p>
     </div>
     <div class="button-form-element" style="grid-area: submit;">
-        <button type="submit">Save</button>
+        @if (Id is null)
+        {
+            <button type="submit">Create</button>
+        }
+        else
+        {
+            <button type="submit">Update</button>
+            <button type="button">Delete</button>
+        }
     </div>
     <div class="external-form-element" style="grid-area: logs;">
         <!-- TODO: Add List of Tour Logs -->
@@ -51,42 +59,18 @@
 </EditForm>
 
 @code {
-    private int? _lastLoadedTourId;
-
-    protected override void OnParametersSet()
-    {
-        var tourId = TryGetTourIdFromQuery();
-        if (!tourId.HasValue || _lastLoadedTourId == tourId)
-        {
-            return;
+    [Parameter] public int? Id { get; set; }
+    
+    protected override void OnParametersSet() {
+        if (Id == null) {
+            // TODO: Create new Tour
+        } else {
+            ViewModel.LoadTourById(Id.Value);
         }
-
-        ViewModel.LoadTourById(tourId.Value);
-        _lastLoadedTourId = tourId;
     }
-
-    private int? TryGetTourIdFromQuery()
-    {
-        var uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
-        var rawQuery = uri.Query;
-        if (string.IsNullOrWhiteSpace(rawQuery))
-        {
-            return null;
-        }
-
-        var parsed = QueryHelpers.ParseQuery(rawQuery);
-        if (parsed.TryGetValue("id", out var idValues) && int.TryParse(idValues.FirstOrDefault(), out var queryId))
-        {
-            return queryId;
-        }
-
-        // Keep supporting `/tour?1` in addition to `/tour?id=1`.
-        if (parsed.Count == 0)
-        {
-            var bareValue = rawQuery.TrimStart('?');
-            return int.TryParse(bareValue, out var bareId) ? bareId : null;
-        }
-
-        return null;
+    
+    private void HandleValidSubmit() {
+        ViewModel.CurrentTour.Id = Id.Value;
+        ViewModel.SaveCommand.Execute(null);
     }
 }

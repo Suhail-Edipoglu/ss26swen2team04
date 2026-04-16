@@ -2,6 +2,11 @@
 
 <NavMenu State="NavMenu.UiState.Tour"></NavMenu>
 <LogoutButton></LogoutButton>
-<CurrentTour></CurrentTour>
+<CurrentTour Id=@Id></CurrentTour>
 <CreateNew></CreateNew>
 <StaticMap></StaticMap>
+
+@code {
+    [SupplyParameterFromQuery(Name = "id")]
+    public int? Id { get; set; }
+}
