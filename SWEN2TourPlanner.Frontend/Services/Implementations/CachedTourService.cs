@@ -15,17 +15,17 @@ public class CachedTourService : ITourService
         {
             new Tour(0, "TestTour1", "Das ist die erste Test Tour", 
                 "Wien", "Linz", TransportType.Train, 184, 
-                new DateTime(0,0, 0, 1, 20, 0), 
+                new DateTime(2000,1, 1, 1, 20, 0), 
                 "Hier stehen die Routeninformationen", 
                 "Path", 0, _logService.GetLogs(0)),
             new Tour(1, "TestTour2", "Das ist die zweite Test Tour", 
                 "Linz", "Wien", TransportType.Train, 184, 
-                new DateTime(0,0, 0, 1, 20, 0), 
+                new DateTime(2000,1, 1, 1, 20, 0), 
                 "Hier stehen die Routeninformationen", 
                 "Path", 0, _logService.GetLogs(1)),
             new Tour(2, "TestTour3", "Das ist die dritte Test Tour", 
                 "Wien", "Salzburg", TransportType.Train, 298, 
-                new DateTime(0,0, 0, 2, 30, 0), 
+                new DateTime(2000,1, 1, 2, 30, 0), 
                 "Hier stehen die Routeninformationen", 
                 "Path", 0, _logService.GetLogs(2)),
         };
@@ -34,6 +34,11 @@ public class CachedTourService : ITourService
     public List<Tour>? GetTours(int userId)
     {
         return _tours?.Where(t => t.UserId == userId).ToList();
+    }
+
+    public Tour? GetTourById(int tourId)
+    {
+        return _tours?.FirstOrDefault(t => t.Id == tourId);
     }
 
     public void CreateTour(Tour tour)

@@ -1,13 +1,49 @@
-using Microsoft.AspNetCore.Components;
+using Blazing.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using SWEN2TourPlanner.Frontend.Services;
 using SWEN2TourPlanner.Frontend.ViewModels.Interfaces;
 using SWEN2TourPlanner.Models;
 
 namespace SWEN2TourPlanner.Frontend.ViewModels;
 
-public class CurrentTourViewModel : ICurrentTourViewModel {
-    public bool EditMode { get; set; }
-    public Tour? CurrentTour { get; set; }
-    [Inject]
-    public ITourService TourService { get; set; }
+[ViewModelDefinition(Lifetime = ServiceLifetime.Singleton)]
+public sealed partial class CurrentTourViewModel : ViewModelBase, ICurrentTourViewModel
+{
+    [ObservableProperty] private bool _editMode = true;
+    [ObservableProperty] private Tour _currentTour = new();
+
+    private readonly ITourService _tourService;
+
+    public CurrentTourViewModel(ITourService tourService)
+    {
+        _tourService = tourService;
+    }
+
+    [RelayCommand]
+    private void Save()
+    {
+        if (_tourService.GetTourById(CurrentTour.Id) is null)
+        {
+            _tourService.CreateTour(CurrentTour);
+        }
+        else
+        {
+            _tourService.UpdateTour(CurrentTour);
+        }
+
+        EditMode = false;
+    }
+
+    public Tour LoadTourById(int id)
+    {
+        var loadedTour = _tourService.GetTourById(id);
+        if (loadedTour is not null)
+        {
+            CurrentTour = loadedTour;
+            EditMode = false;
+        }
+
+        return CurrentTour;
+    }
 }
