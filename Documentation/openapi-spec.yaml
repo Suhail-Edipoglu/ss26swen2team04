@@ -1,0 +1,266 @@
+openapi: 3.0.3
+info:
+  title: Tour Planner API
+  description: REST API für das Tour Planner Semesterprojekt (ASP.Net Core).
+  version: 1.0.0
+servers:
+  - url: http://localhost:5000/api
+    description: Lokaler Entwicklungs-Server
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    UserCredentials:
+      type: object
+      required:
+        - username
+        - password
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+          format: password
+    
+    Tour:
+      type: object
+      required:
+        - name
+        - from
+        - to
+        - transportType
+      properties:
+        id:
+          type: integer
+          format: int64
+          readOnly: true
+        name:
+          type: string
+        tourDescription:
+          type: string
+        from:
+          type: string
+        to:
+          type: string
+        transportType:
+          type: string
+          enum: [Bike, Hike, Running, Vacation]
+        tourDistance:
+          type: number
+          format: float
+          description: Distanz, abgerufen via OpenRouteservice API.
+        estimatedTime:
+          type: number
+          format: float
+          description: Geschätzte Zeit, abgerufen via OpenRouteservice API.
+        routeInformation:
+          type: string
+          description: Grafische Routeninformationen (z.B. als GeoJSON für Leaflet).
+        popularity:
+          type: integer
+          readOnly: true
+          description: Berechnet aus der Anzahl der Logs.
+        childFriendliness:
+          type: string
+          readOnly: true
+          description: Berechnet aus Schwierigkeit, Zeit und Distanz der Logs.
+
+    TourLog:
+      type: object
+      required:
+        - dateTime
+        - difficulty
+        - totalDistance
+        - totalTime
+        - rating
+      properties:
+        id:
+          type: integer
+          format: int64
+          readOnly: true
+        tourId:
+          type: integer
+          format: int64
+        dateTime:
+          type: string
+          format: date-time
+        comment:
+          type: string
+        difficulty:
+          type: integer
+          minimum: 1
+          maximum: 10
+        totalDistance:
+          type: number
+          format: float
+        totalTime:
+          type: number
+          format: float
+        rating:
+          type: integer
+          minimum: 1
+          maximum: 5
+
+security:
+  - bearerAuth: []
+
+paths:
+  /auth/register:
+    post:
+      summary: Benutzer registrieren
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserCredentials'
+      responses:
+        '201':
+          description: Erfolgreich registriert
+  
+  /auth/login:
+    post:
+      summary: Benutzer-Login
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserCredentials'
+      responses:
+        '200':
+          description: Login erfolgreich. Gibt ein JWT-Token zurück.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+
+  /tours:
+    get:
+      summary: Alle Touren des Benutzers abrufen (inkl. Volltextsuche)
+      parameters:
+        - name: search
+          in: query
+          description: Suchbegriff für die Volltextsuche in Touren, Logs und berechneten Werten.
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Eine Liste von Touren
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Tour'
+    post:
+      summary: Neue Tour erstellen
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Tour'
+      responses:
+        '201':
+          description: Tour erstellt
+
+  /tours/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+    get:
+      summary: Einzelne Tour abrufen
+      responses:
+        '200':
+          description: Tour-Details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tour'
+    put:
+      summary: Tour aktualisieren
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Tour'
+      responses:
+        '204':
+          description: Erfolgreich aktualisiert
+    delete:
+      summary: Tour löschen
+      responses:
+        '204':
+          description: Erfolgreich gelöscht
+
+  /tours/{id}/logs:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+    get:
+      summary: Alle Logs einer bestimmten Tour abrufen
+      responses:
+        '200':
+          description: Liste von Logs
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TourLog'
+    post:
+      summary: Neuen Tour-Log hinzufügen
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TourLog'
+      responses:
+        '201':
+          description: Log erfolgreich erstellt
+
+  /logs/{logId}:
+    parameters:
+      - name: logId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+    put:
+      summary: Tour-Log aktualisieren
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TourLog'
+      responses:
+        '204':
+          description: Log erfolgreich aktualisiert
+    delete:
+      summary: Tour-Log löschen
+      responses:
+        '204':
+          description: Log erfolgreich gelöscht
+
