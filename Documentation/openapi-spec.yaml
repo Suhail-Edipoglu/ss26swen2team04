@@ -173,6 +173,11 @@ paths:
       responses:
         '201':
           description: Tour erstellt
+          content:
+            number:
+              type: integer
+              format: int64
+              description: ID der neu erstellten Tour
 
   /tours/{id}:
     parameters:
@@ -238,6 +243,11 @@ paths:
       responses:
         '201':
           description: Log erfolgreich erstellt
+          content:
+            number:
+              type: integer
+              format: int64
+              description: ID des neu erstellten Tour Log
 
   /logs/{logId}:
     parameters:
