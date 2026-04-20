@@ -3,7 +3,7 @@ using SWEN2TourPlanner.Frontend.ViewModels;
 using SWEN2TourPlanner.Frontend.ViewModels.Interfaces;
 using Blazing.Mvvm;
 using SWEN2TourPlanner.Frontend.Services;
-using SWEN2TourPlanner.Frontend.Services.Implementations;
+using SWEN2TourPlanner.Frontend.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -1,6 +1,7 @@
-﻿using SWEN2TourPlanner.Models;
+﻿using SWEN2TourPlanner.Frontend.Services.Interfaces;
+using SWEN2TourPlanner.Models;
 
-namespace SWEN2TourPlanner.Frontend.Services.Implementations;
+namespace SWEN2TourPlanner.Frontend.Services;
 
 public class CachedLogService : ILogService
 {

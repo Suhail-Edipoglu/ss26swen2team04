@@ -1,6 +1,6 @@
 ﻿using SWEN2TourPlanner.Models;
 
-namespace SWEN2TourPlanner.Frontend.Services;
+namespace SWEN2TourPlanner.Frontend.Services.Interfaces;
 
 public interface ITourService
 {

@@ -1,6 +1,7 @@
 using Blazing.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using SWEN2TourPlanner.Frontend.Services;
+using SWEN2TourPlanner.Frontend.Services.Interfaces;
 using SWEN2TourPlanner.Frontend.ViewModels.Interfaces;
 using SWEN2TourPlanner.Models;
 
