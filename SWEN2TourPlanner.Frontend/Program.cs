@@ -11,21 +11,17 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
-// Wire View Models
-builder.Services.AddScoped<IMapViewModel, MapViewModel>();
-builder.Services.AddScoped<ICurrentTourViewModel, CurrentTourViewModel>();
-builder.Services.AddScoped<ICurrentTourLogViewModel, CurrentTourLogViewModel>();
-builder.Services.AddScoped<ITourListViewModel, TourListViewModel>();
-builder.Services.AddSingleton<INavMenuViewModel, NavMenuViewModel>();
-
 // Wire Models
 builder.Services.AddSingleton<ITourService, CachedTourService>();
 builder.Services.AddSingleton<ILogService, CachedLogService>();
 
+// Add Blazing MVVM, this also enables ViewModel Loading
 builder.Services.AddMvvm(options =>
 { 
     options.HostingModelType = BlazorHostingModelType.Server;
 });
+// Add Http Client for Api Calls
+builder.Services.AddHttpClient();
 
 var app = builder.Build();
 

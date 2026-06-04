@@ -1,12 +1,12 @@
-using System.ComponentModel;
+using Blazing.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 namespace SWEN2TourPlanner.Frontend.ViewModels.Interfaces;
 
-public interface INavMenuViewModel : INotifyPropertyChanged {
+public interface INavMenuViewModel : IViewModelBase {
     string CurrentTour { get; set; }
     string CurrentTourLog { get; set; }
     bool IsMenuExpanded { get; set; }
-    int? CurrentTourId { get; set; }
-    void UpdateCurrentTourId(int? id);
+    void RootClicked();
+    void TourClicked();
     IRelayCommand ToggleDetailsCommand { get; }
 }

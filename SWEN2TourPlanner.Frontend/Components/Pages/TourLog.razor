@@ -1,6 +1,6 @@
 @page "/log"
 
-<NavMenu State=NavMenu.UiState.TourLog></NavMenu>
+<NavMenu State="CurrentState"></NavMenu>
 <LogoutButton></LogoutButton>
 <CurrentTourLog Id=@Id></CurrentTourLog>
 <CreateNew></CreateNew>
@@ -9,4 +9,5 @@
 @code {
     [SupplyParameterFromQuery(Name = "id")]
     public int? Id { get; set; }
+    private const NavMenu.UiState CurrentState = NavMenu.UiState.TourLog;
 }

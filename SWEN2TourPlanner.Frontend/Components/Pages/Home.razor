@@ -1,7 +1,11 @@
 ﻿@page "/"
 
-<NavMenu State=NavMenu.UiState.List></NavMenu>
+<NavMenu State="CurrentState"></NavMenu>
 <LogoutButton></LogoutButton>
 <TourList></TourList>
 <CreateNew></CreateNew>
 <StaticMap></StaticMap>
+
+@code {
+    private const NavMenu.UiState CurrentState = NavMenu.UiState.List;
+}
