@@ -6,6 +6,10 @@ info:
 servers:
   - url: http://localhost:5000/api
     description: Lokaler Entwicklungs-Server
+tags:
+  - name: Auth
+  - name: Tours
+  - name: Tour Logs
 components:
   securitySchemes:
     bearerAuth:
@@ -111,6 +115,8 @@ paths:
   /auth/register:
     post:
       summary: Benutzer registrieren
+      tags:
+        - Auth
       security: []
       requestBody:
         required: true
@@ -125,6 +131,8 @@ paths:
   /auth/login:
     post:
       summary: Benutzer-Login
+      tags:
+        - Auth
       security: []
       requestBody:
         required: true
@@ -146,6 +154,8 @@ paths:
   /tours:
     get:
       summary: Alle Touren des Benutzers abrufen (inkl. Volltextsuche)
+      tags:
+        - Tours
       parameters:
         - name: search
           in: query
@@ -164,6 +174,8 @@ paths:
                   $ref: '#/components/schemas/Tour'
     post:
       summary: Neue Tour erstellen
+      tags:
+        - Tours
       requestBody:
         required: true
         content:
@@ -189,6 +201,8 @@ paths:
           format: int64
     get:
       summary: Einzelne Tour abrufen
+      tags:
+        - Tours
       responses:
         '200':
           description: Tour-Details
@@ -198,6 +212,8 @@ paths:
                 $ref: '#/components/schemas/Tour'
     put:
       summary: Tour aktualisieren
+      tags:
+        - Tours
       requestBody:
         required: true
         content:
@@ -209,6 +225,8 @@ paths:
           description: Erfolgreich aktualisiert
     delete:
       summary: Tour löschen
+      tags:
+        - Tours
       responses:
         '204':
           description: Erfolgreich gelöscht
@@ -223,6 +241,8 @@ paths:
           format: int64
     get:
       summary: Alle Logs einer bestimmten Tour abrufen
+      tags:
+        - Tour Logs
       responses:
         '200':
           description: Liste von Logs
@@ -232,8 +252,12 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/TourLog'
+
+  /logs:
     post:
-      summary: Neuen Tour-Log hinzufügen
+      summary: Neuen Tour-Log erstellen
+      tags:
+        - Tour Logs
       requestBody:
         required: true
         content:
@@ -248,7 +272,7 @@ paths:
               type: integer
               format: int64
               description: ID des neu erstellten Tour Log
-
+  
   /logs/{logId}:
     parameters:
       - name: logId
@@ -257,8 +281,21 @@ paths:
         schema:
           type: integer
           format: int64
+    get:
+        summary: Einzelnen Tour-Log abrufen
+        tags:
+            - Tour Logs
+        responses:
+            '200':
+            description: Log-Details
+            content:
+                application/json:
+                schema:
+                    $ref: '#/components/schemas/TourLog'
     put:
       summary: Tour-Log aktualisieren
+      tags:
+        - Tour Logs
       requestBody:
         required: true
         content:
@@ -270,6 +307,8 @@ paths:
           description: Log erfolgreich aktualisiert
     delete:
       summary: Tour-Log löschen
+      tags:
+        - Tour Logs
       responses:
         '204':
           description: Log erfolgreich gelöscht
