@@ -3,8 +3,8 @@
 public class User
 {
     public int Id { get; set; }
-    public string Username { get; set; }
-    public string Password { get; set; }
+    public required string Username { get; set; }
+    public required string HashedPassword { get; set; }
     public List<Tour>? Tours { get; set; }
 
     public User()
@@ -15,7 +15,7 @@ public class User
     {
         Id = id;
         Username = username;
-        Password = password;
+        HashedPassword = password;
         Tours = tours;
     }
 }
