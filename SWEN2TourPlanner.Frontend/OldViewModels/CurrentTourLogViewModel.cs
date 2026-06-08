@@ -5,25 +5,22 @@ using Microsoft.AspNetCore.Components;
 using SWEN2TourPlanner.Frontend.Services;
 using SWEN2TourPlanner.Frontend.Services.Interfaces;
 using SWEN2TourPlanner.Frontend.ViewModels.Interfaces;
-using SWEN2TourPlanner.Models;
+using SWEN2TourPlanner.Frontend.DTOs;
 
 namespace SWEN2TourPlanner.Frontend.ViewModels;
 
 [ViewModelDefinition(Lifetime = ServiceLifetime.Scoped)]
 public sealed partial class CurrentTourLogViewModel : ViewModelBase, ICurrentTourLogViewModel {
     
-[ObservableProperty] private Log _currentTourLog = new();
+[ObservableProperty] private TourLog _currentTourLog = new();
 
-    private readonly ILogService _logService;
     private readonly NavigationManager _navigationManager;
     private readonly INavMenuViewModel _navMenuViewModel;
 
     public CurrentTourLogViewModel(
-        ILogService logService,
         NavigationManager navigationManager,
         INavMenuViewModel navMenuViewModel)
     {
-        _logService = logService;
         _navigationManager = navigationManager;
         _navMenuViewModel = navMenuViewModel;
     }
@@ -63,7 +60,6 @@ public sealed partial class CurrentTourLogViewModel : ViewModelBase, ICurrentTou
 
     public void Delete(int id)
     {
-        _logService.DeleteLog(id);
         _navigationManager.NavigateTo("/tour?id=" + CurrentTourLog.TourId);
     }
 }

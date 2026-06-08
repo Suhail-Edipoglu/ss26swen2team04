@@ -1,12 +1,12 @@
 using System.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using SWEN2TourPlanner.Models;
+using SWEN2TourPlanner.Frontend.DTOs;
 
 namespace SWEN2TourPlanner.Frontend.ViewModels.Interfaces;
 
-public interface ICurrentTourLogViewModel : INotifyPropertyChanged{
-    Log CurrentTourLog { get; set; }
+public interface ICurrentTourViewModel : INotifyPropertyChanged {
+    Tour CurrentTour { get; set; }
     IRelayCommand SaveCommand { get; }
-    Log LoadTourLogById(int id);
+    Tour LoadTourById(int id);
     void Delete(int id);
 }

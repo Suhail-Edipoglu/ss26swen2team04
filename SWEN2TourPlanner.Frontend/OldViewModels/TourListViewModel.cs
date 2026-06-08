@@ -3,7 +3,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using SWEN2TourPlanner.Frontend.Services;
 using SWEN2TourPlanner.Frontend.Services.Interfaces;
 using SWEN2TourPlanner.Frontend.ViewModels.Interfaces;
-using SWEN2TourPlanner.Models;
+using SWEN2TourPlanner.Frontend.DTOs;
 
 namespace SWEN2TourPlanner.Frontend.ViewModels;
 
