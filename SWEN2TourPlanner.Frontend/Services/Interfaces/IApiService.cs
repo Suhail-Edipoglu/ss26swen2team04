@@ -4,16 +4,18 @@ namespace SWEN2TourPlanner.Frontend.Services.Interfaces;
 
 public interface IApiService {
         // AUTH
-        Task<bool> RegisterAsync(LoginData loginData);
+        Task<bool> RegisterAsync(LoginData loginData); // returns success to use for redirect
         Task<bool> LoginAsync(LoginData loginData);
         // TOURS
         Task<List<Tour>> GetToursAsync();
-        Task<string> CreateTourAsync(string token, string tourData);
+        Task<Tour> GetTourByIdAsync(int tourId);
+        Task<int> CreateTourAsync(Tour tourData); // returns id
+        Task<bool> UpdateTourAsync(Tour tourData);
+        Task<bool> DeleteTourAsync(int tourId);
         // TOUR LOGS
-        Task<string> GetTourLogsAsync(int tourId);
-        Task<string> CreateTourLogAsync(string token, int tourId, string tourLogData);
-        Task<string> UpdateTourAsync(string token, int tourId, string tourData);
-        Task<string> UpdateTourLogAsync(string token, int tourLogId, string tourLogData);
-        Task<string> DeleteTourAsync(string token, int tourId);
-        Task<string> DeleteTourLogAsync(string token, int tourLogId);
+        Task<List<TourLog>> GetTourLogsAsync(int tourId);
+        Task<TourLog> GetTourLogByIdAsync(int tourLogId);
+        Task<int> CreateTourLogAsync(TourLog tourLogData); // returns id
+        Task<bool> UpdateTourLogAsync(TourLog tourLogData);
+        Task<bool> DeleteTourLogAsync(int tourLogId);
 }
