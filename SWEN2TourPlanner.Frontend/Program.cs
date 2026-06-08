@@ -1,6 +1,4 @@
 using SWEN2TourPlanner.Frontend.Components;
-using SWEN2TourPlanner.Frontend.ViewModels;
-using SWEN2TourPlanner.Frontend.ViewModels.Interfaces;
 using Blazing.Mvvm;
 using SWEN2TourPlanner.Frontend.Services;
 using SWEN2TourPlanner.Frontend.Services.Interfaces;
@@ -11,7 +9,27 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
+// Add Service APIs
+builder.Services.AddHttpClient<ApiService>(client =>
+{
+    client.BaseAddress = new Uri("https://api.example.com/");
+    client.DefaultRequestHeaders.Add("Accept", "application/json");
+});
+builder.Services.AddHttpClient<LeafletMapService>(client =>
+{
+    client.BaseAddress = new Uri("https://api.example.com/");
+    client.DefaultRequestHeaders.Add("Accept", "application/json");
+});
+string openRouteServiceKey = "none"; // TODO Add api key and stuff
+builder.Services.AddHttpClient<OpenRouteServiceService>(client =>
+{
+    client.BaseAddress = new Uri("https://api.openrouteservice.org/");
+    client.DefaultRequestHeaders.Add("Accept", "application/json");
+    client.DefaultRequestHeaders.Add("Authorization", openRouteServiceKey);
+});
+
 // Wire Models
+// TODO Choose Cached Dummy Api Service or Real Backend Api
 builder.Services.AddScoped<IApiService, CachedApiService>();
 // builder.Services.AddScoped<IApiService, ApiService>();
 builder.Services.AddSingleton<IMapService, LeafletMapService>();

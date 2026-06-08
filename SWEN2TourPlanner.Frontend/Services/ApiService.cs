@@ -3,8 +3,8 @@ using SWEN2TourPlanner.Frontend.Services.Interfaces;
 
 namespace SWEN2TourPlanner.Frontend.Services;
 
-public class ApiService(IHttpClientFactory httpClientFactory) : IApiService {
-    private readonly HttpClient _httpClient = httpClientFactory.CreateClient("BackendApi");
+public class ApiService(HttpClient httpClient) : IApiService {
+    private readonly HttpClient _httpClient = httpClient;
     
     public async Task<bool> RegisterAsync(LoginData loginData) {
         throw new NotImplementedException();
