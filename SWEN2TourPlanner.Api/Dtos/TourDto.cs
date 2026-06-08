@@ -1,7 +1,7 @@
 ﻿using SWEN2TourPlanner.Models;
 
 namespace SWEN2TourPlanner.Api.Dtos;
-
+// todo split into diff dtos for create, response etc
 public class TourDto
 {
     public required int Id { get; set; }
@@ -11,20 +11,20 @@ public class TourDto
     public required string To { get; set; }
     public required TransportType TransportType { get; set; }
     public required int Distance { get; set; }
-    public required TimeOnly EstimatedTime  { get; set; }
+    public required TimeOnly EstimatedTime { get; set; }
     public required string RouteInformation { get; set; }
-    public required string ImgPath  { get; set; }
+    public required string ImgPath { get; set; }
     public required int UserId { get; set; }
-    public required List<Log>? Logs { get; set; }
+    public required List<LogDto>? Logs { get; set; }
 }
 
 public static class TourDtoExtensions
 {
     public static TourDto ToDto(this Tour tour)
     {
-        return new TourDto()
+        return new TourDto
         {
-            Id = tour.Id ?? 0,
+            Id = tour.Id,
             Name = tour.Name,
             Description = tour.Description,
             From = tour.From,
@@ -35,13 +35,13 @@ public static class TourDtoExtensions
             RouteInformation = tour.RouteInformation,
             ImgPath = tour.ImgPath,
             UserId = tour.UserId,
-            Logs = tour.Logs
+            Logs = tour.Logs?.Select(l => l.ToDto()).ToList()
         };
     }
-    
+
     public static Tour ToTour(this TourDto tourDto)
     {
-        return new Tour()
+        return new Tour
         {
             Id = tourDto.Id,
             Name = tourDto.Name,
@@ -54,7 +54,7 @@ public static class TourDtoExtensions
             RouteInformation = tourDto.RouteInformation,
             ImgPath = tourDto.ImgPath,
             UserId = tourDto.UserId,
-            Logs = tourDto.Logs
+            Logs = tourDto.Logs?.Select(l => l.ToLog()).ToList()
         };
     }
 }

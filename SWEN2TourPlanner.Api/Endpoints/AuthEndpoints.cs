@@ -16,13 +16,15 @@ public static class AuthEndpoints
 
         group.MapPost("/register", Register);
         group.MapPost("/login", Login);
-        
+
         //
-        var summaries = new[] {
+        var summaries = new[]
+        {
             "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
         };
 
-        baseGroup.MapGet("/weatherforecast", () => {
+        baseGroup.MapGet("/weatherforecast", () =>
+            {
                 var forecast = Enumerable.Range(1, 5).Select(index =>
                         new WeatherForecast
                         (
@@ -37,12 +39,13 @@ public static class AuthEndpoints
     }
     //
 
-    public static async Task<Results<Created, Conflict<string>>> Register([FromBody] CredentialsDto credentials, IUserService userService, IPasswordHashingService passwordHashingService, ITokenService tokenService)
+    public static async Task<Results<Created, Conflict<string>>> Register([FromBody] CredentialsDto credentials,
+        IUserService userService, IPasswordHashingService passwordHashingService, ITokenService tokenService)
     {
         // debug
         Console.WriteLine($"Received registration request for username: {credentials.Username}");
         Console.WriteLine($"Password: {credentials.Password}");
-        
+
         var hashedPassword = passwordHashingService.Hash(credentials.Password);
         try
         {
@@ -55,7 +58,8 @@ public static class AuthEndpoints
         }
     }
 
-    public static async Task<Results<Ok<TokenDto>, UnauthorizedHttpResult>> Login([FromBody] CredentialsDto credentials, IUserService userService, IPasswordHashingService passwordHashingService, ITokenService tokenService)
+    public static async Task<Results<Ok<TokenDto>, UnauthorizedHttpResult>> Login([FromBody] CredentialsDto credentials,
+        IUserService userService, IPasswordHashingService passwordHashingService, ITokenService tokenService)
     {
         // debug
         Console.WriteLine($"Received login request for username: {credentials.Username}");
@@ -64,14 +68,11 @@ public static class AuthEndpoints
         try
         {
             var user = await userService.GetUserByUsernameAsync(credentials.Username);
-            
+
             var isPasswordValid = passwordHashingService.Verify(user.HashedPassword, credentials.Password);
-            if (!isPasswordValid)
-            {
-                throw new InvalidDataException("Invalid credentials");
-            }
-            
-            var token = new TokenDto() { Token = tokenService.GenerateToken(user) };
+            if (!isPasswordValid) throw new InvalidDataException("Invalid credentials");
+
+            var token = new TokenDto { Token = tokenService.GenerateToken(user) };
             return TypedResults.Ok(token);
         }
         catch (Exception e) when (e is UserNotFoundException || e is InvalidDataException)
@@ -82,7 +83,8 @@ public static class AuthEndpoints
 }
 
 //
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary) {
+internal record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
+{
     public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
 }
 //

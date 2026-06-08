@@ -6,7 +6,7 @@ public class LogAlreadyExistsException : Exception
     public LogAlreadyExistsException()
     {
     }
-    
+
     public LogAlreadyExistsException(string? message) : base(message)
     {
     }

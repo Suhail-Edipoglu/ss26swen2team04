@@ -13,21 +13,23 @@ public static class LogEndpoints
         var baseGroup = app.MapGroup("/api");
         var group = baseGroup.MapGroup("/tours/{tourId}/logs");
         var logs = baseGroup.MapGroup("/logs");
-        
+
         group.MapGet("/", GetAllLogsForTour);
         logs.MapPost("/", CreateLog);
         logs.MapGet("/{logId}", GetLogById);
         logs.MapPut("/{logId}", UpdateLog);
         logs.MapDelete("/{logId}", DeleteLog);
     }
-    
-    private static async Task<IEnumerable<LogDto>> GetAllLogsForTour(int tourId, ILogService logService, ClaimsPrincipal user)
+
+    private static async Task<IEnumerable<LogDto>> GetAllLogsForTour(int tourId, ILogService logService,
+        ClaimsPrincipal user)
     {
         var username = user.Identity!.Name!;
         return (await logService.FindMatchingLogsAsync(tourId)).Select(l => l.ToDto());
     }
-    
-    private static async Task<Results<Created<LogDto>, Conflict<string>, InternalServerError<string>>> CreateLog([FromBody] LogDto logDto, ILogService logService, ClaimsPrincipal user)
+
+    private static async Task<Results<Created<LogDto>, Conflict<string>, InternalServerError<string>>> CreateLog(
+        [FromBody] LogDto logDto, ILogService logService, ClaimsPrincipal user)
     {
         var username = user.Identity!.Name!;
         try
@@ -45,19 +47,18 @@ public static class LogEndpoints
             return TypedResults.InternalServerError(e.Message);
         }
     }
-    
-    private static async Task<Results<Ok<LogDto>, NotFound<string>>> GetLogById(int logId, ILogService logService, ClaimsPrincipal user)
+
+    private static async Task<Results<Ok<LogDto>, NotFound<string>>> GetLogById(int logId, ILogService logService,
+        ClaimsPrincipal user)
     {
         var username = user.Identity!.Name!;
         var log = await logService.GetLogAsync(logId);
-        if (log == null)
-        {
-            return TypedResults.NotFound("Log not found");
-        }
+        if (log == null) return TypedResults.NotFound("Log not found");
         return TypedResults.Ok(log.ToDto());
     }
-    
-    private static async Task<Results<NoContent, NotFound<string>, InternalServerError<string>>> UpdateLog(int logId, [FromBody] LogDto logDto, ILogService logService, ClaimsPrincipal user)
+
+    private static async Task<Results<NoContent, NotFound<string>, InternalServerError<string>>> UpdateLog(int logId,
+        [FromBody] LogDto logDto, ILogService logService, ClaimsPrincipal user)
     {
         var username = user.Identity!.Name!;
         try
@@ -65,10 +66,7 @@ public static class LogEndpoints
             var logToUpdate = logDto.ToLog();
             logToUpdate.Id = logId;
             var success = await logService.UpdateLogAsync(logToUpdate);
-            if (!success)
-            {
-                return TypedResults.NotFound("Log not found");
-            }
+            if (!success) return TypedResults.NotFound("Log not found");
             return TypedResults.NoContent();
         }
         catch (Exception e)
@@ -76,17 +74,15 @@ public static class LogEndpoints
             return TypedResults.InternalServerError(e.Message);
         }
     }
-    
-    private static async Task<Results<NoContent, NotFound<string>, InternalServerError<string>>> DeleteLog(int logId, ILogService logService, ClaimsPrincipal user)
+
+    private static async Task<Results<NoContent, NotFound<string>, InternalServerError<string>>> DeleteLog(int logId,
+        ILogService logService, ClaimsPrincipal user)
     {
         var username = user.Identity!.Name!;
         try
         {
             var success = await logService.RemoveLogAsync(logId);
-            if (!success)
-            {
-                return TypedResults.NotFound("Log not found");
-            }
+            if (!success) return TypedResults.NotFound("Log not found");
             return TypedResults.NoContent();
         }
         catch (Exception e)
