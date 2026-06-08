@@ -12,13 +12,15 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
 // Wire Models
-builder.Services.AddSingleton<ITourService, CachedTourService>();
-builder.Services.AddSingleton<ILogService, CachedLogService>();
+builder.Services.AddScoped<IApiService, CachedApiService>();
+// builder.Services.AddScoped<IApiService, ApiService>();
+builder.Services.AddSingleton<IMapService, LeafletMapService>();
 
 // Add Blazing MVVM, this also enables ViewModel Loading
 builder.Services.AddMvvm(options =>
-{ 
+{
     options.HostingModelType = BlazorHostingModelType.Server;
+    options.ParameterResolutionMode = ParameterResolutionMode.ViewModel;
 });
 // Add Http Client for Api Calls
 builder.Services.AddHttpClient();

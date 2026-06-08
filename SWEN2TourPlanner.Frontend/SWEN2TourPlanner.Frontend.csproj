@@ -13,6 +13,7 @@
   
   <ItemGroup>
     <PackageReference Include="Blazing.Mvvm" Version="3.2.1" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="10.0.8" />
   </ItemGroup>
 
 </Project>
