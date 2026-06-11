@@ -2,12 +2,14 @@ using SWEN2TourPlanner.Frontend.Components;
 using Blazing.Mvvm;
 using SWEN2TourPlanner.Frontend.Services;
 using SWEN2TourPlanner.Frontend.Services.Interfaces;
+using MudBlazor.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+builder.Services.AddMudServices(); // MudBlazor
 
 // Add Service APIs
 builder.Services.AddHttpClient<ApiService>(client =>
