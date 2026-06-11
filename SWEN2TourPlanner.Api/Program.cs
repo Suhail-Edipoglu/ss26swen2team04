@@ -83,7 +83,6 @@ if (app.Environment.IsDevelopment())
         var services = scope.ServiceProvider;
         
         var context = services.GetRequiredService<SWEN2TourPlannerDbContext>();
-        context.Database.EnsureCreated();
         context.Database.Migrate();
     }
 }

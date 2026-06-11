@@ -1,4 +1,5 @@
-﻿using SWEN2TourPlanner.Dal;
+﻿using SWEN2TourPlanner.Bll.Exceptions;
+using SWEN2TourPlanner.Dal;
 using SWEN2TourPlanner.Models;
 
 namespace SWEN2TourPlanner.Bll;
@@ -12,13 +13,30 @@ public class UserService : IUserService
         _userRepository = userRepository;
     }
     
-    public Task<User> GetUserByUsernameAsync(string username)
+    public async Task<User> GetUserByUsernameAsync(string username)
     {
-        throw new NotImplementedException();
+        var user = await _userRepository.GetUserByUsernameAsync(username) ?? throw new UserNotFoundException($"User with username '{username}' not found.");
+
+        return user;
     }
 
-    public Task<User> RegisterUserAsync(string username, string hashedPassword)
+    public async Task<User> RegisterUserAsync(string username, string hashedPassword)
     {
-        throw new NotImplementedException();
+        var user = new User
+        {
+            Username = username,
+            HashedPassword = hashedPassword
+        };
+        
+        try
+        {
+            await _userRepository.InsertUserAsync(user);
+        }
+        catch (DuplicateKeyException e)
+        {
+            throw new UserAlreadyExistsException($"User with username '{username}' already exists.", e);
+        }
+            
+        return user;
     }
 }
