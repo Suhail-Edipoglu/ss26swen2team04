@@ -4,8 +4,8 @@ namespace SWEN2TourPlanner.Frontend.Services.Interfaces;
 
 public interface IApiService {
         // AUTH
-        Task<bool> RegisterAsync(LoginData loginData); // returns success to use for redirect
-        Task<bool> LoginAsync(LoginData loginData);
+        Task<bool> RegisterAsync(UserData userData); // returns success to use for redirect
+        Task<string?> LoginAsync(UserData userData); // returns token or null on fail
         // TOURS
         Task<List<Tour>> GetToursAsync();
         Task<Tour> GetTourByIdAsync(int tourId);

@@ -1,5 +1,31 @@
 @page "/login"
+@using Blazing.Mvvm.Components
 @inherits Blazing.Mvvm.Components.MvvmComponentBase<SWEN2TourPlanner.Frontend.ViewModels.Interfaces.ILoginViewModel>
-
-<LoginMenu></LoginMenu>
-<StaticMap></StaticMap>
+<MudThemeProvider />
+<MudPopoverProvider />
+<MudDialogProvider />
+<MudSnackbarProvider />
+<MudLayout>
+    <MudMainContent>
+        <MudTabs>
+            <MudTabPanel Text="Login">
+                <EditForm Model="ViewModel.LoginData" FormName="Login" OnValidSubmit="ViewModel.LoginCommand.Execute">
+                    <MvvmObservableValidator />
+                    <ValidationSummary />
+                    <MudTextField Label="Username" Required="true" RequiredError="Username is required!" @bind-Value="@ViewModel.LoginData.Username"></MudTextField>
+                    <MudTextField Label="Password" Required="true" RequiredError="Password is required!" @bind-Value="@ViewModel.LoginData.Password" InputType="InputType.Password"></MudTextField>
+                    <MudButton Variant="Variant.Filled" Color="Color.Primary" ButtonType="ButtonType.Submit" Disabled="@ViewModel.LoginData.HasErrors">Login</MudButton>
+                </EditForm>
+            </MudTabPanel>
+            <MudTabPanel Text="Register">
+                <EditForm Model="ViewModel.RegisterData" FormName="Register" OnValidSubmit="ViewModel.RegisterCommand.Execute">
+                    <MvvmObservableValidator />
+                    <ValidationSummary />
+                    <MudTextField Label="Username" Required="true" RequiredError="Username is required!" @bind-Value="@ViewModel.RegisterData.Username"></MudTextField>
+                    <MudTextField Label="Password" Required="true" RequiredError="Password is required!" @bind-Value="@ViewModel.RegisterData.Password" InputType="InputType.Password"></MudTextField>
+                    <MudButton Variant="Variant.Filled" Color="Color.Primary" ButtonType="ButtonType.Submit" Disabled="@ViewModel.RegisterData.HasErrors">Login</MudButton>
+                </EditForm>
+            </MudTabPanel>
+        </MudTabs>
+    </MudMainContent>
+</MudLayout>

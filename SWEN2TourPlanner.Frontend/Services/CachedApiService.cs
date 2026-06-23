@@ -4,9 +4,9 @@ using SWEN2TourPlanner.Frontend.Services.Interfaces;
 namespace SWEN2TourPlanner.Frontend.Services;
 
 public class CachedApiService : IApiService {
-    private readonly List<LoginData> _loginDataList = [
-        new LoginData { Username = "user1", Password = "password1" },
-        new LoginData { Username = "user2", Password = "password2" }
+    private readonly List<UserData> _loginDataList = [
+        new UserData { Username = "user1", Password = "password1" },
+        new UserData { Username = "user2", Password = "password2" }
     ];
 
     private readonly List<Tour> _tours = [
@@ -20,7 +20,6 @@ public class CachedApiService : IApiService {
             Distance = 8,
             EstimatedTime = new TimeOnly(0, 35),
             RouteInformation = "Praterstern -> Ringstrasse -> Stephansplatz",
-            ImgPath = "images/tours/vienna-city-ride.jpg",
             UserId = 1
         },
         new Tour {
@@ -33,7 +32,6 @@ public class CachedApiService : IApiService {
             Distance = 20,
             EstimatedTime = new TimeOnly(0, 22),
             RouteInformation = "S7/Railjet route",
-            ImgPath = "images/tours/airport-transfer.jpg",
             UserId = 1
         }
     ];
@@ -61,24 +59,22 @@ public class CachedApiService : IApiService {
         }
     ];
 
-    public Task<bool> RegisterAsync(LoginData loginData) {
-        if (_loginDataList.Any(ld => ld.Username == loginData.Username)) {
+    public Task<bool> RegisterAsync(UserData userData) {
+        if (_loginDataList.Any(ld => ld.Username == userData.Username)) {
             return Task.FromResult(false);
         }
 
-        _loginDataList.Add(new LoginData {
-            Username = loginData.Username,
-            Password = loginData.Password
+        _loginDataList.Add(new UserData {
+            Username = userData.Username,
+            Password = userData.Password
         });
 
         return Task.FromResult(true);
     }
 
-    public Task<bool> LoginAsync(LoginData loginData) {
-        var isValid = _loginDataList.Any(ld =>
-            ld.Username == loginData.Username && ld.Password == loginData.Password);
-
-        return Task.FromResult(isValid);
+    public Task<string?> LoginAsync(UserData userData) {
+        return _loginDataList.Any(ld =>
+            ld.Username == userData.Username && ld.Password == userData.Password) ? Task.FromResult(userData.Username) : Task.FromResult<string?>(null); 
     }
 
     public Task<List<Tour>> GetToursAsync() {
@@ -187,7 +183,6 @@ public class CachedApiService : IApiService {
             Distance = source.Distance,
             EstimatedTime = source.EstimatedTime,
             RouteInformation = source.RouteInformation,
-            ImgPath = source.ImgPath,
             UserId = source.UserId
         };
     }

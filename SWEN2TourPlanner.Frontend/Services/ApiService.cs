@@ -6,10 +6,10 @@ namespace SWEN2TourPlanner.Frontend.Services;
 public class ApiService(HttpClient httpClient) : IApiService {
     private readonly HttpClient _httpClient = httpClient;
     
-    public async Task<bool> RegisterAsync(LoginData loginData) {
+    public async Task<bool> RegisterAsync(UserData userData) {
         throw new NotImplementedException();
     }
-    public async Task<bool> LoginAsync(LoginData loginData) {
+    public async Task<string?> LoginAsync(UserData userData) {
         throw new NotImplementedException();
     }
     public async Task<List<Tour>> GetToursAsync() {

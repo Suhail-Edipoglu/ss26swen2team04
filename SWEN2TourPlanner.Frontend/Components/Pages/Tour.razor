@@ -1,14 +1,6 @@
 @page "/tour"
+@layout MainLayout
 @inherits Blazing.Mvvm.Components.MvvmComponentBase<SWEN2TourPlanner.Frontend.ViewModels.Interfaces.ITourViewModel>
 
-<NavMenu State="CurrentState"></NavMenu>
-<LogoutButton></LogoutButton>
-<CurrentTour Id=@Id></CurrentTour>
-<CreateNew></CreateNew>
-<StaticMap></StaticMap>
 
-@code {
-    [SupplyParameterFromQuery(Name = "id")]
-    public int? Id { get; set; }
-    private const NavMenu.UiState CurrentState = NavMenu.UiState.Tour;
-}
+<MudFab Color="Color.Secondary" StartIcon="@Icons.Material.Filled.Add" Size="Size.Large" />

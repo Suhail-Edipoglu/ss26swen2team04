@@ -1,14 +1,3 @@
 @page "/log"
+@layout MainLayout
 @inherits Blazing.Mvvm.Components.MvvmComponentBase<SWEN2TourPlanner.Frontend.ViewModels.Interfaces.ITourLogViewModel>
-
-<NavMenu State="CurrentState"></NavMenu>
-<LogoutButton></LogoutButton>
-<CurrentTourLog Id=@Id></CurrentTourLog>
-<CreateNew></CreateNew>
-<StaticMap></StaticMap>
-
-@code {
-    [SupplyParameterFromQuery(Name = "id")]
-    public int? Id { get; set; }
-    private const NavMenu.UiState CurrentState = NavMenu.UiState.TourLog;
-}

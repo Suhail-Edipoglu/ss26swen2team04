@@ -9,7 +9,7 @@ public class CachedApiServiceTests {
     public async Task RegisterAsync_ReturnsFalse_WhenUsernameAlreadyExists() {
         var service = CreateService();
 
-        var result = await service.RegisterAsync(new LoginData {
+        var result = await service.RegisterAsync(new UserData {
             Username = "user1",
             Password = "anything"
         });
@@ -21,12 +21,12 @@ public class CachedApiServiceTests {
     public async Task LoginAsync_ReturnsTrue_ForRegisteredUser() {
         var service = CreateService();
 
-        await service.RegisterAsync(new LoginData {
+        await service.RegisterAsync(new UserData {
             Username = "new-user",
             Password = "pw"
         });
 
-        var loginResult = await service.LoginAsync(new LoginData {
+        var loginResult = await service.LoginAsync(new UserData {
             Username = "new-user",
             Password = "pw"
         });
@@ -147,7 +147,6 @@ public class CachedApiServiceTests {
             Distance = 12,
             EstimatedTime = new TimeOnly(1, 15),
             RouteInformation = "Turn left then right",
-            ImgPath = "images/test.jpg",
             UserId = 1
         };
     }

@@ -17,7 +17,9 @@
   <ItemGroup>
     <Compile Include="../SWEN2TourPlanner.Frontend/Services/CachedApiService.cs" Link="Services/CachedApiService.cs" />
     <Compile Include="../SWEN2TourPlanner.Frontend/Services/Interfaces/IApiService.cs" Link="Services/Interfaces/IApiService.cs" />
-    <Compile Include="../SWEN2TourPlanner.Frontend/DTOs/LoginData.cs" Link="DTOs/LoginData.cs" />
+    <Compile Include="..\SWEN2TourPlanner.Frontend\DTOs\UserData.cs">
+      <Link>DTOs/UserData.cs</Link>
+    </Compile>
     <Compile Include="../SWEN2TourPlanner.Frontend/DTOs/Tour.cs" Link="DTOs/Tour.cs" />
     <Compile Include="../SWEN2TourPlanner.Frontend/DTOs/TourLog.cs" Link="DTOs/TourLog.cs" />
     <Compile Include="../SWEN2TourPlanner.Frontend/DTOs/TransportType.cs" Link="DTOs/TransportType.cs" />

@@ -11,6 +11,5 @@ public class Tour
     public required int Distance { get; set; }
     public required TimeOnly EstimatedTime  { get; set; }
     public required string RouteInformation { get; set; }
-    public required string ImgPath  { get; set; }
     public required int UserId { get; set; }
 }

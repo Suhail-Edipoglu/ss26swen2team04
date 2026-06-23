@@ -1,23 +1,19 @@
 using SWEN2TourPlanner.Frontend.Components;
 using Blazing.Mvvm;
+using MudBlazor.Services;
+using SWEN2TourPlanner.Frontend.Models;
+using SWEN2TourPlanner.Frontend.Models.Interfaces;
 using SWEN2TourPlanner.Frontend.Services;
 using SWEN2TourPlanner.Frontend.Services.Interfaces;
-using MudBlazor.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.Services.AddRazorComponents()
-    .AddInteractiveServerComponents();
+    .AddInteractiveServerComponents(); // Use Blazor Server Rendering
 builder.Services.AddMudServices(); // MudBlazor
 
 // Add Service APIs
 builder.Services.AddHttpClient<ApiService>(client =>
-{
-    client.BaseAddress = new Uri("https://api.example.com/");
-    client.DefaultRequestHeaders.Add("Accept", "application/json");
-});
-builder.Services.AddHttpClient<LeafletMapService>(client =>
 {
     client.BaseAddress = new Uri("https://api.example.com/");
     client.DefaultRequestHeaders.Add("Accept", "application/json");
@@ -31,10 +27,9 @@ builder.Services.AddHttpClient<OpenRouteServiceService>(client =>
 });
 
 // Wire Models
-// TODO Choose Cached Dummy Api Service or Real Backend Api
-builder.Services.AddScoped<IApiService, CachedApiService>();
-// builder.Services.AddScoped<IApiService, ApiService>();
-builder.Services.AddSingleton<IMapService, LeafletMapService>();
+builder.Services.AddSingleton<IApiService, CachedApiService>();
+builder.Services.AddScoped<ILoginManager, LoginManager>();
+builder.Services.AddScoped<ICache, Cache>();
 
 // Add Blazing MVVM, this also enables ViewModel Loading
 builder.Services.AddMvvm(options =>

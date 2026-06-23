@@ -1,8 +1,0 @@
-using SWEN2TourPlanner.Frontend.Services.Interfaces;
-
-namespace SWEN2TourPlanner.Frontend.Services;
-
-public class LeafletMapService(HttpClient httpClient) : IMapService{
-    private readonly HttpClient _httpClient = httpClient;
-
-}
