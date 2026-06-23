@@ -4,7 +4,7 @@ namespace SWEN2TourPlanner.Dal;
 
 public interface ITourRepository
 {
-    Task<IEnumerable<Tour>> GetAllToursAsync(string username);
+    Task<List<Tour>> GetAllToursAsync(string username);
     Task<Tour?> GetTourByIdAsync(string username, int tourId);
     Task InsertTourAsync(string username, Tour tour);
     Task UpdateTourAsync(string username, Tour tour);

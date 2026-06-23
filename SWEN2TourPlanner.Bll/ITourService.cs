@@ -4,9 +4,9 @@ namespace SWEN2TourPlanner.Bll;
 
 public interface ITourService
 {
-    Task<Tour?> GetTourAsync(int tourId);
-    Task<Tour?> GetToursAsync(string username);
-    Task<Tour> CreateTourAsync(Tour tour);
+    Task<Tour> GetTourAsync(string username, int tourId);
+    Task<List<Tour>> GetToursAsync(string username);
+    Task<Tour> CreateTourAsync(Tour tour,  string username);
     Task<bool> UpdateTourAsync(int tourId, Tour tour);
     Task<bool> RemoveTourAsync(int tourId);
     Task<IEnumerable<Tour>> FindMatchingToursAsync(string username, string? searchText = null);

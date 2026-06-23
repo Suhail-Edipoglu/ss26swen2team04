@@ -11,7 +11,7 @@ public static class TourEndpoints
     public static void MapTourEndpoint(this IEndpointRouteBuilder app)
     {
         var baseGroup = app.MapGroup("/api");
-        var group = baseGroup.MapGroup("/tours");
+        var group = baseGroup.MapGroup("/tours").RequireAuthorization();
 
         group.MapGet("/", GetAllTours);
         group.MapPost("/", CreateTour);
@@ -32,7 +32,8 @@ public static class TourEndpoints
         var username = user.Identity!.Name!;
         try
         {
-            var createdTour = (await tourService.CreateTourAsync(tourDto.ToTour())).ToDto();
+            var tour = tourDto.ToTour();
+            var createdTour = (await tourService.CreateTourAsync(tour, username)).ToDto();
             string? uri = null; // TODO: generate URI for the created resource
             return TypedResults.Created(uri, createdTour);
         }
@@ -50,7 +51,7 @@ public static class TourEndpoints
         ClaimsPrincipal user)
     {
         var username = user.Identity!.Name!;
-        var tour = await tourService.GetTourAsync(id);
+        var tour = await tourService.GetTourAsync(username, id);
         if (tour == null || tour.Name != username) return TypedResults.NotFound("Tour not found");
         return TypedResults.Ok(tour.ToDto());
     }

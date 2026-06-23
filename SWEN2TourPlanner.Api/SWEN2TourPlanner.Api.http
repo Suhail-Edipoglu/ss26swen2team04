@@ -32,14 +32,32 @@ Content-Type: application/json
 
 ###
 
-GET {{HostAddress}}/api/facts
-Authorization: Bearer {{login.response.body.$.token}}
+GET {{HostAddress}}/api/tours/
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6InRlc3R1c2VyIiwibmJmIjoxNzgyMjI1NzkzLCJleHAiOjE3ODIyMjkzOTMsImlhdCI6MTc4MjIyNTc5MywiaXNzIjoiU1dFTjJUb3VyUGxhbm5lci5BcGkiLCJhdWQiOiJTV0VOMlRvdXJQbGFubmVyLkZyb250ZW5kIn0.at5GN__tgxfq8sYGGa6LfJrdSM5_aXQS8s7z-L1DiuQ
 
 ###
 
+
 # Search for plus sign
 GET {{HostAddress}}/api/facts/search?term=%2B
-Authorization: Bearer {{login.response.body.$.token}}
+Authorization: Bearer "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6InRlc3R1c2VyIiwibmJmIjoxNzgyMjIxNDg2LCJleHAiOjE3ODIyMjUwODYsImlhdCI6MTc4MjIyMTQ4NiwiaXNzIjoiU1dFTjJUb3VyUGxhbm5lci5BcGkiLCJhdWQiOiJTV0VOMlRvdXJQbGFubmVyLkZyb250ZW5kIn0.zPTggjNXV7NlOKh2jwhvWNWdpC_RtU-DaxpPbT_tSGk"
+
+###
+
+POST {{HostAddress}}/api/tours/
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6InRlc3R1c2VyIiwibmJmIjoxNzgyMjI1NzkzLCJleHAiOjE3ODIyMjkzOTMsImlhdCI6MTc4MjIyNTc5MywiaXNzIjoiU1dFTjJUb3VyUGxhbm5lci5BcGkiLCJhdWQiOiJTV0VOMlRvdXJQbGFubmVyLkZyb250ZW5kIn0.at5GN__tgxfq8sYGGa6LfJrdSM5_aXQS8s7z-L1DiuQ
+Content-Type: application/json
+
+{
+  "name": "coole tour",
+  "description": "coole beschreibung",
+  "from": "Berlin",
+  "to": "Hamburg",
+  "transportType": 2,
+  "distance": 289,
+  "estimatedTime": "03:00:00",
+  "routeInformation": "https://www.google.com/maps/dir/Berlin/Hamburg/@52.4416976,10.4899138,7z/data=!3m1!4b1!4m13!4m12!1m5!1m1!1s0x47a84e9caa9fbbf3:0x420d2cbbd8e5e7c!2m2!1d13.404954!2d52.5200066!1m5!1m1!1s0x47b18eaaea9a7b71:0x422cbbd8e5e7c!2m2!1d9.9936824!2d53.5510846"
+}
 
 ###
 

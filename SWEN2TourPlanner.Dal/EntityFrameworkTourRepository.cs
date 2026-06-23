@@ -1,4 +1,5 @@
-﻿using SWEN2TourPlanner.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using SWEN2TourPlanner.Models;
 
 namespace SWEN2TourPlanner.Dal;
 
@@ -11,28 +12,74 @@ public class EntityFrameworkTourRepository : ITourRepository
         _dbContext = dbContext;
     }
     
-    public Task<IEnumerable<Tour>> GetAllToursAsync(string username)
+    public async Task<List<Tour>> GetAllToursAsync(string username)
     {
-        throw new NotImplementedException();
+        try
+        {
+            var tours = await _dbContext.Tours.AsNoTracking().Where(t => t.User.Username == username).ToListAsync();
+            return tours;
+        }
+        catch (Exception e) when(e is DbUpdateException || e is ArgumentException)
+        {
+            return null;
+        }
     }
 
-    public Task<Tour?> GetTourByIdAsync(string username, int tourId)
+    public async Task<Tour?> GetTourByIdAsync(string username, int tourId)
     {
-        throw new NotImplementedException();
+        return await _dbContext.Tours.SingleOrDefaultAsync(t => t.Id == tourId && t.User.Username == username);
     }
 
-    public Task InsertTourAsync(string username, Tour tour)
+    public async Task InsertTourAsync(string username, Tour tour)
     {
-        throw new NotImplementedException();
+        try
+        {
+            var user = await _dbContext.Users.SingleAsync(u => u.Username == username);
+            tour.User = user;
+            await _dbContext.Tours.AddAsync(tour);
+            await _dbContext.SaveChangesAsync();
+        }
+        catch (Exception e) when(e is DbUpdateException || e is ArgumentException)
+        {
+            throw new DuplicateKeyException($"Tour with name '{tour.Name}' already exists for user '{username}'.", e);
+        }
     }
 
-    public Task UpdateTourAsync(string username, Tour tour)
+    public async Task UpdateTourAsync(string username, Tour tour)
     {
-        throw new NotImplementedException();
+        var existingTour = await _dbContext.Tours.SingleOrDefaultAsync(t => t.Id == tour.Id && t.User.Username == username);
+        if (existingTour == null)
+        {
+            throw new KeyNotFoundException($"Tour with id '{tour.Id}' not found for user '{username}'.");
+        }
+        
+        existingTour.Name = tour.Name;
+        existingTour.Description = tour.Description;
+        existingTour.From = tour.From;
+        existingTour.To = tour.To;
+        existingTour.TransportType = tour.TransportType;
+        
+        try
+        {
+            _dbContext.Tours.Update(existingTour);
+            await _dbContext.SaveChangesAsync();
+        }
+        catch (Exception e) when(e is DbUpdateException || e is ArgumentException)
+        {
+            throw new DuplicateKeyException($"Tour with name '{tour.Name}' already exists for user '{username}'.", e);
+        }
     }
 
-    public Task<bool> DeleteTourAsync(string username, int tourId)
+    public async Task<bool> DeleteTourAsync(string username, int tourId)
     {
-        throw new NotImplementedException();
+        var tour = await _dbContext.Tours.SingleOrDefaultAsync(t => t.Id == tourId && t.User.Username == username);
+        if (tour == null)
+        {
+            return false;
+        }
+        
+        _dbContext.Tours.Remove(tour);
+        await _dbContext.SaveChangesAsync();
+        return true;
     }
 }

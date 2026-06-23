@@ -8,7 +8,7 @@ public class Tour
 
     public Tour(int id, string name, string description, string from, string to, TransportType transportType,
         int distance,
-        TimeOnly estimatedTime, string routeInformation, string imgPath, int userId, List<Log>? logs) : this()
+        TimeOnly estimatedTime, string routeInformation, int userId, List<Log>? logs) : this()
     {
         Id = id;
         Name = name;
@@ -19,21 +19,19 @@ public class Tour
         Distance = distance;
         EstimatedTime = estimatedTime;
         RouteInformation = routeInformation;
-        ImgPath = imgPath;
         UserId = userId;
         Logs = logs;
     }
 
     public int Id { get; set; }
-    public string Name { get; set; }
-    public string Description { get; set; }
-    public string From { get; set; }
-    public string To { get; set; }
-    public TransportType TransportType { get; set; }
-    public int Distance { get; set; }
-    public TimeOnly EstimatedTime { get; set; }
-    public string RouteInformation { get; set; }
-    public string ImgPath { get; set; }
+    public required string Name { get; set; }
+    public required string Description { get; set; }
+    public required string From { get; set; }
+    public required string To { get; set; }
+    public required TransportType TransportType { get; set; }
+    public required int Distance { get; set; }
+    public required TimeOnly EstimatedTime { get; set; }
+    public required string RouteInformation { get; set; }
     public int UserId { get; set; }
     public User? User { get; set; }
     public List<Log>? Logs { get; set; }

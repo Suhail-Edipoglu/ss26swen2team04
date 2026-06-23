@@ -4,7 +4,7 @@ namespace SWEN2TourPlanner.Api.Dtos;
 // todo split into diff dtos for create, response etc
 public class TourDto
 {
-    public required int Id { get; set; }
+    public int Id { get; set; }
     public required string Name { get; set; }
     public required string Description { get; set; }
     public required string From { get; set; }
@@ -13,9 +13,8 @@ public class TourDto
     public required int Distance { get; set; }
     public required TimeOnly EstimatedTime { get; set; }
     public required string RouteInformation { get; set; }
-    public required string ImgPath { get; set; }
-    public required int UserId { get; set; }
-    public required List<LogDto>? Logs { get; set; }
+    public int UserId { get; set; }
+    public List<LogDto>? Logs { get; set; }
 }
 
 public static class TourDtoExtensions
@@ -33,7 +32,6 @@ public static class TourDtoExtensions
             Distance = tour.Distance,
             EstimatedTime = tour.EstimatedTime,
             RouteInformation = tour.RouteInformation,
-            ImgPath = tour.ImgPath,
             UserId = tour.UserId,
             Logs = tour.Logs?.Select(l => l.ToDto()).ToList()
         };
@@ -52,7 +50,6 @@ public static class TourDtoExtensions
             Distance = tourDto.Distance,
             EstimatedTime = tourDto.EstimatedTime,
             RouteInformation = tourDto.RouteInformation,
-            ImgPath = tourDto.ImgPath,
             UserId = tourDto.UserId,
             Logs = tourDto.Logs?.Select(l => l.ToLog()).ToList()
         };
