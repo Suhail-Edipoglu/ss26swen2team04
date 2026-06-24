@@ -81,6 +81,10 @@ public class CachedApiService : IApiService {
         return Task.FromResult(_tours.Select(CloneTour).ToList());
     }
 
+    public async Task<List<Tour>> SearchToursAsync(string searchTerm) {
+        return await GetToursAsync();
+    }
+
     public Task<Tour> GetTourByIdAsync(int tourId) {
         var tour = _tours.FirstOrDefault(t => t.Id == tourId)
             ?? throw new KeyNotFoundException($"Tour with id {tourId} was not found.");
@@ -126,6 +130,10 @@ public class CachedApiService : IApiService {
             .Where(l => l.TourId == tourId)
             .Select(CloneTourLog)
             .ToList());
+    }
+
+    public async Task<List<TourLog>> SearchTourLogsAsync(int tourId, string searchTerm) {
+        return await GetTourLogsAsync(tourId);
     }
 
     public Task<TourLog> GetTourLogByIdAsync(int tourLogId) {

@@ -15,6 +15,11 @@ public class ApiService(HttpClient httpClient) : IApiService {
     public async Task<List<Tour>> GetToursAsync() {
         throw new NotImplementedException();
     }
+
+    public async Task<List<Tour>> SearchToursAsync(string searchTerm) {
+        throw new NotImplementedException();
+    }
+
     public async Task<Tour> GetTourByIdAsync(int tourId) {
         throw new NotImplementedException();
     }
@@ -30,6 +35,11 @@ public class ApiService(HttpClient httpClient) : IApiService {
     public async Task<List<TourLog>> GetTourLogsAsync(int tourId) {
         throw new NotImplementedException();
     }
+
+    public async Task<List<TourLog>> SearchTourLogsAsync(int tourId, string searchTerm) {
+        throw new NotImplementedException();
+    }
+
     public async Task<TourLog> GetTourLogByIdAsync(int tourLogId) {
         throw new NotImplementedException();
     }
