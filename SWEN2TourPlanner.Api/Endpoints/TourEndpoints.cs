@@ -1,4 +1,4 @@
-﻿using System.Security.Claims;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using SWEN2TourPlanner.Api.Dtos;
@@ -14,16 +14,17 @@ public static class TourEndpoints
         var group = baseGroup.MapGroup("/tours").RequireAuthorization();
 
         group.MapGet("/", GetAllTours);
+        group.MapGet("/search", GetAllTours);
         group.MapPost("/", CreateTour);
         group.MapGet("/{id}", GetTourById);
         group.MapPut("/{id}", UpdateTour);
         group.MapDelete("/{id}", DeleteTour);
     }
 
-    private static async Task<IEnumerable<TourDto>> GetAllTours(ITourService tourService, ClaimsPrincipal user)
+    private static async Task<IEnumerable<TourDto>> GetAllTours([FromQuery] string? term, ITourService tourService, ClaimsPrincipal user)
     {
         var username = user.Identity!.Name!;
-        return (await tourService.FindMatchingToursAsync(username)).Select(t => t.ToDto());
+        return (await tourService.FindMatchingToursAsync(username, term)).Select(t => t.ToDto());
     }
 
     private static async Task<Results<Created<TourDto>, Conflict<string>, InternalServerError<string>>> CreateTour(
@@ -52,7 +53,7 @@ public static class TourEndpoints
     {
         var username = user.Identity!.Name!;
         var tour = await tourService.GetTourAsync(username, id);
-        if (tour == null || tour.Name != username) return TypedResults.NotFound("Tour not found");
+        if (tour == null || tour.User.Username != username) return TypedResults.NotFound("Tour not found");
         return TypedResults.Ok(tour.ToDto());
     }
 
@@ -60,9 +61,14 @@ public static class TourEndpoints
         [FromBody] TourDto tourDto, ITourService tourService, ClaimsPrincipal user)
     {
         var username = user.Identity!.Name!;
+        var tour = await tourService.GetTourAsync(username, id);
+        if (tour == null || tour.User.Username != username) return TypedResults.NotFound("Tour not found");
         try
         {
-            var success = await tourService.UpdateTourAsync(id, tourDto.ToTour());
+            var usertmp = tour.User;
+            tour = tourDto.ToTour();
+            tour.User = usertmp;
+            var success = await tourService.UpdateTourAsync(id, tour);
             if (!success) return TypedResults.NotFound("Tour not found");
             return TypedResults.NoContent();
         }
@@ -78,7 +84,7 @@ public static class TourEndpoints
         var username = user.Identity!.Name!;
         try
         {
-            var success = await tourService.RemoveTourAsync(id);
+            var success = await tourService.RemoveTourAsync(username, id);
             if (!success) return TypedResults.NotFound("Tour not found");
             return TypedResults.NoContent();
         }

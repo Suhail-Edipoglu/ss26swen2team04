@@ -1,4 +1,6 @@
 @HostAddress = http://localhost:5283
+@Token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6InRlc3R1c2VyIiwibmJmIjoxNzgyMzA2MTA1LCJleHAiOjE3ODIzMDk3MDUsImlhdCI6MTc4MjMwNjEwNSwiaXNzIjoiU1dFTjJUb3VyUGxhbm5lci5BcGkiLCJhdWQiOiJTV0VOMlRvdXJQbGFubmVyLkZyb250ZW5kIn0.8Fys2cI4FOCC2d7GS1ebVP4eeNbDsYWaSmj64MeQsi8
+@TourId = 2
 
 POST {{HostAddress}}/api/auth/register
 Content-Type: application/json
@@ -10,7 +12,7 @@ Content-Type: application/json
 
 ###
 
-# @name login
+# @name login false credentials
 POST {{HostAddress}}/api/auth/login
 Content-Type: application/json
 
@@ -21,7 +23,7 @@ Content-Type: application/json
 
 ###
 
-# @name login
+# @name login valid credentials
 POST {{HostAddress}}/api/auth/login
 Content-Type: application/json
 
@@ -32,20 +34,23 @@ Content-Type: application/json
 
 ###
 
+# Get all tours (popularity und childfriendliness fehlen noch)
 GET {{HostAddress}}/api/tours/
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6InRlc3R1c2VyIiwibmJmIjoxNzgyMjI1NzkzLCJleHAiOjE3ODIyMjkzOTMsImlhdCI6MTc4MjIyNTc5MywiaXNzIjoiU1dFTjJUb3VyUGxhbm5lci5BcGkiLCJhdWQiOiJTV0VOMlRvdXJQbGFubmVyLkZyb250ZW5kIn0.at5GN__tgxfq8sYGGa6LfJrdSM5_aXQS8s7z-L1DiuQ
+Authorization: Bearer {{Token}}
 
 ###
-
 
 # Search for plus sign
-GET {{HostAddress}}/api/facts/search?term=%2B
-Authorization: Bearer "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6InRlc3R1c2VyIiwibmJmIjoxNzgyMjIxNDg2LCJleHAiOjE3ODIyMjUwODYsImlhdCI6MTc4MjIyMTQ4NiwiaXNzIjoiU1dFTjJUb3VyUGxhbm5lci5BcGkiLCJhdWQiOiJTV0VOMlRvdXJQbGFubmVyLkZyb250ZW5kIn0.zPTggjNXV7NlOKh2jwhvWNWdpC_RtU-DaxpPbT_tSGk"
+
+GET {{HostAddress}}/api/tours/search?term=berlin
+Authorization: Bearer {{Token}}
 
 ###
 
+# create a new tour
+
 POST {{HostAddress}}/api/tours/
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6InRlc3R1c2VyIiwibmJmIjoxNzgyMjI1NzkzLCJleHAiOjE3ODIyMjkzOTMsImlhdCI6MTc4MjIyNTc5MywiaXNzIjoiU1dFTjJUb3VyUGxhbm5lci5BcGkiLCJhdWQiOiJTV0VOMlRvdXJQbGFubmVyLkZyb250ZW5kIn0.at5GN__tgxfq8sYGGa6LfJrdSM5_aXQS8s7z-L1DiuQ
+Authorization: Bearer {{Token}}
 Content-Type: application/json
 
 {
@@ -61,23 +66,35 @@ Content-Type: application/json
 
 ###
 
-# @name collect
-POST {{HostAddress}}/api/facts/collect
-Authorization: Bearer {{login.response.body.$.token}}
+# get tour by id (popularity und childfriendliness fehlen noch)
+
+GET {{HostAddress}}/api/tours/{{TourId}}
+Authorization: Bearer {{Token}}
 
 ###
 
-POST {{HostAddress}}/api/facts/{{collect.response.body.$.id}}/verify
-Authorization: Bearer {{login.response.body.$.token}}
+# update tour
+
+PUT {{HostAddress}}/api/tours/{{TourId}}
+Authorization: Bearer {{Token}}
 Content-Type: application/json
 
 {
-  "note": "It's completely true.\nI've checked it!"
+  "name": "coole geupdatete tour",
+  "description": "coole geupdatete beschreibung",
+  "from": "Wien",
+  "to": "Hamburg",
+  "transportType": 2,
+  "distance": 289,
+  "estimatedTime": "03:00:00",
+  "routeInformation": "https://www.google.com/maps/dir/Berlin/Hamburg/@52.4416976,10.4899138,7z/data=!3m1!4b1!4m13!4m12!1m5!1m1!1s0x47a84e9caa9fbbf3:0x420d2cbbd8e5e7c!2m2!1d13.404954!2d52.5200066!1m5!1m1!1s0x47b18eaaea9a7b71:0x422cbbd8e5e7c!2m2!1d9.9936824!2d53.5510846"
 }
 
 ###
 
-DELETE {{HostAddress}}/api/facts/{{collect.response.body.$.id}}
-Authorization: Bearer {{login.response.body.$.token}}
+# delete tour (logs löschen fehlt hier noch)
+
+DELETE {{HostAddress}}/api/tours/{{TourId}}
+Authorization: Bearer {{Token}}
 
 ###

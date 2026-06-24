@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using SWEN2TourPlanner.Models;
 
 namespace SWEN2TourPlanner.Dal;
@@ -16,7 +16,11 @@ public class EntityFrameworkTourRepository : ITourRepository
     {
         try
         {
-            var tours = await _dbContext.Tours.AsNoTracking().Where(t => t.User.Username == username).ToListAsync();
+            var tours = await _dbContext.Tours
+                .Include(t => t.User)
+                .AsNoTracking()
+                .Where(t => t.User.Username == username)
+                .ToListAsync();
             return tours;
         }
         catch (Exception e) when(e is DbUpdateException || e is ArgumentException)
@@ -27,7 +31,11 @@ public class EntityFrameworkTourRepository : ITourRepository
 
     public async Task<Tour?> GetTourByIdAsync(string username, int tourId)
     {
-        return await _dbContext.Tours.SingleOrDefaultAsync(t => t.Id == tourId && t.User.Username == username);
+        var tour = await _dbContext.Tours
+            .Include(t => t.User)
+            .SingleOrDefaultAsync(t => t.Id == tourId && t.User.Username == username);
+        
+        return tour;
     }
 
     public async Task InsertTourAsync(string username, Tour tour)
@@ -47,6 +55,8 @@ public class EntityFrameworkTourRepository : ITourRepository
 
     public async Task UpdateTourAsync(string username, Tour tour)
     {
+        var user = await _dbContext.Users.SingleAsync(u => u.Username == username);
+        tour.User = user;
         var existingTour = await _dbContext.Tours.SingleOrDefaultAsync(t => t.Id == tour.Id && t.User.Username == username);
         if (existingTour == null)
         {
@@ -58,6 +68,9 @@ public class EntityFrameworkTourRepository : ITourRepository
         existingTour.From = tour.From;
         existingTour.To = tour.To;
         existingTour.TransportType = tour.TransportType;
+        existingTour.Distance = tour.Distance;
+        existingTour.EstimatedTime = tour.EstimatedTime;
+        existingTour.RouteInformation = tour.RouteInformation;
         
         try
         {

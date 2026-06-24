@@ -30,7 +30,7 @@ public class TourService : ITourService
         try
         {
             await _tourRepository.InsertTourAsync(username, tour);
-            return tour;
+            return tour; // maybe return tour from db?
         }
         catch (DuplicateKeyException)
         {
@@ -40,12 +40,29 @@ public class TourService : ITourService
 
     public async Task<bool> UpdateTourAsync(int tourId, Tour tour)
     {
-        throw new NotImplementedException();
+        try
+        {
+            tour.Id = tourId;
+            await _tourRepository.UpdateTourAsync(tour.User.Username, tour);
+            return true;
+        }
+        catch (TourNotFoundException)
+        {
+            return false;
+        }
     }
 
-    public async Task<bool> RemoveTourAsync(int tourId)
+    public async Task<bool> RemoveTourAsync(string username, int tourId)
     {
-        throw new NotImplementedException();
+        try
+        {
+            await _tourRepository.DeleteTourAsync(username, tourId);
+            return true;
+        }
+        catch (TourNotFoundException)
+        {
+            return false;
+        }
     }
 
     public async Task<IEnumerable<Tour>> FindMatchingToursAsync(string username, string? searchText = null)
