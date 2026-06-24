@@ -12,4 +12,6 @@ public class Tour
     public required TimeOnly EstimatedTime  { get; set; }
     public required string RouteInformation { get; set; }
     public required int UserId { get; set; }
+    public int Popularity { get; set; }
+    public int ChildFriendliness { get; set; }
 }

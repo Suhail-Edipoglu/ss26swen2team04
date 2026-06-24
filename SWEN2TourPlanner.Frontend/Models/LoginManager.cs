@@ -5,29 +5,40 @@ using SWEN2TourPlanner.Frontend.Services.Interfaces;
 namespace SWEN2TourPlanner.Frontend.Models;
 
 public class LoginManager(IApiService api) : ILoginManager {
-    bool ILoginManager.IsLoggedIn() {
-        throw new NotImplementedException();
-    }
-    public string? Token { get; private set; } = null;
+    private string? _token = null;
+    private DateTime _tokenValidUntil = DateTime.MinValue;
+    private UserData? _userData = null;
     private IApiService _api = api; 
     
     public bool Login(UserData userData) {
         var success = _api.LoginAsync(userData);
-        Token = success.Result;
-        return Token != null;
+        success.Wait();
+        _token = success.Result;
+        _tokenValidUntil = DateTime.Now.AddMinutes(50);
+        _userData = userData;
+        return _token != null;
     }
     
     public bool Register(UserData userData) {
         var success = _api.RegisterAsync(userData);
+        success.Wait();
         return success.Result;
     }
 
     public void Logout() {
-        Token = null;
+        _token = null;
+        _userData = null;
     }
 
     public bool IsLoggedIn() {
-        return Token != null;
+        return _token != null;
     }
-    
+
+    public string? GetToken() {
+        if (_token != null && _tokenValidUntil < DateTime.Now) {
+            // updates token if user still logged in
+            Login(_userData);
+        }
+        return _token;
+    }
 }

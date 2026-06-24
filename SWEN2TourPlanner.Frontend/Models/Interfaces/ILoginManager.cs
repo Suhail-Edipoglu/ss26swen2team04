@@ -7,5 +7,5 @@ public interface ILoginManager {
     public bool Register(UserData userData);
     public void Logout();
     public bool IsLoggedIn();
-    public string? Token { get; }
+    public string? GetToken();
 }

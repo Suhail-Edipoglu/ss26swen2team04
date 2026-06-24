@@ -1,31 +1,30 @@
 @page "/login"
-@using Blazing.Mvvm.Components
 @inherits Blazing.Mvvm.Components.MvvmComponentBase<SWEN2TourPlanner.Frontend.ViewModels.Interfaces.ILoginViewModel>
 <MudThemeProvider />
 <MudPopoverProvider />
 <MudDialogProvider />
 <MudSnackbarProvider />
 <MudLayout>
-    <MudMainContent>
-        <MudTabs>
-            <MudTabPanel Text="Login">
-                <EditForm Model="ViewModel.LoginData" FormName="Login" OnValidSubmit="ViewModel.LoginCommand.Execute">
-                    <MvvmObservableValidator />
-                    <ValidationSummary />
-                    <MudTextField Label="Username" Required="true" RequiredError="Username is required!" @bind-Value="@ViewModel.LoginData.Username"></MudTextField>
-                    <MudTextField Label="Password" Required="true" RequiredError="Password is required!" @bind-Value="@ViewModel.LoginData.Password" InputType="InputType.Password"></MudTextField>
-                    <MudButton Variant="Variant.Filled" Color="Color.Primary" ButtonType="ButtonType.Submit" Disabled="@ViewModel.LoginData.HasErrors">Login</MudButton>
-                </EditForm>
-            </MudTabPanel>
-            <MudTabPanel Text="Register">
-                <EditForm Model="ViewModel.RegisterData" FormName="Register" OnValidSubmit="ViewModel.RegisterCommand.Execute">
-                    <MvvmObservableValidator />
-                    <ValidationSummary />
-                    <MudTextField Label="Username" Required="true" RequiredError="Username is required!" @bind-Value="@ViewModel.RegisterData.Username"></MudTextField>
-                    <MudTextField Label="Password" Required="true" RequiredError="Password is required!" @bind-Value="@ViewModel.RegisterData.Password" InputType="InputType.Password"></MudTextField>
-                    <MudButton Variant="Variant.Filled" Color="Color.Primary" ButtonType="ButtonType.Submit" Disabled="@ViewModel.RegisterData.HasErrors">Login</MudButton>
-                </EditForm>
-            </MudTabPanel>
-        </MudTabs>
+    <MudMainContent Class="d-flex align-center justify-center mud-width-full"  style="height:100vh;">
+            <MudPaper Class="ma-2" MaxWidth="600px">
+                <MudTabs Centered="true">
+                    <MudTabPanel Text="Login">
+                        <EditForm Class="pa-4" Model="ViewModel.LoginData" FormName="Login" OnValidSubmit="ViewModel.LoginCommand.Execute">
+                            <DataAnnotationsValidator/>
+                            <MudTextField Label="Username" @bind-Value="@ViewModel.LoginData.Username" For="@(() => ViewModel.LoginData.Username)" HelperText="Enter Username" Immediate="true"></MudTextField>
+                            <MudTextField Label="Password" @bind-Value="@ViewModel.LoginData.Password" For="@(() => ViewModel.LoginData.Password)" InputType="InputType.Password" HelperText="Enter Password" Immediate="true"></MudTextField>
+                            <MudButton Variant="Variant.Filled" Color="Color.Primary" ButtonType="ButtonType.Submit" Disabled="@ViewModel.LoginData.HasErrors">Login</MudButton>
+                        </EditForm>
+                    </MudTabPanel>
+                    <MudTabPanel Text="Register">
+                        <EditForm Class="pa-4" Model="ViewModel.RegisterData" FormName="Register" OnValidSubmit="ViewModel.RegisterCommand.Execute">
+                            <DataAnnotationsValidator/>
+                            <MudTextField Label="Username" @bind-Value="@ViewModel.RegisterData.Username" For="@(() => ViewModel.RegisterData.Username)" HelperText="Enter Username" Immediate="true"></MudTextField>
+                            <MudTextField Label="Password" @bind-Value="@ViewModel.RegisterData.Password" For="@(() => ViewModel.RegisterData.Password)" InputType="InputType.Password" HelperText="Enter Password" Immediate="true"></MudTextField>
+                            <MudButton Variant="Variant.Filled" Color="Color.Primary" ButtonType="ButtonType.Submit" Disabled="@ViewModel.RegisterData.HasErrors">Register</MudButton>
+                        </EditForm>
+                    </MudTabPanel>
+                </MudTabs>
+            </MudPaper>
     </MudMainContent>
 </MudLayout>
