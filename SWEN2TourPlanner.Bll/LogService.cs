@@ -12,33 +12,42 @@ public class LogService : ILogService
         _logRepository = logRepository;
     }
     
-    public Task<Log?> GetLogAsync(int logId)
+    public async Task<Log?> GetLogAsync(int logId)
     {
         throw new NotImplementedException();
     }
 
-    public Task<Log?> GetLogsAsync(int tourId, string username)
+    public async Task<Log?> GetLogsAsync(int tourId, string username)
     {
         throw new NotImplementedException();
     }
 
-    public Task<Log> CreateLogAsync(Log log)
+    public async Task<Log> CreateLogAsync(Log log)
     {
         throw new NotImplementedException();
     }
 
-    public Task<bool> UpdateLogAsync(Log log)
+    public async Task<bool> UpdateLogAsync(Log log)
     {
         throw new NotImplementedException();
     }
 
-    public Task<bool> RemoveLogAsync(int logId)
+    public async Task<bool> RemoveLogAsync(int logId)
     {
         throw new NotImplementedException();
     }
 
-    public Task<IEnumerable<Log>> FindMatchingLogsAsync(int tourId, string? searchText = null)
+    public async Task<IEnumerable<Log>> FindMatchingLogsAsync(string username, int tourId, string? searchText = null)
     {
-        throw new NotImplementedException();
+        var logs = await _logRepository.GetAllLogsForTourAsync(username, tourId);
+        
+        if (string.IsNullOrEmpty(searchText))
+        {
+            return logs;
+        }
+        
+        return logs.Where(l => l.Comment.Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
+                       l.Difficulty.ToString().Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
+                       l.Rating.ToString().Contains(searchText, StringComparison.OrdinalIgnoreCase));
     }
 }

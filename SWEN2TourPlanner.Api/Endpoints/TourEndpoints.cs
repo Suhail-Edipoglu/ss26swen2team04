@@ -14,17 +14,16 @@ public static class TourEndpoints
         var group = baseGroup.MapGroup("/tours").RequireAuthorization();
 
         group.MapGet("/", GetAllTours);
-        group.MapGet("/search", GetAllTours);
         group.MapPost("/", CreateTour);
         group.MapGet("/{id}", GetTourById);
         group.MapPut("/{id}", UpdateTour);
         group.MapDelete("/{id}", DeleteTour);
     }
 
-    private static async Task<IEnumerable<TourDto>> GetAllTours([FromQuery] string? term, ITourService tourService, ClaimsPrincipal user)
+    private static async Task<IEnumerable<TourDto>> GetAllTours([FromQuery] string? search, ITourService tourService, ClaimsPrincipal user)
     {
         var username = user.Identity!.Name!;
-        return (await tourService.FindMatchingToursAsync(username, term)).Select(t => t.ToDto());
+        return (await tourService.FindMatchingToursAsync(username, search)).Select(t => t.ToDto());
     }
 
     private static async Task<Results<Created<TourDto>, Conflict<string>, InternalServerError<string>>> CreateTour(

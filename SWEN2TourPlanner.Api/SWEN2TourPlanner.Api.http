@@ -1,6 +1,7 @@
 @HostAddress = http://localhost:5283
-@Token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6InRlc3R1c2VyIiwibmJmIjoxNzgyMzA2MTA1LCJleHAiOjE3ODIzMDk3MDUsImlhdCI6MTc4MjMwNjEwNSwiaXNzIjoiU1dFTjJUb3VyUGxhbm5lci5BcGkiLCJhdWQiOiJTV0VOMlRvdXJQbGFubmVyLkZyb250ZW5kIn0.8Fys2cI4FOCC2d7GS1ebVP4eeNbDsYWaSmj64MeQsi8
+@Token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6InRlc3R1c2VyIiwibmJmIjoxNzgyMzEyOTA0LCJleHAiOjE3ODIzMTY1MDQsImlhdCI6MTc4MjMxMjkwNCwiaXNzIjoiU1dFTjJUb3VyUGxhbm5lci5BcGkiLCJhdWQiOiJTV0VOMlRvdXJQbGFubmVyLkZyb250ZW5kIn0.u5LqtSA1HcE05rD-8wJZfJarHGA_HDTYFcMAKD62ctc
 @TourId = 2
+@LogId = 1
 
 POST {{HostAddress}}/api/auth/register
 Content-Type: application/json
@@ -42,7 +43,7 @@ Authorization: Bearer {{Token}}
 
 # Search for plus sign
 
-GET {{HostAddress}}/api/tours/search?term=berlin
+GET {{HostAddress}}/api/tours/?search=berlin
 Authorization: Bearer {{Token}}
 
 ###
@@ -95,6 +96,70 @@ Content-Type: application/json
 # delete tour (logs löschen fehlt hier noch)
 
 DELETE {{HostAddress}}/api/tours/{{TourId}}
+Authorization: Bearer {{Token}}
+
+###
+
+# get all logs for a tour
+
+GET {{HostAddress}}/api/tours/{{TourId}}/logs
+Authorization: Bearer {{Token}}
+
+###
+
+# search for logs by term
+
+GET {{HostAddress}}/api/tours/{{TourId}}/logs/search?term=test
+Authorization: Bearer {{Token}}
+
+###
+
+# create a new log for a tour
+
+POST {{HostAddress}}/api/logs
+Authorization: Bearer {{Token}}
+Content-Type: application/json
+
+{
+    "tourId": {{TourId}},
+    "date": "2023-01-01T00:00:00Z",
+    "comment": "This is a test log.",
+    "difficulty": 3.1,
+    "totalDistance": 100,
+    "totalTime": "02:30:00",
+    "rating": 4.7
+}
+
+###
+
+# get a log by id
+
+GET {{HostAddress}}/api/logs/{{LogId}}
+Authorization: Bearer {{Token}}
+
+###
+
+# update a log
+
+PUT {{HostAddress}}/api/logs/{{LogId}}
+Authorization: Bearer {{Token}}
+Content-Type: application/json
+
+{
+    "tourId": {{TourId}},
+    "date": "2023-01-02T00:00:00Z",
+    "comment": "This is an updated test log.",
+    "difficulty": 4.2,
+    "totalDistance": 120,
+    "totalTime": "03:00:00",
+    "rating": 4.9
+}
+
+###
+
+# delete a log
+
+DELETE {{HostAddress}}/api/logs/{{LogId}}
 Authorization: Bearer {{Token}}
 
 ###

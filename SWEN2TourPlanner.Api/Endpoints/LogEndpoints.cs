@@ -21,11 +21,11 @@ public static class LogEndpoints
         logs.MapDelete("/{logId}", DeleteLog);
     }
 
-    private static async Task<IEnumerable<LogDto>> GetAllLogsForTour(int tourId, ILogService logService,
+    private static async Task<IEnumerable<LogDto>> GetAllLogsForTour([FromQuery] string? search, int tourId, ILogService logService,
         ClaimsPrincipal user)
     {
         var username = user.Identity!.Name!;
-        return (await logService.FindMatchingLogsAsync(tourId)).Select(l => l.ToDto());
+        return (await logService.FindMatchingLogsAsync(username, tourId, search)).Select(l => l.ToDto());
     }
 
     private static async Task<Results<Created<LogDto>, Conflict<string>, InternalServerError<string>>> CreateLog(

@@ -1,4 +1,5 @@
-﻿using SWEN2TourPlanner.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using SWEN2TourPlanner.Models;
 
 namespace SWEN2TourPlanner.Dal;
 
@@ -11,28 +12,78 @@ public class EntityFrameworkLogRepository : ILogRepository
         _dbContext = dbContext;
     }
     
-    public Task<IEnumerable<Log>> GetAllLogsForTourAsync(string username, int tourId)
+    public async Task<List<Log>> GetAllLogsForTourAsync(string username, int tourId)
     {
-        throw new NotImplementedException();
+        try
+        {
+            var logs = await  _dbContext.Logs
+                .Include(l => l.Tour)
+                .ThenInclude(t => t.User)
+                .Where(l => l.Tour.Id == tourId && l.Tour.User.Username == username)
+                .ToListAsync();
+            return logs;
+        }
+        catch (Exception e) when(e is DbUpdateException || e is ArgumentException)
+        {
+            return null;
+        }
     }
 
-    public Task<Log?> GetLogByIdAsync(string username, int logId)
+    public async Task<Log?> GetLogByIdAsync(string username, int logId)
     {
-        throw new NotImplementedException();
+        var log = await _dbContext.Logs
+            .Include(l => l.Tour)
+            .ThenInclude(t => t.User)
+            .SingleOrDefaultAsync(l => l.Id == logId && l.Tour.User.Username == username);
+        
+        return log;
     }
 
-    public Task InsertLogAsync(string username, int tourId, Log log)
+    public async Task InsertLogAsync(string username, int tourId, Log log)
     {
-        throw new NotImplementedException();
+        try
+        {
+            var tour = await _dbContext.Tours
+                .Include(t => t.User)
+                .SingleAsync(t => t.Id == tourId && t.User.Username == username);
+            log.Tour = tour;
+            await _dbContext.Logs.AddAsync(log);
+            await _dbContext.SaveChangesAsync();
+        }
+        catch (Exception e) when(e is DbUpdateException || e is ArgumentException)
+        {
+            throw new DuplicateKeyException($"Log with id '{log.Id}' already exists for user '{username}'.", e);
+        }
     }
 
-    public Task UpdateLogAsync(string username, Log log)
+    public async Task UpdateLogAsync(string username, Log log)
     {
-        throw new NotImplementedException();
+        var tour = await _dbContext.Tours
+            .Include(t => t.User)
+            .SingleAsync(t => t.Id == log.Tour.Id && t.User.Username == username);
+        log.Tour = tour;
+        var existingLog = await _dbContext.Logs
+            .SingleOrDefaultAsync(l => l.Id == log.Id && l.Tour.User.Username == username);
+        if (existingLog == null)
+        {
+            throw new KeyNotFoundException($"Log with id '{log.Id}' not found for user '{username}'.");
+        }
+        _dbContext.Entry(existingLog).CurrentValues.SetValues(log);
+        await _dbContext.SaveChangesAsync();
     }
 
-    public Task<bool> DeleteLogAsync(string username, int logId)
+    public async Task<bool> DeleteLogAsync(string username, int logId)
     {
-        throw new NotImplementedException();
+        var log = await _dbContext.Logs
+            .Include(l => l.Tour)
+            .ThenInclude(t => t.User)
+            .SingleOrDefaultAsync(l => l.Id == logId && l.Tour.User.Username == username);
+        if (log == null)
+        {
+            return false;
+        }
+        _dbContext.Logs.Remove(log);
+        await _dbContext.SaveChangesAsync();
+        return true;
     }
 }
