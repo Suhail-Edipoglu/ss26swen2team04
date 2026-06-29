@@ -1,12 +1,212 @@
 @page "/tour"
+@layout MainLayout
+@inherits Blazing.Mvvm.Components.MvvmComponentBase<SWEN2TourPlanner.Frontend.ViewModels.Interfaces.ITourViewModel>
+@using SWEN2TourPlanner.Frontend.DTOs
+@using SWEN2TourPlanner.Frontend.DTOs.Enums
 
-<NavMenu State="NavMenu.UiState.Tour"></NavMenu>
-<LogoutButton></LogoutButton>
-<CurrentTour Id=@Id></CurrentTour>
-<CreateNew></CreateNew>
-<StaticMap></StaticMap>
+<MudPaper Class="pa-4 ma-2" Elevation="1">
+	<!-- Header and Actions -->
+	<MudStack Row="true" Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center">
+		<MudText Typo="Typo.h5">Tour Details</MudText>
+		@if (ViewModel.CurrentView is TourViewMode.Edit or TourViewMode.Create) {
+			@EditModeActions
+		} else {
+			@ViewModeActions
+		}
+	</MudStack>
+
+	<!-- Feedback Alert -->
+	@if (ViewModel.SaveAlert is not null) {
+		<MudAlert Class="mt-3" Severity="ViewModel.SaveAlert.Severity">
+			@ViewModel.SaveAlert.Message
+		</MudAlert>
+	}
+
+	<!-- Form Content -->
+	<EditForm Class="mt-4" Model="ViewModel.TourData" FormName="TourDetails">
+		@if (ViewModel.CurrentView == TourViewMode.Compact) {
+			@CompactTourView
+		} else if (ViewModel.CurrentView is TourViewMode.Edit or TourViewMode.Create) {
+			@EditTourView
+		} else {
+			@FullTourView
+		}
+	</EditForm>
+</MudPaper>
+
+<!-- Map Section -->
+<Map></Map>
+
+
+@* ==================
+   REUSABLE FRAGMENTS
+   ================== *@
 
 @code {
-    [SupplyParameterFromQuery(Name = "id")]
-    public int? Id { get; set; }
+	/// <summary>
+	/// View mode action buttons: Compact toggle, Edit, Delete (if applicable)
+	/// </summary>
+	private RenderFragment ViewModeActions => @<MudStack Row="true" Spacing="2">
+		<MudIconButton
+			Icon="@(ViewModel.CurrentView == TourViewMode.Compact ? Icons.Material.Filled.ArrowDropDown : Icons.Material.Filled.ArrowDropUp)"
+			Color="Color.Secondary"
+			Class="pa-0"
+			Style="height: 36px; width: 36px;"
+			Size="Size.Medium"
+			OnClick="ViewModel.ToggleCompactViewCommand.Execute"
+			aria-label="@(ViewModel.CurrentView == TourViewMode.Compact ? "Switch to full view" : "Switch to compact view")" />
+		<MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="ViewModel.EnterEditModeCommand.Execute">
+			Edit
+		</MudButton>
+		@if (ViewModel.CurrentView != TourViewMode.Create) {
+			<MudButton Variant="Variant.Outlined" Color="Color.Error" OnClick="async () => await ViewModel.DeleteTourCommand.ExecuteAsync(null)">
+				Delete
+			</MudButton>
+		}
+	</MudStack>;
+
+	/// <summary>
+	/// Edit mode action buttons: Save/Create, Cancel, Delete (if applicable)
+	/// </summary>
+	private RenderFragment EditModeActions => @<MudStack Row="true" Spacing="2">
+		<MudButton Variant="Variant.Filled" Color="Color.Success" OnClick="async () => await ViewModel.SaveChangesCommand.ExecuteAsync(null)">
+			@(ViewModel.CurrentView == TourViewMode.Create ? "Create" : "Save")
+		</MudButton>
+		<MudButton Variant="Variant.Outlined" Color="Color.Secondary" OnClick="ViewModel.CancelEditCommand.Execute">
+			Cancel
+		</MudButton>
+		@if (ViewModel.CurrentView != TourViewMode.Create) {
+			<MudButton Variant="Variant.Outlined" Color="Color.Error" OnClick="async () => await ViewModel.DeleteTourCommand.ExecuteAsync(null)">
+				Delete
+			</MudButton>
+		}
+	</MudStack>;
+
+	/// <summary>
+	/// Compact view: Displays only Name, From, To (read-only)
+	/// </summary>
+	private RenderFragment CompactTourView => @<MudGrid>
+		<MudItem xs="12" md="6">
+			<MudTextField Label="Name" Value="ViewModel.TourData.Name" Disabled="true" />
+		</MudItem>
+		<MudItem xs="6" md="3">
+			<MudTextField Label="From" Value="ViewModel.TourData.From" Disabled="true" />
+		</MudItem>
+		<MudItem xs="6" md="3">
+			<MudTextField Label="To" Value="ViewModel.TourData.To" Disabled="true" />
+		</MudItem>
+	</MudGrid>;
+
+	/// <summary>
+	/// Edit view: All editable fields, excluding computed/read-only metadata
+	/// </summary>
+	private RenderFragment EditTourView => @<MudGrid>
+		<MudItem xs="12" md="6">
+			<MudTextField Label="Name" @bind-Value="ViewModel.TourData.Name" Disabled="false" />
+		</MudItem>
+		<MudItem xs="12" md="6">
+			<MudSelect T="TransportType" Label="Transport Type" @bind-Value="ViewModel.TourData.TransportType" Disabled="false">
+				<MudSelectItem Value="TransportType.None">None</MudSelectItem>
+				<MudSelectItem Value="TransportType.Bicycle">Bicycle</MudSelectItem>
+				<MudSelectItem Value="TransportType.Car">Car</MudSelectItem>
+				<MudSelectItem Value="TransportType.Bus">Bus</MudSelectItem>
+				<MudSelectItem Value="TransportType.Train">Train</MudSelectItem>
+				<MudSelectItem Value="TransportType.Airplane">Airplane</MudSelectItem>
+			</MudSelect>
+		</MudItem>
+		<MudItem xs="12">
+			<MudTextField Label="Tour Description" @bind-Value="ViewModel.TourData.Description" Lines="4" Disabled="false" />
+		</MudItem>
+		<MudItem xs="12" md="6">
+			<MudTextField Label="From" @bind-Value="ViewModel.TourData.From" Disabled="false" />
+		</MudItem>
+		<MudItem xs="12" md="6">
+			<MudTextField Label="To" @bind-Value="ViewModel.TourData.To" Disabled="false" />
+		</MudItem>
+	</MudGrid>;
+
+	/// <summary>
+	/// Full view: All fields in read-only mode including computed metadata
+	/// </summary>
+	private RenderFragment FullTourView => @<MudGrid>
+		<MudItem xs="12" md="6">
+			<MudTextField Label="Name" Value="ViewModel.TourData.Name" Disabled="true" />
+		</MudItem>
+		<MudItem xs="12" md="6">
+			<MudSelect T="TransportType" Label="Transport Type" Value="ViewModel.TourData.TransportType" Disabled="true">
+				<MudSelectItem Value="TransportType.None">None</MudSelectItem>
+				<MudSelectItem Value="TransportType.Bicycle">Bicycle</MudSelectItem>
+				<MudSelectItem Value="TransportType.Car">Car</MudSelectItem>
+				<MudSelectItem Value="TransportType.Bus">Bus</MudSelectItem>
+				<MudSelectItem Value="TransportType.Train">Train</MudSelectItem>
+				<MudSelectItem Value="TransportType.Airplane">Airplane</MudSelectItem>
+			</MudSelect>
+		</MudItem>
+		<MudItem xs="12">
+			<MudTextField Label="Tour Description" Value="ViewModel.TourData.Description" Lines="4" Disabled="true" />
+		</MudItem>
+		<MudItem xs="12" md="6">
+			<MudTextField Label="From" Value="ViewModel.TourData.From" Disabled="true" />
+		</MudItem>
+		<MudItem xs="12" md="6">
+			<MudTextField Label="To" Value="ViewModel.TourData.To" Disabled="true" />
+		</MudItem>
+		<MudItem xs="6" md="3">
+			<MudTextField Label="Tour Distance (km)" Value="@(ViewModel.TourData.Distance?.ToString() ?? "?")" Disabled="true" />
+		</MudItem>
+		<MudItem xs="6" md="3">
+			<MudTextField Label="Estimated Time" Value='@(ViewModel.TourData.EstimatedTime?.ToString("HH:mm") ?? "?")' Disabled="true" />
+		</MudItem>
+		<MudItem xs="6" md="3">
+			<MudTextField Label="Popularity" Value="@(ViewModel.TourData.Popularity?.ToString() ?? "?")" Disabled="true" />
+		</MudItem>
+		<MudItem xs="6" md="3">
+			<MudTextField Label="Child-Friendliness" Value="@(ViewModel.TourData.ChildFriendliness?.ToString() ?? "?")" Disabled="true" />
+		</MudItem>
+		<MudItem xs="12">
+			<MudStack>
+				<MudText Typo="Typo.h6">Tour Logs</MudText>
+				<MudSpacer/>
+				<MudTextField
+					Label="Search logs"
+					@bind-Value="ViewModel.TourLogSearchTerm"
+					Immediate="true"
+					Placeholder="Search by comment, date, difficulty, distance, time, rating"
+					Adornment="Adornment.Start"
+					AdornmentIcon="@Icons.Material.Filled.Search" />
+			</MudStack>
+		</MudItem>
+		<MudItem xs="12">
+			<MudSimpleTable Hover="true">
+				<thead>
+					<tr>
+						<th>Date</th>
+						<th>Comment</th>
+						<th>Difficulty</th>
+						<th>Total Distance</th>
+						<th>Total Time</th>
+						<th>Rating</th>
+					</tr>
+				</thead>
+				<tbody>
+				@if (ViewModel.TourData.Logs.Any()) {
+					@foreach (var log in ViewModel.TourData.Logs) {
+						<tr @onclick="async () => await ViewModel.OpenTourLogCommand.ExecuteAsync(log)">
+							<td>@log.Time.ToString("g")</td>
+							<td>@log.Comment</td>
+							<td>@log.Difficulty</td>
+							<td>@log.TotalDistance</td>
+							<td>@log.TotalTime</td>
+							<td>@log.Rating</td>
+						</tr>
+					}
+				} else {
+					<tr>
+						<td colspan="6">No logs available.</td>
+					</tr>
+				}
+				</tbody>
+			</MudSimpleTable>
+		</MudItem>
+	</MudGrid>;
 }

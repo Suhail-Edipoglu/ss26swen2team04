@@ -1,12 +1,109 @@
 @page "/log"
+@layout MainLayout
+@inherits Blazing.Mvvm.Components.MvvmComponentBase<SWEN2TourPlanner.Frontend.ViewModels.Interfaces.ITourLogViewModel>
+@using System.Globalization
+@using SWEN2TourPlanner.Frontend.DTOs.Enums
 
-<NavMenu State=NavMenu.UiState.TourLog></NavMenu>
-<LogoutButton></LogoutButton>
-<CurrentTourLog Id=@Id></CurrentTourLog>
-<CreateNew></CreateNew>
-<StaticMap></StaticMap>
+<MudPaper Class="pa-4 ma-2" Elevation="1">
+	<!-- Header and Actions -->
+	<MudStack Row="true" Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center">
+		<MudText Typo="Typo.h5">Tour Log Details</MudText>
+		@if (ViewModel.CurrentView is TourLogViewMode.Edit or TourLogViewMode.Create) {
+			@EditModeActions
+		} else {
+			@ViewModeActions
+		}
+	</MudStack>
+
+	<!-- Feedback Alert -->
+	@if (ViewModel.SaveAlert is not null) {
+		<MudAlert Class="mt-3" Severity="ViewModel.SaveAlert.Severity">
+			@ViewModel.SaveAlert.Message
+		</MudAlert>
+	}
+
+	<!-- Form Content -->
+	<EditForm Class="mt-4" Model="ViewModel.TourLogData" FormName="TourLogDetails">
+		@if (ViewModel.CurrentView is TourLogViewMode.Edit or TourLogViewMode.Create) {
+			@EditTourLogView
+		} else {
+			@FullTourLogView
+		}
+	</EditForm>
+</MudPaper>
+
+@* ==================
+   REUSABLE FRAGMENTS
+   ================== *@
 
 @code {
-    [SupplyParameterFromQuery(Name = "id")]
-    public int? Id { get; set; }
+	/// <summary>
+	/// View mode action buttons.
+	/// </summary>
+	private RenderFragment ViewModeActions => @<MudStack Row="true" Spacing="2">
+		<MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="ViewModel.EnterEditModeCommand.Execute">
+			Edit
+		</MudButton>
+	</MudStack>;
+
+	/// <summary>
+	/// Edit mode action buttons.
+	/// </summary>
+	private RenderFragment EditModeActions => @<MudStack Row="true" Spacing="2">
+		<MudButton Variant="Variant.Filled" Color="Color.Success" OnClick="async () => await ViewModel.SaveChangesCommand.ExecuteAsync(null)">
+			@(ViewModel.CurrentView == TourLogViewMode.Create ? "Create" : "Save")
+		</MudButton>
+		<MudButton Variant="Variant.Outlined" Color="Color.Secondary" OnClick="ViewModel.CancelEditCommand.Execute">
+			Cancel
+		</MudButton>
+	</MudStack>;
+
+	/// <summary>
+	/// Edit/Create view for tour logs.
+	/// </summary>
+	private RenderFragment EditTourLogView => @<MudGrid>
+		<MudItem xs="12" md="6">
+			<MudDatePicker Label="Date / Time" @bind-Value="ViewModel.TourLogData.Time" />
+		</MudItem>
+		<MudItem xs="12" md="6">
+			<MudNumericField T="float" Label="Difficulty (1-10)" @bind-Value="ViewModel.TourLogData.Difficulty" Min="1f" Max="10f" Step="0.5f" />
+		</MudItem>
+		<MudItem xs="12">
+			<MudTextField Label="Comment" @bind-Value="ViewModel.TourLogData.Comment" Lines="4" />
+		</MudItem>
+		<MudItem xs="12" md="4">
+			<MudNumericField T="int" Label="Total Distance" @bind-Value="ViewModel.TourLogData.TotalDistance" Min="0" Step="1" />
+		</MudItem>
+		<MudItem xs="12" md="4">
+			<MudTimePicker Label="Total Time" @bind-Value="ViewModel.TourLogData.TotalTime" />
+		</MudItem>
+		<MudItem xs="12" md="4">
+			<MudNumericField T="float" Label="Rating (1-5)" @bind-Value="ViewModel.TourLogData.Rating" Min="1f" Max="5f" Step="0.5f" />
+		</MudItem>
+	</MudGrid>;
+
+	/// <summary>
+	/// Read-only full view for tour logs.
+	/// </summary>
+	private RenderFragment FullTourLogView => @<MudGrid>
+		<!-- Main Details -->
+		<MudItem xs="12" md="6">
+			<MudTextField Label="Date / Time" Value="@ViewModel.TourLogData.Time.ToString(CultureInfo.InvariantCulture)" Disabled="true" />
+		</MudItem>
+		<MudItem xs="12" md="6">
+			<MudTextField Label="Difficulty (1-10)" Value="@ViewModel.TourLogData.Difficulty.ToString(CultureInfo.InvariantCulture)" Disabled="true" />
+		</MudItem>
+		<MudItem xs="12">
+			<MudTextField Label="Comment" Value="@ViewModel.TourLogData.Comment" Lines="4" Disabled="true" />
+		</MudItem>
+		<MudItem xs="12" md="4">
+			<MudTextField Label="Total Distance" Value="@ViewModel.TourLogData.TotalDistance.ToString(CultureInfo.InvariantCulture)" Disabled="true" />
+		</MudItem>
+		<MudItem xs="12" md="4">
+			<MudTextField Label="Total Time" Value="@ViewModel.TourLogData.TotalTime.ToString()" Disabled="true" />
+		</MudItem>
+		<MudItem xs="12" md="4">
+			<MudTextField Label="Rating (1-5)" Value="@ViewModel.TourLogData.Rating.ToString(CultureInfo.InvariantCulture)" Disabled="true" />
+		</MudItem>
+	</MudGrid>;
 }

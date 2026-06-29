@@ -1,4 +1,33 @@
 @page "/login"
-
-<LoginMenu></LoginMenu>
-<StaticMap></StaticMap>
+@inherits Blazing.Mvvm.Components.MvvmComponentBase<SWEN2TourPlanner.Frontend.ViewModels.Interfaces.ILoginViewModel>
+<Providers />
+<MudLayout>
+    <MudMainContent Class="d-flex align-center justify-center mud-width-full"  style="height:100vh;">
+            <MudPaper Class="ma-2" MaxWidth="600px">
+                <MudTabs Centered="true">
+                    <MudTabPanel Text="Login">
+                        <EditForm Class="pa-4" Model="ViewModel.LoginData" FormName="Login" OnValidSubmit="ViewModel.LoginCommand.Execute">
+                            <DataAnnotationsValidator/>
+                            <MudTextField Label="Username" @bind-Value="@ViewModel.LoginData.Username" For="@(() => ViewModel.LoginData.Username)" HelperText="Enter Username" Immediate="true"></MudTextField>
+                            <MudTextField Label="Password" @bind-Value="@ViewModel.LoginData.Password" For="@(() => ViewModel.LoginData.Password)" InputType="InputType.Password" HelperText="Enter Password" Immediate="true"></MudTextField>
+                            @if (ViewModel.LoginAlert != null) {
+                                <MudAlert Class="mt-2" Severity="ViewModel.LoginAlert!.Severity">@ViewModel.LoginAlert.Message</MudAlert>
+                            }
+                            <MudButton Class="mt-4" Variant="Variant.Filled" Color="Color.Primary" ButtonType="ButtonType.Submit" Disabled="@ViewModel.LoginData.HasErrors">Login</MudButton>
+                        </EditForm>
+                    </MudTabPanel>
+                    <MudTabPanel Text="Register">
+                        <EditForm Class="pa-4" Model="ViewModel.RegisterData" FormName="Register" OnValidSubmit="ViewModel.RegisterCommand.Execute">
+                            <DataAnnotationsValidator/>
+                            <MudTextField Label="Username" @bind-Value="@ViewModel.RegisterData.Username" For="@(() => ViewModel.RegisterData.Username)" HelperText="Enter Username" Immediate="true"></MudTextField>
+                            <MudTextField Label="Password" @bind-Value="@ViewModel.RegisterData.Password" For="@(() => ViewModel.RegisterData.Password)" InputType="InputType.Password" HelperText="Enter Password" Immediate="true"></MudTextField>
+                            @if (ViewModel.RegistrationAlert != null) {
+                                <MudAlert Class="mt-2" Severity="ViewModel.RegistrationAlert!.Severity">@ViewModel.RegistrationAlert.Message</MudAlert>
+                            }
+                            <MudButton Class="mt-4" Variant="Variant.Filled" Color="Color.Primary" ButtonType="ButtonType.Submit" Disabled="@ViewModel.RegisterData.HasErrors">Register</MudButton>
+                        </EditForm>
+                    </MudTabPanel>
+                </MudTabs>
+            </MudPaper>
+    </MudMainContent>
+</MudLayout>

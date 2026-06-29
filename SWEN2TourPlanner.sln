@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWEN2TourPlanner.Frontend",
 		{A98FB8EC-82F1-418D-8270-ADCF6F92BC04} = {A98FB8EC-82F1-418D-8270-ADCF6F92BC04}
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWEN2TourPlanner.Frontend.Tests", "SWEN2TourPlanner.Frontend.Tests\SWEN2TourPlanner.Frontend.Tests.csproj", "{67E4C43B-E582-4FA2-AA99-4D6438355832}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,5 +41,9 @@ Global
 		{431F7CBB-D2C6-4EFF-97B9-F5E37056E021}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{431F7CBB-D2C6-4EFF-97B9-F5E37056E021}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{431F7CBB-D2C6-4EFF-97B9-F5E37056E021}.Release|Any CPU.Build.0 = Release|Any CPU
+		{67E4C43B-E582-4FA2-AA99-4D6438355832}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{67E4C43B-E582-4FA2-AA99-4D6438355832}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{67E4C43B-E582-4FA2-AA99-4D6438355832}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{67E4C43B-E582-4FA2-AA99-4D6438355832}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

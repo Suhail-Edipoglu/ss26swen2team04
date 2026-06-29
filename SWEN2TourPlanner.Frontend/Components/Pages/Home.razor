@@ -1,7 +1,57 @@
 ﻿@page "/"
+@layout MainLayout
+@inherits Blazing.Mvvm.Components.MvvmComponentBase<SWEN2TourPlanner.Frontend.ViewModels.Interfaces.IHomeViewModel>
+@using SWEN2TourPlanner.Frontend.DTOs
 
-<NavMenu State=NavMenu.UiState.List></NavMenu>
-<LogoutButton></LogoutButton>
-<TourList></TourList>
-<CreateNew></CreateNew>
-<StaticMap></StaticMap>
+
+<MudPaper Class="pa-4 ma-2" Elevation="1">
+	<!-- Header and Search -->
+	<MudStack Row="true" Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center">
+		<MudText Typo="Typo.h5">Tours</MudText>
+		<MudTextField
+			Label="Search tours"
+			@bind-Value="ViewModel.TourSearchTerm"
+			Immediate="true"
+			Placeholder="Search by name, route, transport type, distance or rating"
+			Adornment="Adornment.Start"
+			AdornmentIcon="@Icons.Material.Filled.Search"
+			Style="min-width: 320px;" />
+	</MudStack>
+
+	<!-- Table Content -->
+	<MudSimpleTable Hover="true" Class="mt-4">
+		<thead>
+			<tr>
+				<th>Name</th>
+				<th>From</th>
+				<th>To</th>
+				<th>Transport Type</th>
+				<th>Distance</th>
+				<th>Estimated Time</th>
+				<th>Popularity</th>
+				<th>Child-Friendliness</th>
+			</tr>
+		</thead>
+		<tbody>
+			@if (ViewModel.Tours.Any()) {
+				@foreach (var tour in ViewModel.Tours) {
+					<tr style="cursor:pointer;" @onclick="async () => await ViewModel.OpenTourCommand.ExecuteAsync(tour)">
+						<td>@tour.Name</td>
+						<td>@tour.From</td>
+						<td>@tour.To</td>
+						<td>@tour.TransportType</td>
+						<td>@(tour.Distance?.ToString() ?? "?")</td>
+						<td>@(tour.EstimatedTime?.ToString("HH:mm") ?? "?")</td>
+						<td>@(tour.Popularity?.ToString() ?? "?")</td>
+						<td>@(tour.ChildFriendliness?.ToString() ?? "?")</td>
+					</tr>
+				}
+			} else {
+				<tr>
+					<td colspan="8">No tours available.</td>
+				</tr>
+			}
+		</tbody>
+	</MudSimpleTable>
+</MudPaper>
+
