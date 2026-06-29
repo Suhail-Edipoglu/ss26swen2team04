@@ -3,7 +3,6 @@
 @inherits Blazing.Mvvm.Components.MvvmComponentBase<SWEN2TourPlanner.Frontend.ViewModels.Interfaces.ITourViewModel>
 @using SWEN2TourPlanner.Frontend.DTOs
 @using SWEN2TourPlanner.Frontend.DTOs.Enums
-@using SWEN2TourPlanner.Frontend.ViewModels
 
 <MudPaper Class="pa-4 ma-2" Elevation="1">
 	<!-- Header and Actions -->
@@ -163,6 +162,51 @@
 		</MudItem>
 		<MudItem xs="6" md="3">
 			<MudTextField Label="Child-Friendliness" Value="@(ViewModel.TourData.ChildFriendliness?.ToString() ?? "?")" Disabled="true" />
+		</MudItem>
+		<MudItem xs="12">
+			<MudStack>
+				<MudText Typo="Typo.h6">Tour Logs</MudText>
+				<MudSpacer/>
+				<MudTextField
+					Label="Search logs"
+					@bind-Value="ViewModel.TourLogSearchTerm"
+					Immediate="true"
+					Placeholder="Search by comment, date, difficulty, distance, time, rating"
+					Adornment="Adornment.Start"
+					AdornmentIcon="@Icons.Material.Filled.Search" />
+			</MudStack>
+		</MudItem>
+		<MudItem xs="12">
+			<MudSimpleTable Hover="true">
+				<thead>
+					<tr>
+						<th>Date</th>
+						<th>Comment</th>
+						<th>Difficulty</th>
+						<th>Total Distance</th>
+						<th>Total Time</th>
+						<th>Rating</th>
+					</tr>
+				</thead>
+				<tbody>
+				@if (ViewModel.TourData.Logs.Any()) {
+					@foreach (var log in ViewModel.TourData.Logs) {
+						<tr @onclick="async () => await ViewModel.OpenTourLogCommand.ExecuteAsync(log)">
+							<td>@log.Time.ToString("g")</td>
+							<td>@log.Comment</td>
+							<td>@log.Difficulty</td>
+							<td>@log.TotalDistance</td>
+							<td>@log.TotalTime</td>
+							<td>@log.Rating</td>
+						</tr>
+					}
+				} else {
+					<tr>
+						<td colspan="6">No logs available.</td>
+					</tr>
+				}
+				</tbody>
+			</MudSimpleTable>
 		</MudItem>
 	</MudGrid>;
 }

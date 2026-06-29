@@ -40,8 +40,7 @@ public sealed partial class TourLogViewModel(IApiService apiService, ICache cach
                 TourLogData.TourId = _cache.CurrentTour.Id.Value;
             }
             else {
-                // TODO: fix
-                //_mvvmNavigationManager.NavigateTo<IHomeViewModel>();
+                _mvvmNavigationManager.NavigateTo<IHomeViewModel>();
             }
             CurrentView = TourLogViewMode.Create;
         }

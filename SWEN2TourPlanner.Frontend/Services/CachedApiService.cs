@@ -1,5 +1,6 @@
 using SWEN2TourPlanner.Frontend.DTOs;
 using SWEN2TourPlanner.Frontend.Services.Interfaces;
+using System.Globalization;
 
 namespace SWEN2TourPlanner.Frontend.Services;
 
@@ -75,7 +76,7 @@ public class CachedApiService : IApiService {
     public Task<string?> LoginAsync(UserData userData) {
         if (_loginDataList.Any(ld =>
             ld.Username == userData.Username && ld.Password == userData.Password)) {
-            return Task.FromResult(userData.Username)!;
+            return Task.FromResult(userData.Username);
         }
 
         return Task.FromResult<string?>(null);
@@ -86,7 +87,24 @@ public class CachedApiService : IApiService {
     }
 
     public async Task<List<Tour>> SearchToursAsync(string searchTerm) {
-        return await GetToursAsync();
+        var normalizedSearchTerm = searchTerm.Trim();
+        if (string.IsNullOrWhiteSpace(normalizedSearchTerm)) {
+            return await GetToursAsync();
+        }
+
+        return _tours
+            .Where(t =>
+                t.Name.Contains(normalizedSearchTerm, StringComparison.OrdinalIgnoreCase) ||
+                t.Description.Contains(normalizedSearchTerm, StringComparison.OrdinalIgnoreCase) ||
+                t.From.Contains(normalizedSearchTerm, StringComparison.OrdinalIgnoreCase) ||
+                t.To.Contains(normalizedSearchTerm, StringComparison.OrdinalIgnoreCase) ||
+                t.TransportType.ToString().Contains(normalizedSearchTerm, StringComparison.OrdinalIgnoreCase) ||
+                (t.Distance?.ToString(CultureInfo.InvariantCulture).Contains(normalizedSearchTerm, StringComparison.OrdinalIgnoreCase) ?? false) ||
+                (t.EstimatedTime?.ToString("HH:mm").Contains(normalizedSearchTerm, StringComparison.OrdinalIgnoreCase) ?? false) ||
+                (t.Popularity?.ToString(CultureInfo.InvariantCulture).Contains(normalizedSearchTerm, StringComparison.OrdinalIgnoreCase) ?? false) ||
+                (t.ChildFriendliness?.ToString(CultureInfo.InvariantCulture).Contains(normalizedSearchTerm, StringComparison.OrdinalIgnoreCase) ?? false))
+            .Select(CloneTour)
+            .ToList();
     }
 
     public Task<Tour> GetTourByIdAsync(int tourId) {
@@ -137,7 +155,22 @@ public class CachedApiService : IApiService {
     }
 
     public async Task<List<TourLog>> SearchTourLogsAsync(int tourId, string searchTerm) {
-        return await GetTourLogsAsync(tourId);
+        var normalizedSearchTerm = searchTerm.Trim();
+        if (string.IsNullOrWhiteSpace(normalizedSearchTerm)) {
+            return await GetTourLogsAsync(tourId);
+        }
+
+        return _tourLogs
+            .Where(l => l.TourId == tourId)
+            .Where(l =>
+                l.Comment.Contains(normalizedSearchTerm, StringComparison.OrdinalIgnoreCase) ||
+                l.Time.ToString("g").Contains(normalizedSearchTerm, StringComparison.OrdinalIgnoreCase) ||
+                l.Difficulty.ToString(CultureInfo.InvariantCulture).Contains(normalizedSearchTerm, StringComparison.OrdinalIgnoreCase) ||
+                l.TotalDistance.ToString(CultureInfo.InvariantCulture).Contains(normalizedSearchTerm, StringComparison.OrdinalIgnoreCase) ||
+                l.TotalTime.ToString().Contains(normalizedSearchTerm, StringComparison.OrdinalIgnoreCase) ||
+                l.Rating.ToString(CultureInfo.InvariantCulture).Contains(normalizedSearchTerm, StringComparison.OrdinalIgnoreCase))
+            .Select(CloneTourLog)
+            .ToList();
     }
 
     public Task<TourLog> GetTourLogByIdAsync(int tourLogId) {
@@ -197,7 +230,8 @@ public class CachedApiService : IApiService {
             RouteInformation = source.RouteInformation,
             UserId = source.UserId,
             Popularity = source.Popularity,
-            ChildFriendliness = source.ChildFriendliness
+            ChildFriendliness = source.ChildFriendliness,
+            Logs = source.Logs.Select(CloneTourLog).ToList()
         };
     }
 

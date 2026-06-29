@@ -14,4 +14,5 @@ public class Tour
     public required int UserId { get; set; }
     public int? Popularity { get; set; }
     public int? ChildFriendliness { get; set; }
+    public List<TourLog> Logs { get; set; } = [];
 }

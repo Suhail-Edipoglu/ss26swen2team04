@@ -36,6 +36,9 @@ public sealed partial class TourViewModel(IApiService apiService, ICache cache, 
     private TourViewMode _currentView = TourViewMode.Full;
 
     [ObservableProperty]
+    private string _tourLogSearchTerm = string.Empty;
+
+    [ObservableProperty]
     private Alert? _saveAlert;
 
     private Tour? _originalTourData;
@@ -50,6 +53,7 @@ public sealed partial class TourViewModel(IApiService apiService, ICache cache, 
         else {
             TourData = CloneTour(_cache.CurrentTour);
             CurrentView = TourViewMode.Full;
+            await LoadTourLogsAsync();
         }
 
         SaveAlert = null;
@@ -75,6 +79,29 @@ public sealed partial class TourViewModel(IApiService apiService, ICache cache, 
     }
 
     [RelayCommand]
+    private async Task SearchTourLogs(string searchTerm) {
+        var normalizedSearchTerm = searchTerm.Trim();
+        if (!string.Equals(TourLogSearchTerm, normalizedSearchTerm, StringComparison.Ordinal)) {
+            TourLogSearchTerm = normalizedSearchTerm;
+            return;
+        }
+
+        await LoadTourLogsAsync();
+    }
+
+    partial void OnTourLogSearchTermChanged(string value) {
+        _ = SearchTourLogs(value);
+    }
+
+    [RelayCommand]
+    private async Task OpenTourLog(TourLog tourLog) {
+        _cache.CurrentTourLog = CloneTourLog(tourLog);
+        _cache.CurrentTour = CloneTour(TourData);
+        await Task.Yield();
+        _mvvmNavigationManager.NavigateTo<ITourLogViewModel>();
+    }
+
+    [RelayCommand]
     private async Task SaveChanges() {
         RecalculateFrontendValues();
 
@@ -95,6 +122,7 @@ public sealed partial class TourViewModel(IApiService apiService, ICache cache, 
             }
 
             TourData = CloneTour(createdTour);
+            await LoadTourLogsAsync();
             _cache.CurrentTour = CloneTour(createdTour);
             SaveAlert = new Alert("Tour created successfully.", Severity.Success);
             CurrentView = TourViewMode.Full;
@@ -113,6 +141,7 @@ public sealed partial class TourViewModel(IApiService apiService, ICache cache, 
         SaveAlert = new Alert("Tour saved successfully.", Severity.Success);
         CurrentView = TourViewMode.Full;
         _originalTourData = null;
+        await LoadTourLogsAsync();
     }
 
     [RelayCommand]
@@ -160,6 +189,19 @@ public sealed partial class TourViewModel(IApiService apiService, ICache cache, 
         TourData.EstimatedTime = null;
     }
 
+    private async Task LoadTourLogsAsync() {
+        if (TourData.Id is null) {
+            TourData.Logs = [];
+            return;
+        }
+
+        var logs = string.IsNullOrWhiteSpace(TourLogSearchTerm)
+            ? await _apiService.GetTourLogsAsync(TourData.Id.Value)
+            : await _apiService.SearchTourLogsAsync(TourData.Id.Value, TourLogSearchTerm);
+
+        TourData.Logs = logs.OrderByDescending(l => l.Time).ToList();
+    }
+
     private static Tour CloneTour(Tour source) => new() {
         Id = source.Id,
         Name = source.Name,
@@ -172,7 +214,19 @@ public sealed partial class TourViewModel(IApiService apiService, ICache cache, 
         RouteInformation = source.RouteInformation,
         UserId = source.UserId,
         Popularity = source.Popularity,
-        ChildFriendliness = source.ChildFriendliness
+        ChildFriendliness = source.ChildFriendliness,
+        Logs = source.Logs.Select(CloneTourLog).ToList()
+    };
+
+    private static TourLog CloneTourLog(TourLog source) => new() {
+        Id = source.Id,
+        Time = source.Time,
+        Comment = source.Comment,
+        Difficulty = source.Difficulty,
+        TotalDistance = source.TotalDistance,
+        TotalTime = source.TotalTime,
+        Rating = source.Rating,
+        TourId = source.TourId
     };
 
     private static Tour CreateEmptyTour() => new() {
@@ -186,7 +240,8 @@ public sealed partial class TourViewModel(IApiService apiService, ICache cache, 
         RouteInformation = string.Empty,
         UserId = 0,
         Popularity = null,
-        ChildFriendliness = null
+        ChildFriendliness = null,
+        Logs = []
     };
 
 }
