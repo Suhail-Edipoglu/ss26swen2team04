@@ -19,12 +19,12 @@ var orsBaseAddress = builder.Configuration["OpenRouteService:BaseAddress"]
     ?? throw new InvalidOperationException("OpenRouteService:BaseAddress is not configured.");
 var orsApiKey = builder.Configuration["OpenRouteService:ApiKey"] ?? string.Empty;
 
-builder.Services.AddHttpClient<ApiService>(client =>
+builder.Services.AddHttpClient<IApiService, ApiService>(client =>
 {
     client.BaseAddress = new Uri(apiBaseAddress);
     client.DefaultRequestHeaders.Add("Accept", "application/json");
 });
-builder.Services.AddHttpClient<OpenRouteServiceService>(client =>
+builder.Services.AddHttpClient<IRouteApiService, OpenRouteServiceService>(client =>
 {
     client.BaseAddress = new Uri(orsBaseAddress);
     client.DefaultRequestHeaders.Add("Accept", "application/json");
@@ -34,7 +34,6 @@ builder.Services.AddHttpClient<OpenRouteServiceService>(client =>
 });
 
 // Wire Models
-builder.Services.AddSingleton<IApiService, ApiService>();
 builder.Services.AddScoped<ILoginManager, LoginManager>();
 builder.Services.AddScoped<ICache, Cache>();
 
