@@ -34,7 +34,7 @@ builder.Services.AddHttpClient<OpenRouteServiceService>(client =>
 });
 
 // Wire Models
-builder.Services.AddSingleton<IApiService, CachedApiService>();
+builder.Services.AddSingleton<IApiService, ApiService>();
 builder.Services.AddScoped<ILoginManager, LoginManager>();
 builder.Services.AddScoped<ICache, Cache>();
 
