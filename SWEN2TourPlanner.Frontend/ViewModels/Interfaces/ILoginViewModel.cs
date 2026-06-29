@@ -10,4 +10,6 @@ public interface ILoginViewModel : IViewModelBase {
     UserData RegisterData { get; set; }
     IRelayCommand LoginCommand { get; }
     IRelayCommand RegisterCommand { get; }
+    Alert? LoginAlert { get; }
+    Alert? RegistrationAlert { get; }
 }

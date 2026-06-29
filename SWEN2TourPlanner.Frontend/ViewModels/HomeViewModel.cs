@@ -2,6 +2,7 @@ using Blazing.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
 using MudBlazor;
 using SWEN2TourPlanner.Frontend.DTOs;
+using SWEN2TourPlanner.Frontend.DTOs.Enums;
 using SWEN2TourPlanner.Frontend.DTOs.Messages;
 using SWEN2TourPlanner.Frontend.Services.Interfaces;
 using SWEN2TourPlanner.Frontend.ViewModels.Interfaces;

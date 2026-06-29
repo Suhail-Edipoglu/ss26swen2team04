@@ -12,7 +12,7 @@ public class LoginCheckerViewModel(IMvvmNavigationManager navigationManager, ILo
 
     public override void OnParametersSet() {
         if (!_loginManager.IsLoggedIn()) {
-            _navigationManager.NavigateTo<ILoginViewModel>();
+            // _navigationManager.NavigateTo<ILoginViewModel>();
         }
         base.OnParametersSet();
     }

@@ -3,6 +3,7 @@ using Blazing.Mvvm.Components;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
+using MudBlazor;
 using SWEN2TourPlanner.Frontend.DTOs;
 using SWEN2TourPlanner.Frontend.Models.Interfaces;
 using SWEN2TourPlanner.Frontend.ViewModels.Interfaces;
@@ -17,6 +18,10 @@ public sealed partial class LoginViewModel(ILoginManager loginManager, IMvvmNavi
     private UserData _loginData = new();
     [ObservableProperty]
     private UserData _registerData = new();
+    [ObservableProperty]
+    private Alert? _loginAlert = null;
+    [ObservableProperty]
+    private Alert? _registrationAlert = null;
 
     [RelayCommand]
     private void Login() {
@@ -25,16 +30,16 @@ public sealed partial class LoginViewModel(ILoginManager loginManager, IMvvmNavi
             _mvvmNavigationManager.NavigateTo<IHomeViewModel>();
         }
         else {
-            // NOTIFY Login failed
+            LoginAlert = new Alert("Login Failed", Severity.Error);
         }
     }
     [RelayCommand]
     private void Register() {
         if (_loginManager.Register(RegisterData)) {
-            // NOTIFY Register success
+            RegistrationAlert = new Alert("Registration Successful", Severity.Success);
         }
         else {
-            // NOTIFY Register failed
+            RegistrationAlert = new Alert("Registration Failed", Severity.Error);
         }
     }
 }

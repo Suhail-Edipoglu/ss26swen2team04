@@ -8,7 +8,7 @@ public class LoginManager(IApiService api) : ILoginManager {
     private string? _token = null;
     private DateTime _tokenValidUntil = DateTime.MinValue;
     private UserData? _userData = null;
-    private IApiService _api = api; 
+    private readonly IApiService _api = api;
     
     public bool Login(UserData userData) {
         var success = _api.LoginAsync(userData);
@@ -37,7 +37,7 @@ public class LoginManager(IApiService api) : ILoginManager {
     public string? GetToken() {
         if (_token != null && _tokenValidUntil < DateTime.Now) {
             // updates token if user still logged in
-            Login(_userData);
+            Login(_userData!);
         }
         return _token;
     }

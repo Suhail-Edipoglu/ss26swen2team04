@@ -10,4 +10,5 @@ namespace SWEN2TourPlanner.Frontend.ViewModels.Interfaces;
 public interface INavBarViewModel : IViewModelBase, IRecipient<NavbarStateChangedMessage> {
     List<BreadcrumbItem> AppNavBarItems { get; set; }
     IRelayCommand LogoutCommand { get; }
+    IRelayCommand ChangeThemeCommand { get; }
 }

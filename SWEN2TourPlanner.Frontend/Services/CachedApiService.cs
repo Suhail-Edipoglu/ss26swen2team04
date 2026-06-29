@@ -43,7 +43,7 @@ public class CachedApiService : IApiService {
             Comment = "Nice weather and smooth ride.",
             Difficulty = 2.5f,
             TotalDistance = 8,
-            TotalTime = new TimeOnly(0, 37),
+            TotalTime = new TimeSpan(2, 37, 0),
             Rating = 4.5f,
             TourId = 1
         },
@@ -53,7 +53,7 @@ public class CachedApiService : IApiService {
             Comment = "Train was on time.",
             Difficulty = 1.0f,
             TotalDistance = 20,
-            TotalTime = new TimeOnly(0, 22),
+            TotalTime = new TimeSpan(0, 22, 0),
             Rating = 4.0f,
             TourId = 2
         }
@@ -73,8 +73,12 @@ public class CachedApiService : IApiService {
     }
 
     public Task<string?> LoginAsync(UserData userData) {
-        return _loginDataList.Any(ld =>
-            ld.Username == userData.Username && ld.Password == userData.Password) ? Task.FromResult(userData.Username) : Task.FromResult<string?>(null); 
+        if (_loginDataList.Any(ld =>
+            ld.Username == userData.Username && ld.Password == userData.Password)) {
+            return Task.FromResult(userData.Username)!;
+        }
+
+        return Task.FromResult<string?>(null);
     }
 
     public Task<List<Tour>> GetToursAsync() {
@@ -144,7 +148,7 @@ public class CachedApiService : IApiService {
     }
 
     public Task<int> CreateTourLogAsync(TourLog tourLogData) {
-        if (!_tours.Any(t => t.Id == tourLogData.TourId)) {
+        if (_tours.All(t => t.Id != tourLogData.TourId)) {
             throw new KeyNotFoundException($"Tour with id {tourLogData.TourId} was not found.");
         }
 
@@ -191,7 +195,9 @@ public class CachedApiService : IApiService {
             Distance = source.Distance,
             EstimatedTime = source.EstimatedTime,
             RouteInformation = source.RouteInformation,
-            UserId = source.UserId
+            UserId = source.UserId,
+            Popularity = source.Popularity,
+            ChildFriendliness = source.ChildFriendliness
         };
     }
 

@@ -1,9 +1,11 @@
 using Blazing.Mvvm.ComponentModel;
 using Blazing.Mvvm.Components;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Messaging;
 using CommunityToolkit.Mvvm.Input;
 using MudBlazor;
 using SWEN2TourPlanner.Frontend.DTOs;
+using SWEN2TourPlanner.Frontend.DTOs.Enums;
 using SWEN2TourPlanner.Frontend.DTOs.Messages;
 using SWEN2TourPlanner.Frontend.Models.Interfaces;
 using SWEN2TourPlanner.Frontend.ViewModels.Interfaces;
@@ -31,7 +33,12 @@ public sealed partial class NavBarViewModel : RecipientViewModelBase, INavBarVie
         _loginManager.Logout();
         _mvvmNavigationManager.NavigateTo<ILoginViewModel>();
     }
-    
+
+    [RelayCommand]
+    private void ChangeTheme() {
+        WeakReferenceMessenger.Default.Send(new ThemeChangedMessage());
+    }
+
     public void Receive(NavbarStateChangedMessage message) {
         AppNavBarItems = message.NewState switch {
             NavbarState.Main => [
@@ -39,15 +46,16 @@ public sealed partial class NavBarViewModel : RecipientViewModelBase, INavBarVie
             ],
             NavbarState.Tour => [
                 new BreadcrumbItem("Tours", _mvvmNavigationManager.GetUri<IHomeViewModel>()),
-                new BreadcrumbItem(_cache.CurrentTour.Name, _mvvmNavigationManager.GetUri<ITourViewModel>(), true)
+                new BreadcrumbItem(_cache.CurrentTour?.Name ?? "New Tour", _mvvmNavigationManager.GetUri<ITourViewModel>(), true)
             ],
             NavbarState.TourLog => [
                 new BreadcrumbItem("Home", _mvvmNavigationManager.GetUri<IHomeViewModel>()),
-                new BreadcrumbItem(_cache.CurrentTour.Name, _mvvmNavigationManager.GetUri<ITourViewModel>()),
-                new BreadcrumbItem(_cache.CurrentTourLog.Time.ToShortDateString(),
+                new BreadcrumbItem(_cache.CurrentTour?.Name ?? "Tour", _mvvmNavigationManager.GetUri<ITourViewModel>()),
+                new BreadcrumbItem(_cache.CurrentTourLog?.Time.ToShortDateString() ?? "Tour Log",
                     _mvvmNavigationManager.GetUri<ITourLogViewModel>(), true)
             ],
             _ => AppNavBarItems
         };
     }
+    
 }

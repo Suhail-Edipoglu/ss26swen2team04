@@ -1,8 +1,8 @@
-@using Blazing.Mvvm.Components
 @inherits Blazing.Mvvm.Components.MvvmComponentBase<SWEN2TourPlanner.Frontend.ViewModels.Interfaces.INavBarViewModel>
 
 <MudAppBar>
     <MudBreadcrumbs Items="@ViewModel.AppNavBarItems"></MudBreadcrumbs>
     <MudSpacer/>
+    <MudIconButton Class="me-2" Icon="@Icons.Material.Filled.ColorLens" Color="Color.Inherit" OnClick="@ViewModel.ChangeThemeCommand.Execute" aria-label="Toggle dark mode" />
     <MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="@ViewModel.LogoutCommand.Execute">Logout</MudButton>
 </MudAppBar>

@@ -8,10 +8,10 @@ public class Tour
     public required string From { get; set; }
     public required string To { get; set; }
     public required TransportType TransportType { get; set; }
-    public required int Distance { get; set; }
-    public required TimeOnly EstimatedTime  { get; set; }
+    public int? Distance { get; set; }
+    public TimeOnly? EstimatedTime  { get; set; }
     public required string RouteInformation { get; set; }
     public required int UserId { get; set; }
-    public int Popularity { get; set; }
-    public int ChildFriendliness { get; set; }
+    public int? Popularity { get; set; }
+    public int? ChildFriendliness { get; set; }
 }
