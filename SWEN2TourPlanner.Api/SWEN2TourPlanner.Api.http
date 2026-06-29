@@ -1,7 +1,7 @@
 @HostAddress = http://localhost:5283
-@Token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6InRlc3R1c2VyIiwibmJmIjoxNzgyMzEyOTA0LCJleHAiOjE3ODIzMTY1MDQsImlhdCI6MTc4MjMxMjkwNCwiaXNzIjoiU1dFTjJUb3VyUGxhbm5lci5BcGkiLCJhdWQiOiJTV0VOMlRvdXJQbGFubmVyLkZyb250ZW5kIn0.u5LqtSA1HcE05rD-8wJZfJarHGA_HDTYFcMAKD62ctc
-@TourId = 2
-@LogId = 1
+@Token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6InRlc3R1c2VyIiwibmJmIjoxNzgyNzQwMjA3LCJleHAiOjE3ODI3NDM4MDcsImlhdCI6MTc4Mjc0MDIwNywiaXNzIjoiU1dFTjJUb3VyUGxhbm5lci5BcGkiLCJhdWQiOiJTV0VOMlRvdXJQbGFubmVyLkZyb250ZW5kIn0.XcC3OOv4siMC8cjKSOkFE1FwfQxiQHRSu6AqLZ-X5O4
+@TourId = 8
+@LogId = 2
 
 POST {{HostAddress}}/api/auth/register
 Content-Type: application/json
@@ -116,13 +116,13 @@ Authorization: Bearer {{Token}}
 
 # create a new log for a tour
 
-POST {{HostAddress}}/api/logs
+POST {{HostAddress}}/api/logs/
 Authorization: Bearer {{Token}}
 Content-Type: application/json
 
 {
     "tourId": {{TourId}},
-    "date": "2023-01-01T00:00:00Z",
+    "time": "2023-01-01T00:00:00Z",
     "comment": "This is a test log.",
     "difficulty": 3.1,
     "totalDistance": 100,
@@ -147,7 +147,7 @@ Content-Type: application/json
 
 {
     "tourId": {{TourId}},
-    "date": "2023-01-02T00:00:00Z",
+    "time": "2023-01-02T00:00:00Z",
     "comment": "This is an updated test log.",
     "difficulty": 4.2,
     "totalDistance": 120,

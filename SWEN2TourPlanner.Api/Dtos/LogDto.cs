@@ -4,7 +4,7 @@ namespace SWEN2TourPlanner.Api.Dtos;
 // todo dtos
 public class LogDto
 {
-    public required int Id { get; set; }
+    public int Id { get; set; }
     public required int TourId { get; set; }
     public required DateTime Time { get; set; }
     public required string Comment { get; set; }

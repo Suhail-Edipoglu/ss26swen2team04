@@ -11,8 +11,8 @@ public static class LogEndpoints
     public static void MapLogEndpoints(this IEndpointRouteBuilder app)
     {
         var baseGroup = app.MapGroup("/api");
-        var group = baseGroup.MapGroup("/tours/{tourId}/logs");
-        var logs = baseGroup.MapGroup("/logs");
+        var group = baseGroup.MapGroup("/tours/{tourId}/logs").RequireAuthorization();
+        var logs = baseGroup.MapGroup("/logs").RequireAuthorization();
 
         group.MapGet("/", GetAllLogsForTour);
         logs.MapPost("/", CreateLog);
@@ -34,7 +34,7 @@ public static class LogEndpoints
         var username = user.Identity!.Name!;
         try
         {
-            var createdLog = (await logService.CreateLogAsync(logDto.ToLog())).ToDto();
+            var createdLog = (await logService.CreateLogAsync(logDto.ToLog(), username)).ToDto();
             string? uri = null; // TODO: generate URI for the created resource
             return TypedResults.Created(uri, createdLog);
         }
@@ -52,7 +52,7 @@ public static class LogEndpoints
         ClaimsPrincipal user)
     {
         var username = user.Identity!.Name!;
-        var log = await logService.GetLogAsync(logId);
+        var log = await logService.GetLogAsync(logId, username);
         if (log == null) return TypedResults.NotFound("Log not found");
         return TypedResults.Ok(log.ToDto());
     }
@@ -65,7 +65,7 @@ public static class LogEndpoints
         {
             var logToUpdate = logDto.ToLog();
             logToUpdate.Id = logId;
-            var success = await logService.UpdateLogAsync(logToUpdate);
+            var success = await logService.UpdateLogAsync(logToUpdate, username);
             if (!success) return TypedResults.NotFound("Log not found");
             return TypedResults.NoContent();
         }
@@ -81,7 +81,7 @@ public static class LogEndpoints
         var username = user.Identity!.Name!;
         try
         {
-            var success = await logService.RemoveLogAsync(logId);
+            var success = await logService.RemoveLogAsync(logId, username);
             if (!success) return TypedResults.NotFound("Log not found");
             return TypedResults.NoContent();
         }

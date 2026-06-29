@@ -1,4 +1,5 @@
-﻿using SWEN2TourPlanner.Dal;
+﻿using SWEN2TourPlanner.Bll.Exceptions;
+using SWEN2TourPlanner.Dal;
 using SWEN2TourPlanner.Models;
 
 namespace SWEN2TourPlanner.Bll;
@@ -12,29 +13,53 @@ public class LogService : ILogService
         _logRepository = logRepository;
     }
     
-    public async Task<Log?> GetLogAsync(int logId)
+    public async Task<Log> GetLogAsync(int logId, string username)
     {
-        throw new NotImplementedException();
+        return await _logRepository.GetLogByIdAsync(username, logId) ?? throw new LogNotFoundException();
     }
 
-    public async Task<Log?> GetLogsAsync(int tourId, string username)
+    public async Task<List<Log>> GetLogsAsync(int tourId, string username)
     {
-        throw new NotImplementedException();
+        return await _logRepository.GetAllLogsForTourAsync(username, tourId) ?? throw new LogNotFoundException();
     }
 
-    public async Task<Log> CreateLogAsync(Log log)
+    public async Task<Log> CreateLogAsync(Log log, string username)
     {
-        throw new NotImplementedException();
+        try
+        {
+            await _logRepository.InsertLogAsync(username, log);
+            return log; // maybe return log from db?
+        }
+        catch (DuplicateKeyException)
+        {
+            throw new DuplicateKeyException($"Log with id '{log.Id}' already exists for user '{username}'.");
+        }
     }
 
-    public async Task<bool> UpdateLogAsync(Log log)
+    public async Task<bool> UpdateLogAsync(Log log, string username)
     {
-        throw new NotImplementedException();
+        try
+        {
+            await _logRepository.UpdateLogAsync(username, log);
+            return true;
+        }
+        catch (LogNotFoundException)
+        {
+            return false;
+        }
     }
 
-    public async Task<bool> RemoveLogAsync(int logId)
+    public async Task<bool> RemoveLogAsync(int logId, string username)
     {
-        throw new NotImplementedException();
+        try
+        {
+            await _logRepository.DeleteLogAsync(username, logId);
+            return true;
+        }
+        catch (LogNotFoundException)
+        {
+            return false;
+        }
     }
 
     public async Task<IEnumerable<Log>> FindMatchingLogsAsync(string username, int tourId, string? searchText = null)

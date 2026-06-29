@@ -39,13 +39,13 @@ public class EntityFrameworkLogRepository : ILogRepository
         return log;
     }
 
-    public async Task InsertLogAsync(string username, int tourId, Log log)
+    public async Task InsertLogAsync(string username, Log log)
     {
         try
         {
             var tour = await _dbContext.Tours
                 .Include(t => t.User)
-                .SingleAsync(t => t.Id == tourId && t.User.Username == username);
+                .SingleAsync(t => t.Id == log.TourId && t.User.Username == username);
             log.Tour = tour;
             await _dbContext.Logs.AddAsync(log);
             await _dbContext.SaveChangesAsync();
@@ -60,7 +60,7 @@ public class EntityFrameworkLogRepository : ILogRepository
     {
         var tour = await _dbContext.Tours
             .Include(t => t.User)
-            .SingleAsync(t => t.Id == log.Tour.Id && t.User.Username == username);
+            .SingleAsync(t => t.Id == log.TourId && t.User.Username == username);
         log.Tour = tour;
         var existingLog = await _dbContext.Logs
             .SingleOrDefaultAsync(l => l.Id == log.Id && l.Tour.User.Username == username);
