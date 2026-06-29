@@ -8,8 +8,8 @@ namespace SWEN2TourPlanner.Frontend.ViewModels.Interfaces;
 public interface ILoginViewModel : IViewModelBase {
     UserData LoginData { get; set; }
     UserData RegisterData { get; set; }
-    IRelayCommand LoginCommand { get; }
-    IRelayCommand RegisterCommand { get; }
+    IAsyncRelayCommand LoginCommand { get; }
+    IAsyncRelayCommand RegisterCommand { get; }
     Alert? LoginAlert { get; }
     Alert? RegistrationAlert { get; }
 }

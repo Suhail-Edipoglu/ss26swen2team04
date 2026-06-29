@@ -10,11 +10,10 @@ public class LoginManager(IApiService api) : ILoginManager {
     private UserData? _userData;
     private readonly IApiService _api = api;
     
-    public bool Login(UserData userData) {
+    public async Task<bool> LoginAsync(UserData userData) {
         try {
-            var task = _api.LoginAsync(userData);
-            task.Wait();
-            _token = task.Result;
+            var token = await _api.LoginAsync(userData);
+            _token = token;
             
             if (_token != null) {
                 _tokenValidUntil = DateTime.Now.AddMinutes(50);
@@ -28,11 +27,9 @@ public class LoginManager(IApiService api) : ILoginManager {
         }
     }
     
-    public bool Register(UserData userData) {
+    public async Task<bool> RegisterAsync(UserData userData) {
         try {
-            var task = _api.RegisterAsync(userData);
-            task.Wait();
-            return task.Result;
+            return await _api.RegisterAsync(userData);
         } catch (Exception ex) {
             System.Diagnostics.Debug.WriteLine($"Register failed: {ex.Message}");
             return false;
@@ -48,11 +45,11 @@ public class LoginManager(IApiService api) : ILoginManager {
         return _token != null;
     }
 
-    public string? GetToken() {
+    public async Task<string?> GetTokenAsync() {
         if (_token != null && _tokenValidUntil < DateTime.Now) {
             // updates token if user still logged in
             if (_userData != null) {
-                Login(_userData);
+                await LoginAsync(_userData);
             }
         }
         return _token;

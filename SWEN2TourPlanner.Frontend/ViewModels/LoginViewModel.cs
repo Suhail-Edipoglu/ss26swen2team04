@@ -24,8 +24,8 @@ public sealed partial class LoginViewModel(ILoginManager loginManager, IMvvmNavi
     private Alert? _registrationAlert = null;
 
     [RelayCommand]
-    private void Login() {
-        if (_loginManager.Login(LoginData))
+    private async Task LoginAsync() {
+        if (await _loginManager.LoginAsync(LoginData))
         {
             _mvvmNavigationManager.NavigateTo<IHomeViewModel>();
         }
@@ -34,8 +34,8 @@ public sealed partial class LoginViewModel(ILoginManager loginManager, IMvvmNavi
         }
     }
     [RelayCommand]
-    private void Register() {
-        if (_loginManager.Register(RegisterData)) {
+    private async Task RegisterAsync() {
+        if (await _loginManager.RegisterAsync(RegisterData)) {
             RegistrationAlert = new Alert("Registration Successful", Severity.Success);
         }
         else {
