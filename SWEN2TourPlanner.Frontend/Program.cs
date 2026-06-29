@@ -13,17 +13,24 @@ builder.Services.AddRazorComponents()
 builder.Services.AddMudServices(); // MudBlazor
 
 // Add Service APIs
+var apiBaseAddress = builder.Configuration["ApiService:BaseAddress"]
+    ?? throw new InvalidOperationException("ApiService:BaseAddress is not configured.");
+var orsBaseAddress = builder.Configuration["OpenRouteService:BaseAddress"]
+    ?? throw new InvalidOperationException("OpenRouteService:BaseAddress is not configured.");
+var orsApiKey = builder.Configuration["OpenRouteService:ApiKey"] ?? string.Empty;
+
 builder.Services.AddHttpClient<ApiService>(client =>
 {
-    client.BaseAddress = new Uri("https://api.example.com/");
+    client.BaseAddress = new Uri(apiBaseAddress);
     client.DefaultRequestHeaders.Add("Accept", "application/json");
 });
-string openRouteServiceKey = "none"; // TODO Add api key and stuff
 builder.Services.AddHttpClient<OpenRouteServiceService>(client =>
 {
-    client.BaseAddress = new Uri("https://api.openrouteservice.org/");
+    client.BaseAddress = new Uri(orsBaseAddress);
     client.DefaultRequestHeaders.Add("Accept", "application/json");
-    client.DefaultRequestHeaders.Add("Authorization", openRouteServiceKey);
+    if (!string.IsNullOrWhiteSpace(orsApiKey)) {
+        client.DefaultRequestHeaders.Add("Authorization", orsApiKey);
+    }
 });
 
 // Wire Models
