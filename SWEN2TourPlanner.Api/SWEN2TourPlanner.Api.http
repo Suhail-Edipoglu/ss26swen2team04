@@ -1,6 +1,6 @@
 @HostAddress = http://localhost:5283
-@Token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6InRlc3R1c2VyIiwibmJmIjoxNzgyNzQwMjA3LCJleHAiOjE3ODI3NDM4MDcsImlhdCI6MTc4Mjc0MDIwNywiaXNzIjoiU1dFTjJUb3VyUGxhbm5lci5BcGkiLCJhdWQiOiJTV0VOMlRvdXJQbGFubmVyLkZyb250ZW5kIn0.XcC3OOv4siMC8cjKSOkFE1FwfQxiQHRSu6AqLZ-X5O4
-@TourId = 8
+@Token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6InRlc3R1c2VyIiwibmJmIjoxNzgyODM1OTUyLCJleHAiOjE3ODI4Mzk1NTIsImlhdCI6MTc4MjgzNTk1MiwiaXNzIjoiU1dFTjJUb3VyUGxhbm5lci5BcGkiLCJhdWQiOiJTV0VOMlRvdXJQbGFubmVyLkZyb250ZW5kIn0.LsmJ_vbfgteLmn9zndex5QnudfOH7WWKR9U_nBJqHR8
+@TourId = 9
 @LogId = 2
 
 POST {{HostAddress}}/api/auth/register
@@ -97,6 +97,61 @@ Content-Type: application/json
 
 DELETE {{HostAddress}}/api/tours/{{TourId}}
 Authorization: Bearer {{Token}}
+
+###
+
+# export tours and logs as json
+
+GET {{HostAddress}}/api/tours/export
+Authorization: Bearer {{Token}}
+
+###
+
+# import tours and logs from json
+
+POST {{HostAddress}}/api/tours/import
+Authorization: Bearer {{Token}}
+Content-Type: application/json
+
+[
+  {
+    "id": 0,
+    "name": "coole tour",
+    "description": "coole beschreibung",
+    "from": "Berlin",
+    "to": "Hamburg",
+    "transportType": "Car",
+    "distance": 289,
+    "estimatedTime": "03:00:00",
+    "routeInformation": "https://www.google.com/maps/dir/Berlin/Hamburg/@52.4416976,10.4899138,7z/data=!3m1!4b1!4m13!4m12!1m5!1m1!1s0x47a84e9caa9fbbf3:0x420d2cbbd8e5e7c!2m2!1d13.404954!2d52.5200066!1m5!1m1!1s0x47b18eaaea9a7b71:0x422cbbd8e5e7c!2m2!1d9.9936824!2d53.5510846",
+    "userId": 0,
+    "logs": []
+  },
+  {
+    "id": 1,
+    "name": "coole tour",
+    "description": "coole beschreibung",
+    "from": "Berlin",
+    "to": "Hamburg",
+    "transportType": "Car",
+    "distance": 289,
+    "estimatedTime": "03:00:00",
+    "routeInformation": "https://www.google.com/maps/dir/Berlin/Hamburg/@52.4416976,10.4899138,7z/data=!3m1!4b1!4m13!4m12!1m5!1m1!1s0x47a84e9caa9fbbf3:0x420d2cbbd8e5e7c!2m2!1d13.404954!2d52.5200066!1m5!1m1!1s0x47b18eaaea9a7b71:0x422cbbd8e5e7c!2m2!1d9.9936824!2d53.5510846",
+    "userId": 0,
+    "logs": [
+      {
+        "id": 4,
+        "tourId": 1,
+        "time": "2023-01-01T00:00:00Z",
+        "comment": "This is a test log.",
+        "difficulty": 3.1,
+        "totalDistance": 100,
+        "totalTime": "02:30:00",
+        "rating": 4.7
+      }
+    ]
+  }
+]
 
 ###
 

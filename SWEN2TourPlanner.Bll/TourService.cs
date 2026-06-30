@@ -79,4 +79,46 @@ public class TourService : ITourService
                         t.From.Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
                         t.To.Contains(searchText, StringComparison.OrdinalIgnoreCase));
     }
+
+    public async Task<List<Tour>> ExportToursAsync(string username)
+    {
+        var tours = await _tourRepository.ExportToursAsync(username);
+        
+        if (tours == null || tours.Count == 0)
+        {
+            throw new TourNotFoundException($"No tours found for user '{username}'.");
+        }
+
+        int userId = 0;
+        int tourId = 0;
+        
+        foreach (var tour in tours)
+        {
+            tour.UserId = userId;
+            tour.Id = tourId;
+            int logId = 0;
+            
+            if (tour.Logs != null && tour.Logs.Count > 0)
+            {
+                foreach (var log in tour.Logs)
+                {
+                    log.TourId = tourId;
+                    logId = log.Id;
+                    logId++;
+                    log.Tour = null;
+                }
+            }
+
+            tourId++;
+            tour.User = null;
+        }
+        
+        return tours;
+    }
+
+    public async Task<bool> ImportToursAsync(string username, List<Tour> tours)
+    {
+        var importResult = await _tourRepository.ImportToursAsync(username, tours);
+        return importResult;
+    }
 }

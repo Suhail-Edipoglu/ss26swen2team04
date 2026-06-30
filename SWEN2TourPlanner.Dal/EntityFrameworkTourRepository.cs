@@ -1,15 +1,18 @@
 using Microsoft.EntityFrameworkCore;
 using SWEN2TourPlanner.Models;
+using Microsoft.Extensions.Logging;
 
 namespace SWEN2TourPlanner.Dal;
 
 public class EntityFrameworkTourRepository : ITourRepository
 {
     private readonly SWEN2TourPlannerDbContext _dbContext;
+    private readonly ILogger<EntityFrameworkTourRepository> _logger;
     
-    public EntityFrameworkTourRepository(SWEN2TourPlannerDbContext dbContext)
+    public EntityFrameworkTourRepository(SWEN2TourPlannerDbContext dbContext, ILogger<EntityFrameworkTourRepository> logger)
     {
         _dbContext = dbContext;
+        _logger = logger;
     }
     
     public async Task<List<Tour>> GetAllToursAsync(string username)
@@ -49,6 +52,8 @@ public class EntityFrameworkTourRepository : ITourRepository
         }
         catch (Exception e) when(e is DbUpdateException || e is ArgumentException)
         {
+            _logger.LogWarning(e, "Failed to insert tour with name '{tour.Name}' for user '{username}'.",  tour.Name, username);
+            
             throw new DuplicateKeyException($"Tour with name '{tour.Name}' already exists for user '{username}'.", e);
         }
     }
@@ -88,11 +93,58 @@ public class EntityFrameworkTourRepository : ITourRepository
         var tour = await _dbContext.Tours.SingleOrDefaultAsync(t => t.Id == tourId && t.User.Username == username);
         if (tour == null)
         {
+            _logger.LogWarning("Delete Tour failed: Tour with id '{tourId}' not found for user '{username}'.", tourId, username);
             return false;
         }
         
         _dbContext.Tours.Remove(tour);
         await _dbContext.SaveChangesAsync();
+        
+        _logger.LogInformation("Tour with id '{tourId}' deleted for user '{username}'.", tourId, username);
+        
         return true;
+    }
+    
+    public async Task<List<Tour>> ExportToursAsync(string username)
+    {
+        var tours = await _dbContext.Tours
+            .Include(t => t.User)
+            .Include(t => t.Logs)
+            .AsNoTracking()
+            .Where(t => t.User.Username == username)
+            .ToListAsync();
+        return tours;
+    }
+
+    public async Task<bool> ImportToursAsync(string username, List<Tour> tours)
+    {
+        var user = await _dbContext.Users.SingleAsync(u => u.Username == username);
+        foreach (var tour in tours)
+        {
+            tour.User = user;
+            tour.UserId = user.Id;
+            tour.Id = 0;
+
+            if (tour.Logs != null && tour.Logs.Count > 0)
+            {
+                foreach (var log in tour.Logs)
+                {
+                    log.TourId = 0;
+                    log.Id = 0;
+                }
+            }
+        }
+
+        try
+        {
+            _dbContext.Tours.AddRangeAsync(tours);
+            await _dbContext.SaveChangesAsync();
+            return true;
+        }
+        catch (Exception e) when (e is DbUpdateException || e is ArgumentException)
+        {
+            _logger.LogWarning(e, "Failed to import tours for user '{username}'.", username);
+            return false;
+        }
     }
 }

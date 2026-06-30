@@ -28,7 +28,7 @@ public static class LogEndpoints
         return (await logService.FindMatchingLogsAsync(username, tourId, search)).Select(l => l.ToDto());
     }
 
-    private static async Task<Results<Created<LogDto>, Conflict<string>, InternalServerError<string>>> CreateLog(
+    private static async Task<Results<Created<int>, Conflict<string>, InternalServerError<string>>> CreateLog(
         [FromBody] LogDto logDto, ILogService logService, ClaimsPrincipal user)
     {
         var username = user.Identity!.Name!;
@@ -36,7 +36,7 @@ public static class LogEndpoints
         {
             var createdLog = (await logService.CreateLogAsync(logDto.ToLog(), username)).ToDto();
             string? uri = null; // TODO: generate URI for the created resource
-            return TypedResults.Created(uri, createdLog);
+            return TypedResults.Created(uri, createdLog.Id);
         }
         catch (LogAlreadyExistsException e)
         {
@@ -57,7 +57,7 @@ public static class LogEndpoints
         return TypedResults.Ok(log.ToDto());
     }
 
-    private static async Task<Results<NoContent, NotFound<string>, InternalServerError<string>>> UpdateLog(int logId,
+    private static async Task<Results<Ok<bool>, NotFound<string>, InternalServerError<string>>> UpdateLog(int logId,
         [FromBody] LogDto logDto, ILogService logService, ClaimsPrincipal user)
     {
         var username = user.Identity!.Name!;
@@ -67,7 +67,7 @@ public static class LogEndpoints
             logToUpdate.Id = logId;
             var success = await logService.UpdateLogAsync(logToUpdate, username);
             if (!success) return TypedResults.NotFound("Log not found");
-            return TypedResults.NoContent();
+            return TypedResults.Ok(success);
         }
         catch (Exception e)
         {
@@ -75,7 +75,7 @@ public static class LogEndpoints
         }
     }
 
-    private static async Task<Results<NoContent, NotFound<string>, InternalServerError<string>>> DeleteLog(int logId,
+    private static async Task<Results<Ok<bool>, NotFound<string>, InternalServerError<string>>> DeleteLog(int logId,
         ILogService logService, ClaimsPrincipal user)
     {
         var username = user.Identity!.Name!;
@@ -83,7 +83,7 @@ public static class LogEndpoints
         {
             var success = await logService.RemoveLogAsync(logId, username);
             if (!success) return TypedResults.NotFound("Log not found");
-            return TypedResults.NoContent();
+            return TypedResults.Ok(success);
         }
         catch (Exception e)
         {
