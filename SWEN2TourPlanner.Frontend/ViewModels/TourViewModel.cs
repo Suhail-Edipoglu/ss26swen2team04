@@ -185,8 +185,14 @@ public sealed partial class TourViewModel(IApiService apiService, ICache cache, 
 
     private void RecalculateFrontendValues() {
         // Placeholder front-end calculation until routing integration is connected.
-        TourData.Distance = null;
-        TourData.EstimatedTime = null;
+        TourData.Distance = 0;
+        TourData.EstimatedTime = new TimeOnly(0,0);
+    }
+
+    [RelayCommand]
+    private void CreateTourLog() {
+        _cache.CurrentTourLog = null;
+        _mvvmNavigationManager.NavigateTo<ITourLogViewModel>();
     }
 
     private async Task LoadTourLogsAsync() {

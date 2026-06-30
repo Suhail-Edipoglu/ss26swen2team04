@@ -8,6 +8,7 @@
 	<!-- Header and Search -->
 	<MudStack Row="true" Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center">
 		<MudText Typo="Typo.h5">Tours</MudText>
+		<MudSpacer />
 		<MudTextField
 			Label="Search tours"
 			@bind-Value="ViewModel.TourSearchTerm"
@@ -16,6 +17,9 @@
 			Adornment="Adornment.Start"
 			AdornmentIcon="@Icons.Material.Filled.Search"
 			Style="min-width: 320px;" />
+		<MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="ViewModel.CreateTourCommand.Execute">
+			Create New Tour
+		</MudButton>
 	</MudStack>
 
 	<!-- Table Content -->
