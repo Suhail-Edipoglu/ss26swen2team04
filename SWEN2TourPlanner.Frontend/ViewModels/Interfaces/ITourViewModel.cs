@@ -17,4 +17,5 @@ public interface ITourViewModel : IViewModelBase {
     IAsyncRelayCommand SaveChangesCommand { get; }
     IAsyncRelayCommand DeleteTourCommand { get; }
     IRelayCommand CancelEditCommand { get; }
+    IRelayCommand CreateTourLogCommand { get; }
 }

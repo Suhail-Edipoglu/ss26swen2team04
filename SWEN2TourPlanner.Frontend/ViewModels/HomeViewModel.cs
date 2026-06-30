@@ -85,4 +85,11 @@ public sealed partial class HomeViewModel(IApiService apiService, ICache cache, 
             TourId = log.TourId
         }).ToList()
     };
+    
+    [RelayCommand]
+    private void CreateTour() {
+        _cache.CurrentTour = null;
+        _cache.CurrentTourLog = null;
+        _mvvmNavigationManager.NavigateTo<ITourViewModel>();
+    }
 }
