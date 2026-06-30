@@ -18,24 +18,26 @@ public static class TourEndpoints
         group.MapGet("/{id}", GetTourById);
         group.MapPut("/{id}", UpdateTour);
         group.MapDelete("/{id}", DeleteTour);
+        group.MapGet("/export", ExportTours);
+        group.MapPost("/import", ImportTours);
     }
 
     private static async Task<IEnumerable<TourDto>> GetAllTours([FromQuery] string? search, ITourService tourService, ClaimsPrincipal user)
     {
         var username = user.Identity!.Name!;
-        return (await tourService.FindMatchingToursAsync(username, search)).Select(t => t.ToDto());
+        return (await tourService.FindMatchingToursAsync(username, search)).Select(t => t.ToDto()); // todo
     }
 
-    private static async Task<Results<Created<TourDto>, Conflict<string>, InternalServerError<string>>> CreateTour(
+    private static async Task<Results<Created<int>, Conflict<string>, InternalServerError<string>>> CreateTour(
         [FromBody] TourDto tourDto, ITourService tourService, ClaimsPrincipal user)
     {
         var username = user.Identity!.Name!;
         try
         {
-            var tour = tourDto.ToTour();
+            var tour = tourDto.ToTour(); // todo dtos?
             var createdTour = (await tourService.CreateTourAsync(tour, username)).ToDto();
             string? uri = null; // TODO: generate URI for the created resource
-            return TypedResults.Created(uri, createdTour);
+            return TypedResults.Created(uri, createdTour.Id);
         }
         catch (TourAlreadyExistsException e)
         {
@@ -56,7 +58,7 @@ public static class TourEndpoints
         return TypedResults.Ok(tour.ToDto());
     }
 
-    private static async Task<Results<NoContent, NotFound<string>, InternalServerError<string>>> UpdateTour(int id,
+    private static async Task<Results<Ok<bool>, NotFound<string>, InternalServerError<string>>> UpdateTour(int id,
         [FromBody] TourDto tourDto, ITourService tourService, ClaimsPrincipal user)
     {
         var username = user.Identity!.Name!;
@@ -69,7 +71,7 @@ public static class TourEndpoints
             tour.User = usertmp;
             var success = await tourService.UpdateTourAsync(id, tour);
             if (!success) return TypedResults.NotFound("Tour not found");
-            return TypedResults.NoContent();
+            return TypedResults.Ok(success);
         }
         catch (Exception e)
         {
@@ -77,7 +79,7 @@ public static class TourEndpoints
         }
     }
 
-    private static async Task<Results<NoContent, NotFound<string>, InternalServerError<string>>> DeleteTour(int id,
+    private static async Task<Results<Ok<bool>, NotFound<string>, InternalServerError<string>>> DeleteTour(int id,
         ITourService tourService, ClaimsPrincipal user)
     {
         var username = user.Identity!.Name!;
@@ -85,7 +87,37 @@ public static class TourEndpoints
         {
             var success = await tourService.RemoveTourAsync(username, id);
             if (!success) return TypedResults.NotFound("Tour not found");
-            return TypedResults.NoContent();
+            return TypedResults.Ok(success);
+        }
+        catch (Exception e)
+        {
+            return TypedResults.InternalServerError(e.Message);
+        }
+    }
+    
+    private static async Task<Results<Ok<List<TourDto>>, InternalServerError<string>>> ExportTours(ITourService tourService, ClaimsPrincipal user)
+    {
+        var username = user.Identity!.Name!;
+        try
+        {
+            var tours = (await tourService.ExportToursAsync(username)).Select(t => t.ToDto()).ToList();
+            return TypedResults.Ok(tours);
+        }
+        catch (Exception e)
+        {
+            return TypedResults.InternalServerError(e.Message);
+        }
+    }
+    
+    private static async Task<Results<Ok<bool>, InternalServerError<string>>> ImportTours([FromBody] List<TourDto> tourDtos, ITourService tourService, ClaimsPrincipal user)
+    {
+        var username = user.Identity!.Name!;
+        try
+        {
+            var tours = tourDtos.Select(tourDto => tourDto.ToTour()).ToList();
+            var success = (await tourService.ImportToursAsync(username, tours));
+            if (!success) return TypedResults.InternalServerError("Failed to import tours");
+            return TypedResults.Ok(success);
         }
         catch (Exception e)
         {

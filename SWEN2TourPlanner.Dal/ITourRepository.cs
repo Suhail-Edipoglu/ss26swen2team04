@@ -9,4 +9,6 @@ public interface ITourRepository
     Task InsertTourAsync(string username, Tour tour);
     Task UpdateTourAsync(string username, Tour tour);
     Task<bool> DeleteTourAsync(string username, int tourId);
+    Task<List<Tour>> ExportToursAsync(string username);
+    Task<bool> ImportToursAsync(string username, List<Tour> tours);
 }
