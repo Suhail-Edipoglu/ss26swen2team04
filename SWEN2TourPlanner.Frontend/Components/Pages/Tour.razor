@@ -156,7 +156,7 @@
 			<MudTextField Label="Tour Distance (km)" Value="@(ViewModel.TourData.Distance?.ToString() ?? "?")" Disabled="true" />
 		</MudItem>
 		<MudItem xs="6" md="3">
-			<MudTextField Label="Estimated Time" Value='@(ViewModel.TourData.EstimatedTime?.ToString("HH:mm") ?? "?")' Disabled="true" />
+			<MudTextField Label="Estimated Time" Value='@(ViewModel.TourData.EstimatedTime?.ToString(@"hh\:mm") ?? "?")' Disabled="true" />
 		</MudItem>
 		<MudItem xs="6" md="3">
 			<MudTextField Label="Popularity" Value="@(ViewModel.TourData.Popularity?.ToString() ?? "?")" Disabled="true" />

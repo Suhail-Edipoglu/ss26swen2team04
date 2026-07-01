@@ -1,4 +1,4 @@
-﻿@page "/"
+@page "/"
 @layout MainLayout
 @inherits Blazing.Mvvm.Components.MvvmComponentBase<SWEN2TourPlanner.Frontend.ViewModels.Interfaces.IHomeViewModel>
 @using SWEN2TourPlanner.Frontend.DTOs
@@ -45,7 +45,7 @@
 						<td>@tour.To</td>
 						<td>@tour.TransportType</td>
 						<td>@(tour.Distance?.ToString() ?? "?")</td>
-						<td>@(tour.EstimatedTime?.ToString("HH:mm") ?? "?")</td>
+						<td>@(tour.EstimatedTime?.ToString(@"hh\:mm") ?? "?")</td>
 						<td>@(tour.Popularity?.ToString() ?? "?")</td>
 						<td>@(tour.ChildFriendliness?.ToString() ?? "?")</td>
 					</tr>

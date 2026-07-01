@@ -31,6 +31,15 @@ public sealed partial class TourLogViewModel(IApiService apiService, ICache cach
 
     private TourLog? _originalTourLogData;
 
+    public TimeSpan? SelectedTotalTime {
+        get => TourLogData?.TotalTime;
+        set {
+            if (TourLogData != null) {
+                TourLogData.TotalTime = value ?? TimeSpan.Zero;
+            }
+        }
+    }
+
     public override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();

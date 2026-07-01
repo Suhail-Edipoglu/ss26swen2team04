@@ -7,6 +7,7 @@ namespace SWEN2TourPlanner.Frontend.ViewModels.Interfaces;
 
 public interface ITourLogViewModel : IViewModelBase {
     TourLog TourLogData { get; set; }
+    TimeSpan? SelectedTotalTime { get; set; }
     TourLogViewMode CurrentView { get; set; }
     Alert? SaveAlert { get; }
     IRelayCommand EnterEditModeCommand { get; }

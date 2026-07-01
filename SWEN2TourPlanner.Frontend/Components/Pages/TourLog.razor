@@ -76,7 +76,7 @@
 			<MudNumericField T="int" Label="Total Distance" @bind-Value="ViewModel.TourLogData.TotalDistance" Min="0" Step="1" />
 		</MudItem>
 		<MudItem xs="12" md="4">
-			<MudTimePicker Label="Total Time" @bind-Value="ViewModel.TourLogData.TotalTime" />
+			<MudTimePicker Label="Total Time" @bind-Time="ViewModel.SelectedTotalTime" />
 		</MudItem>
 		<MudItem xs="12" md="4">
 			<MudNumericField T="float" Label="Rating (1-5)" @bind-Value="ViewModel.TourLogData.Rating" Min="1f" Max="5f" Step="0.5f" />

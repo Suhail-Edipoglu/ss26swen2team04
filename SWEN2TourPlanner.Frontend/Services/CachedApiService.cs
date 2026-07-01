@@ -100,7 +100,7 @@ public class CachedApiService : IApiService {
                 t.To.Contains(normalizedSearchTerm, StringComparison.OrdinalIgnoreCase) ||
                 t.TransportType.ToString().Contains(normalizedSearchTerm, StringComparison.OrdinalIgnoreCase) ||
                 (t.Distance?.ToString(CultureInfo.InvariantCulture).Contains(normalizedSearchTerm, StringComparison.OrdinalIgnoreCase) ?? false) ||
-                (t.EstimatedTime?.ToString("HH:mm").Contains(normalizedSearchTerm, StringComparison.OrdinalIgnoreCase) ?? false) ||
+                (t.EstimatedTime?.ToString(@"hh\:mm").Contains(normalizedSearchTerm, StringComparison.OrdinalIgnoreCase) ?? false) ||
                 (t.Popularity?.ToString(CultureInfo.InvariantCulture).Contains(normalizedSearchTerm, StringComparison.OrdinalIgnoreCase) ?? false) ||
                 (t.ChildFriendliness?.ToString(CultureInfo.InvariantCulture).Contains(normalizedSearchTerm, StringComparison.OrdinalIgnoreCase) ?? false))
             .Select(CloneTour)
