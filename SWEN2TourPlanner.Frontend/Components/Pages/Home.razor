@@ -12,7 +12,8 @@
 		<MudTextField
 			Label="Search tours"
 			@bind-Value="ViewModel.TourSearchTerm"
-			Immediate="true"
+			DebounceInterval="200"
+			OnDebounceIntervalElapsed="() => ViewModel.UpdateSearchResultsCommand.ExecuteAsync(null)"
 			Placeholder="Search by name, route, transport type, distance or rating"
 			Adornment="Adornment.Start"
 			AdornmentIcon="@Icons.Material.Filled.Search"

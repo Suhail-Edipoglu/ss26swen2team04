@@ -8,20 +8,19 @@ using SWEN2TourPlanner.Frontend.ViewModels.Interfaces;
 namespace SWEN2TourPlanner.Frontend.ViewModels;
 
 [ViewModelDefinition<IThemeProviderViewModel>]
-public partial class ThemeProvider : RecipientViewModelBase, IThemeProviderViewModel {
-    
+public partial class ThemeProvider(ILoggerFactory loggerFactory) : RecipientViewModelBase, IThemeProviderViewModel {
+    ILogger _logger =  loggerFactory.CreateLogger("ThemeProvider");
     [ObservableProperty]
-    private MudTheme _theme = new MudTheme() {
-        PaletteLight = new PaletteLight() {
-            TextDisabled = "rgba(66,66,66,1)"
-        },
-        PaletteDark = new PaletteDark() {
-            TextDisabled = "rgba(255,255,255,0.6980392156862745)"
-        }
-    };
+    private MudTheme _theme = MudThemeGenerator(new MudTheme());
 
     public void Receive(ThemeChangedMessage message) {
-        Console.WriteLine($"Theme Changed");
+        _logger.LogInformation("Theme Changed");
+        // TODO Themes
     }
 
+    private static MudTheme MudThemeGenerator(MudTheme input) {
+        input.PaletteLight.TextDisabled = input.PaletteLight.TextPrimary;
+        input.PaletteDark.TextDisabled = input.PaletteDark.TextPrimary;
+        return input;
+    }
 }

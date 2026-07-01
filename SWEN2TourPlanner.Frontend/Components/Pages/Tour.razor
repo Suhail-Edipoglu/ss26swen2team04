@@ -171,7 +171,8 @@
 				<MudTextField
 					Label="Search logs"
 					@bind-Value="ViewModel.TourLogSearchTerm"
-					Immediate="true"
+					DebounceInterval="200"
+					OnDebounceIntervalElapsed="() => ViewModel.UpdateSearchResultsCommand.ExecuteAsync(null)"
 					Placeholder="Search by comment, date, difficulty, distance, time, rating"
 					Adornment="Adornment.Start"
 					AdornmentIcon="@Icons.Material.Filled.Search" />

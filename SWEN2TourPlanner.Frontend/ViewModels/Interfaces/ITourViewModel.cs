@@ -13,7 +13,7 @@ public interface ITourViewModel : IViewModelBase {
     Alert? SaveAlert { get; }
     IRelayCommand EnterEditModeCommand { get; }
     IRelayCommand ToggleCompactViewCommand { get; }
-    IAsyncRelayCommand<string> SearchTourLogsCommand { get; }
+    IAsyncRelayCommand UpdateSearchResultsCommand { get; }
     IRelayCommand<TourLog> OpenTourLogCommand { get; }
     IAsyncRelayCommand SaveChangesCommand { get; }
     IAsyncRelayCommand DeleteTourCommand { get; }
