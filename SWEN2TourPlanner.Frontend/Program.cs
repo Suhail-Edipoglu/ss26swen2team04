@@ -24,6 +24,11 @@ builder.Services.AddHttpClient<IApiService, ApiService>(client =>
     client.BaseAddress = new Uri(apiBaseAddress);
     client.DefaultRequestHeaders.Add("Accept", "application/json");
 });
+builder.Services.AddHttpClient<IAuthApiService, AuthApiService>(client =>
+{
+    client.BaseAddress = new Uri(apiBaseAddress);
+    client.DefaultRequestHeaders.Add("Accept", "application/json");
+});
 builder.Services.AddHttpClient<IRouteApiService, OpenRouteServiceService>(client =>
 {
     client.BaseAddress = new Uri(orsBaseAddress);

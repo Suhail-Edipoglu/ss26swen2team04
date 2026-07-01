@@ -1,7 +1,10 @@
+using System.Text.Json.Serialization;
+
 namespace SWEN2TourPlanner.Frontend.DTOs;
 
 public class Tour
 {
+    [JsonIgnore(Condition=JsonIgnoreCondition.WhenWritingNull)]
     public int? Id { get; set; }
     public required string Name { get; set; }
     public required string Description { get; set; }

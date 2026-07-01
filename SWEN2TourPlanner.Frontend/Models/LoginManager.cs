@@ -4,11 +4,11 @@ using SWEN2TourPlanner.Frontend.Services.Interfaces;
 
 namespace SWEN2TourPlanner.Frontend.Models;
 
-public class LoginManager(IApiService api) : ILoginManager {
+public class LoginManager(IAuthApiService api) : ILoginManager {
     private string? _token;
     private DateTime _tokenValidUntil = DateTime.MinValue;
     private UserData? _userData;
-    private readonly IApiService _api = api;
+    private readonly IAuthApiService _api = api;
     
     public async Task<bool> LoginAsync(UserData userData) {
         try {
