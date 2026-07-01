@@ -62,7 +62,7 @@ public class LogService : ILogService
         }
     }
 
-    public async Task<IEnumerable<Log>> FindMatchingLogsAsync(string username, int tourId, string? searchText = null)
+    public async Task<List<Log>> FindMatchingLogsAsync(string username, int tourId, string? searchText = null)
     {
         var logs = await _logRepository.GetAllLogsForTourAsync(username, tourId);
         
@@ -73,6 +73,7 @@ public class LogService : ILogService
         
         return logs.Where(l => l.Comment.Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
                        l.Difficulty.ToString().Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
-                       l.Rating.ToString().Contains(searchText, StringComparison.OrdinalIgnoreCase));
+                       l.Rating.ToString().Contains(searchText, StringComparison.OrdinalIgnoreCase))
+                        .ToList();
     }
 }
