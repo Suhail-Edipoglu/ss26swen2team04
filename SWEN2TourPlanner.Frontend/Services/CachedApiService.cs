@@ -19,7 +19,7 @@ public class CachedApiService : IApiService {
             To = "Stephansplatz",
             TransportType = TransportType.Bicycle,
             Distance = 8,
-            EstimatedTime = new TimeOnly(0, 35),
+            EstimatedTime = new TimeSpan(0, 35, 0),
             RouteInformation = "Praterstern -> Ringstrasse -> Stephansplatz",
             UserId = 1
         },
@@ -31,7 +31,7 @@ public class CachedApiService : IApiService {
             To = "Vienna Airport",
             TransportType = TransportType.Train,
             Distance = 20,
-            EstimatedTime = new TimeOnly(0, 22),
+            EstimatedTime = new TimeSpan(0, 22, 0),
             RouteInformation = "S7/Railjet route",
             UserId = 1
         }
@@ -203,7 +203,7 @@ public class CachedApiService : IApiService {
             return Task.FromResult(false);
         }
 
-        if (!_tours.Any(t => t.Id == tourLogData.TourId)) {
+        if (_tours.All(t => t.Id != tourLogData.TourId)) {
             return Task.FromResult(false);
         }
 
@@ -231,7 +231,6 @@ public class CachedApiService : IApiService {
             UserId = source.UserId,
             Popularity = source.Popularity,
             ChildFriendliness = source.ChildFriendliness,
-            Logs = source.Logs.Select(CloneTourLog).ToList()
         };
     }
 

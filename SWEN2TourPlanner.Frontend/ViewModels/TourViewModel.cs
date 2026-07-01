@@ -27,10 +27,13 @@ public sealed partial class TourViewModel(IApiService apiService, ICache cache, 
         To = string.Empty,
         TransportType = TransportType.None,
         Distance = 0,
-        EstimatedTime = new TimeOnly(0, 0),
+        EstimatedTime = new TimeSpan(0, 0, 0),
         RouteInformation = string.Empty,
         UserId = 0
     };
+    
+    [ObservableProperty]
+    private List<TourLog> _tourLogs = [];
 
     [ObservableProperty]
     private TourViewMode _currentView = TourViewMode.Full;
@@ -94,10 +97,9 @@ public sealed partial class TourViewModel(IApiService apiService, ICache cache, 
     }
 
     [RelayCommand]
-    private async Task OpenTourLog(TourLog tourLog) {
+    private void OpenTourLog(TourLog tourLog) {
         _cache.CurrentTourLog = CloneTourLog(tourLog);
         _cache.CurrentTour = CloneTour(TourData);
-        await Task.Yield();
         _mvvmNavigationManager.NavigateTo<ITourLogViewModel>();
     }
 
@@ -185,13 +187,19 @@ public sealed partial class TourViewModel(IApiService apiService, ICache cache, 
 
     private void RecalculateFrontendValues() {
         // Placeholder front-end calculation until routing integration is connected.
-        TourData.Distance = null;
-        TourData.EstimatedTime = null;
+        TourData.Distance = 0;
+        TourData.EstimatedTime = new TimeSpan(0, 0, 0);
+    }
+
+    [RelayCommand]
+    private void CreateTourLog() {
+        _cache.CurrentTourLog = null;
+        _mvvmNavigationManager.NavigateTo<ITourLogViewModel>();
     }
 
     private async Task LoadTourLogsAsync() {
         if (TourData.Id is null) {
-            TourData.Logs = [];
+            TourLogs = [];
             return;
         }
 
@@ -199,7 +207,7 @@ public sealed partial class TourViewModel(IApiService apiService, ICache cache, 
             ? await _apiService.GetTourLogsAsync(TourData.Id.Value)
             : await _apiService.SearchTourLogsAsync(TourData.Id.Value, TourLogSearchTerm);
 
-        TourData.Logs = logs.OrderByDescending(l => l.Time).ToList();
+        TourLogs = logs.OrderByDescending(l => l.Time).ToList();
     }
 
     private static Tour CloneTour(Tour source) => new() {
@@ -215,7 +223,6 @@ public sealed partial class TourViewModel(IApiService apiService, ICache cache, 
         UserId = source.UserId,
         Popularity = source.Popularity,
         ChildFriendliness = source.ChildFriendliness,
-        Logs = source.Logs.Select(CloneTourLog).ToList()
     };
 
     private static TourLog CloneTourLog(TourLog source) => new() {
@@ -241,7 +248,10 @@ public sealed partial class TourViewModel(IApiService apiService, ICache cache, 
         UserId = 0,
         Popularity = null,
         ChildFriendliness = null,
-        Logs = []
     };
 
+    [RelayCommand]
+    private void CloseAlert() {
+        SaveAlert = null;
+    }
 }

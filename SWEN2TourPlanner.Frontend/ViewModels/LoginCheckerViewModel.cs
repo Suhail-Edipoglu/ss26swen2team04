@@ -11,8 +11,8 @@ public class LoginCheckerViewModel(IMvvmNavigationManager navigationManager, ILo
     private readonly IMvvmNavigationManager _navigationManager = navigationManager;
 
     public override void OnParametersSet() {
-        if (!_loginManager.IsLoggedIn()) {
-            // _navigationManager.NavigateTo<ILoginViewModel>();
+        if (!_loginManager.IsLoggedIn()) { 
+            _navigationManager.NavigateTo<ILoginViewModel>();
         }
         base.OnParametersSet();
     }

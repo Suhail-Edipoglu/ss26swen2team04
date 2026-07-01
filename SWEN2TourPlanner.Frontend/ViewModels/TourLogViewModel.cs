@@ -68,6 +68,7 @@ public sealed partial class TourLogViewModel(IApiService apiService, ICache cach
         }
 
         if (CurrentView == TourLogViewMode.Create) {
+            Console.WriteLine(TourLogData.Time);
             var newLogId = await _apiService.CreateTourLogAsync(TourLogData);
             if (newLogId <= 0) {
                 SaveAlert = new Alert("Creating tour log failed.", Severity.Error);
@@ -147,7 +148,7 @@ public sealed partial class TourLogViewModel(IApiService apiService, ICache cach
 
     private static TourLog CreateEmptyTourLog() => new() {
         Id = null,
-        Time = DateTime.Now,
+        Time = DateTimeOffset.Now,
         Comment = string.Empty,
         Difficulty = 1,
         TotalDistance = 0,
@@ -155,4 +156,9 @@ public sealed partial class TourLogViewModel(IApiService apiService, ICache cach
         Rating = 1,
         TourId = 0
     };
+
+    [RelayCommand]
+    private void CloseAlert() {
+        SaveAlert = null;
+    }
 }

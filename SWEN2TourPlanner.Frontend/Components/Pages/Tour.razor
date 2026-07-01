@@ -17,8 +17,9 @@
 
 	<!-- Feedback Alert -->
 	@if (ViewModel.SaveAlert is not null) {
-		<MudAlert Class="mt-3" Severity="ViewModel.SaveAlert.Severity">
-			@ViewModel.SaveAlert.Message
+		var alertmsg = ViewModel.SaveAlert.Message;
+		<MudAlert Class="mt-3" Severity="ViewModel.SaveAlert.Severity" ShowCloseIcon="true" CloseIconClicked="ViewModel.CloseAlertCommand.Execute">
+			@alertmsg
 		</MudAlert>
 	}
 
@@ -174,6 +175,9 @@
 					Placeholder="Search by comment, date, difficulty, distance, time, rating"
 					Adornment="Adornment.Start"
 					AdornmentIcon="@Icons.Material.Filled.Search" />
+				<MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="ViewModel.CreateTourLogCommand.Execute">
+					Add New Tour Log
+				</MudButton>
 			</MudStack>
 		</MudItem>
 		<MudItem xs="12">
@@ -189,9 +193,9 @@
 					</tr>
 				</thead>
 				<tbody>
-				@if (ViewModel.TourData.Logs.Any()) {
-					@foreach (var log in ViewModel.TourData.Logs) {
-						<tr @onclick="async () => await ViewModel.OpenTourLogCommand.ExecuteAsync(log)">
+				@if (ViewModel.TourLogs.Any()) {
+					@foreach (var log in ViewModel.TourLogs) {
+						<tr @onclick="async () => ViewModel.OpenTourLogCommand.Execute(log)">
 							<td>@log.Time.ToString("g")</td>
 							<td>@log.Comment</td>
 							<td>@log.Difficulty</td>

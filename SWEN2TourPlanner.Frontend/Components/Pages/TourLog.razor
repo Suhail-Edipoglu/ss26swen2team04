@@ -17,8 +17,9 @@
 
 	<!-- Feedback Alert -->
 	@if (ViewModel.SaveAlert is not null) {
-		<MudAlert Class="mt-3" Severity="ViewModel.SaveAlert.Severity">
-			@ViewModel.SaveAlert.Message
+		var alertmsg = ViewModel.SaveAlert.Message;
+		<MudAlert Class="mt-3" Severity="ViewModel.SaveAlert.Severity" ShowCloseIcon="true" CloseIconClicked="ViewModel.CloseAlertCommand.Execute">
+			@alertmsg
 		</MudAlert>
 	}
 

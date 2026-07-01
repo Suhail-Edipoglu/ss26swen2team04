@@ -12,4 +12,5 @@ public interface ITourLogViewModel : IViewModelBase {
     IRelayCommand EnterEditModeCommand { get; }
     IAsyncRelayCommand SaveChangesCommand { get; }
     IRelayCommand CancelEditCommand { get; }
+    IRelayCommand CloseAlertCommand { get; }
 }
