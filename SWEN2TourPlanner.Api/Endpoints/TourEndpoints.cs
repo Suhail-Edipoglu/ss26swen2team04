@@ -14,9 +14,9 @@ public static class TourEndpoints
         var group = baseGroup.MapGroup("/tours").RequireAuthorization();
 
         group.MapGet("/", GetAllTours);
-        group.MapPost("/", CreateTour);
+        group.MapPost("/", CreateTour).AddEndpointFilter<ValidationFilter<TourDto>>();
         group.MapGet("/{id}", GetTourById);
-        group.MapPut("/{id}", UpdateTour);
+        group.MapPut("/{id}", UpdateTour).AddEndpointFilter<ValidationFilter<TourDto>>();
         group.MapDelete("/{id}", DeleteTour);
         group.MapGet("/export", ExportTours);
         group.MapPost("/import", ImportTours);

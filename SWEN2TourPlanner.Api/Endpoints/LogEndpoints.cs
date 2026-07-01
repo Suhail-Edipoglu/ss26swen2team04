@@ -1,4 +1,4 @@
-﻿using System.Security.Claims;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using SWEN2TourPlanner.Api.Dtos;
@@ -15,9 +15,9 @@ public static class LogEndpoints
         var logs = baseGroup.MapGroup("/logs").RequireAuthorization();
 
         group.MapGet("/", GetAllLogsForTour);
-        logs.MapPost("/", CreateLog);
+        logs.MapPost("/", CreateLog).AddEndpointFilter<ValidationFilter<LogDto>>();
         logs.MapGet("/{logId}", GetLogById);
-        logs.MapPut("/{logId}", UpdateLog);
+        logs.MapPut("/{logId}", UpdateLog).AddEndpointFilter<ValidationFilter<LogDto>>();
         logs.MapDelete("/{logId}", DeleteLog);
     }
 

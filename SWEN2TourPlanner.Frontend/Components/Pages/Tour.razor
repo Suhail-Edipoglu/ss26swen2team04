@@ -25,6 +25,7 @@
 
 	<!-- Form Content -->
 	<EditForm Class="mt-4" Model="ViewModel.TourData" FormName="TourDetails">
+		<DataAnnotationsValidator />
 		@if (ViewModel.CurrentView == TourViewMode.Compact) {
 			@CompactTourView
 		} else if (ViewModel.CurrentView is TourViewMode.Edit or TourViewMode.Create) {
@@ -103,10 +104,10 @@
 	/// </summary>
 	private RenderFragment EditTourView => @<MudGrid>
 		<MudItem xs="12" md="6">
-			<MudTextField Label="Name" @bind-Value="ViewModel.TourData.Name" Disabled="false" />
+			<MudTextField Label="Name" @bind-Value="ViewModel.TourData.Name" For="@(() => ViewModel.TourData.Name)" Disabled="false" />
 		</MudItem>
 		<MudItem xs="12" md="6">
-			<MudSelect T="TransportType" Label="Transport Type" @bind-Value="ViewModel.TourData.TransportType" Disabled="false">
+			<MudSelect T="TransportType" Label="Transport Type" @bind-Value="ViewModel.TourData.TransportType" For="@(() => ViewModel.TourData.TransportType)" Disabled="false">
 				<MudSelectItem Value="TransportType.None">None</MudSelectItem>
 				<MudSelectItem Value="TransportType.Bicycle">Bicycle</MudSelectItem>
 				<MudSelectItem Value="TransportType.Car">Car</MudSelectItem>
@@ -116,13 +117,13 @@
 			</MudSelect>
 		</MudItem>
 		<MudItem xs="12">
-			<MudTextField Label="Tour Description" @bind-Value="ViewModel.TourData.Description" Lines="4" Disabled="false" />
+			<MudTextField Label="Tour Description" @bind-Value="ViewModel.TourData.Description" For="@(() => ViewModel.TourData.Description)" Lines="4" Disabled="false" />
 		</MudItem>
 		<MudItem xs="12" md="6">
-			<MudTextField Label="From" @bind-Value="ViewModel.TourData.From" Disabled="false" />
+			<MudTextField Label="From" @bind-Value="ViewModel.TourData.From" For="@(() => ViewModel.TourData.From)" Disabled="false" />
 		</MudItem>
 		<MudItem xs="12" md="6">
-			<MudTextField Label="To" @bind-Value="ViewModel.TourData.To" Disabled="false" />
+			<MudTextField Label="To" @bind-Value="ViewModel.TourData.To" For="@(() => ViewModel.TourData.To)" Disabled="false" />
 		</MudItem>
 	</MudGrid>;
 

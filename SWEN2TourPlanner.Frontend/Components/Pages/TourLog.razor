@@ -25,6 +25,7 @@
 
 	<!-- Form Content -->
 	<EditForm Class="mt-4" Model="ViewModel.TourLogData" FormName="TourLogDetails">
+		<DataAnnotationsValidator />
 		@if (ViewModel.CurrentView is TourLogViewMode.Edit or TourLogViewMode.Create) {
 			@EditTourLogView
 		} else {
@@ -38,6 +39,15 @@
    ================== *@
 
 @code {
+	private DateTime? LogDate {
+		get => ViewModel.TourLogData?.Time.DateTime;
+		set {
+			if (value.HasValue && ViewModel.TourLogData != null) {
+				ViewModel.TourLogData.Time = new DateTimeOffset(value.Value, TimeSpan.Zero);
+			}
+		}
+	}
+
 	/// <summary>
 	/// View mode action buttons.
 	/// </summary>
@@ -74,22 +84,22 @@
 	/// </summary>
 	private RenderFragment EditTourLogView => @<MudGrid>
 		<MudItem xs="12" md="6">
-			<MudDatePicker Label="Date / Time" @bind-Value="ViewModel.TourLogData.Time" />
+			<MudDatePicker Label="Date / Time" @bind-Date="LogDate" />
 		</MudItem>
 		<MudItem xs="12" md="6">
-			<MudNumericField T="float" Label="Difficulty (1-10)" @bind-Value="ViewModel.TourLogData.Difficulty" Min="1f" Max="10f" Step="0.5f" />
+			<MudNumericField T="float" Label="Difficulty (1-10)" @bind-Value="ViewModel.TourLogData.Difficulty" Min="1f" Max="10f" Step="0.5f" For="@(() => ViewModel.TourLogData.Difficulty)" />
 		</MudItem>
 		<MudItem xs="12">
-			<MudTextField Label="Comment" @bind-Value="ViewModel.TourLogData.Comment" Lines="4" />
+			<MudTextField Label="Comment" @bind-Value="ViewModel.TourLogData.Comment" Lines="4" For="@(() => ViewModel.TourLogData.Comment)" />
 		</MudItem>
 		<MudItem xs="12" md="4">
-			<MudNumericField T="int" Label="Total Distance" @bind-Value="ViewModel.TourLogData.TotalDistance" Min="0" Step="1" />
+			<MudNumericField T="int" Label="Total Distance" @bind-Value="ViewModel.TourLogData.TotalDistance" Min="0" Step="1" For="@(() => ViewModel.TourLogData.TotalDistance)" />
 		</MudItem>
 		<MudItem xs="12" md="4">
 			<MudTimePicker Label="Total Time" @bind-Time="ViewModel.SelectedTotalTime" />
 		</MudItem>
 		<MudItem xs="12" md="4">
-			<MudNumericField T="float" Label="Rating (1-5)" @bind-Value="ViewModel.TourLogData.Rating" Min="1f" Max="5f" Step="0.5f" />
+			<MudNumericField T="float" Label="Rating (1-5)" @bind-Value="ViewModel.TourLogData.Rating" Min="1f" Max="5f" Step="0.5f" For="@(() => ViewModel.TourLogData.Rating)" />
 		</MudItem>
 	</MudGrid>;
 
