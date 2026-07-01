@@ -69,18 +69,23 @@ public class TourService : ITourService
 
     public async Task<List<Tour>> FindMatchingToursAsync(string username, string? searchText = null)
     {
-        var tours = await _tourRepository.GetAllToursAsync(username);
+        var tours = (await _tourRepository.GetAllToursAsync(username)).OrderBy(t => t.Id).ToList();
         
         if (string.IsNullOrWhiteSpace(searchText))
         {
             return tours;
         }
         
-        return tours.Where(t => t.Name.Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
-                        t.Description.Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
-                        t.From.Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
-                        t.To.Contains(searchText, StringComparison.OrdinalIgnoreCase))
-                        .ToList();
+        return tours.Where(t => t.Name.Contains(searchText, StringComparison.OrdinalIgnoreCase) || 
+                                t.Description.Contains(searchText, StringComparison.OrdinalIgnoreCase) || 
+                                t.From.Contains(searchText, StringComparison.OrdinalIgnoreCase) || 
+                                t.To.Contains(searchText, StringComparison.OrdinalIgnoreCase) || 
+                                t.TransportType.ToString().Contains(searchText, StringComparison.OrdinalIgnoreCase) || 
+                                (t.Distance.HasValue && t.Distance.Value.ToString().Contains(searchText, StringComparison.OrdinalIgnoreCase)) || 
+                                (t.EstimatedTime.HasValue && t.EstimatedTime.Value.ToString().Contains(searchText, StringComparison.OrdinalIgnoreCase)) || 
+                                t.RouteInformation.Contains(searchText, StringComparison.OrdinalIgnoreCase) || 
+                                (t.Popularity > 0 && t.Popularity.ToString().Contains(searchText, StringComparison.OrdinalIgnoreCase)) || 
+                                (t.ChildFriendliness > 0 && t.ChildFriendliness.ToString().Contains(searchText, StringComparison.OrdinalIgnoreCase))).ToList();
     }
 
     public async Task<List<Tour>> ExportToursAsync(string username)

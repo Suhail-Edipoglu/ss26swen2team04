@@ -69,17 +69,19 @@ public class LogService : ILogService
 
     public async Task<List<Log>> FindMatchingLogsAsync(string username, int tourId, string? searchText = null)
     {
-        var logs = await _logRepository.GetAllLogsForTourAsync(username, tourId);
+        var logs = (await _logRepository.GetAllLogsForTourAsync(username, tourId)).OrderBy(l => l.Id).ToList();
         
         if (string.IsNullOrEmpty(searchText))
         {
             return logs;
         }
         
-        return logs.Where(l => l.Comment.Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
-                       l.Difficulty.ToString().Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
-                       l.Rating.ToString().Contains(searchText, StringComparison.OrdinalIgnoreCase))
-                        .ToList();
+        return logs.Where(l => l.Time.ToString().Contains(searchText, StringComparison.OrdinalIgnoreCase) || 
+                               l.Comment.Contains(searchText, StringComparison.OrdinalIgnoreCase) || 
+                               l.Difficulty.ToString().Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
+                               l.TotalDistance.ToString().Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
+                               l.TotalTime.ToString().Contains(searchText, StringComparison.OrdinalIgnoreCase) || 
+                               l.Rating.ToString().Contains(searchText, StringComparison.OrdinalIgnoreCase)).ToList();
     }
     
     public async Task CalculateTourAttributesAsync(string username, int tourId)

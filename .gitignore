@@ -4,3 +4,5 @@ obj/
 riderModule.iml
 /_ReSharper.Caches/
 .config
+SWEN2TourPlanner.Api/appsettings*.json
+SWEN2TourPlanner.Frontend/appsettings*.json
