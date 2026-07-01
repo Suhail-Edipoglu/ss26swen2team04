@@ -30,7 +30,7 @@ public static class TourEndpoints
         return TypedResults.Ok(tours);
     }
 
-    private static async Task<Results<Created<int>, Conflict<string>, InternalServerError<string>>> CreateTour(
+    private static async Task<Results<Created<int>, InternalServerError<string>>> CreateTour(
         [FromBody] TourDto tourDto, ITourService tourService, ClaimsPrincipal user)
     {
         var username = user.Identity!.Name!;
@@ -40,10 +40,6 @@ public static class TourEndpoints
             var createdTour = (await tourService.CreateTourAsync(tour, username)).ToDto();
             string? uri = null; // TODO: generate URI for the created resource
             return TypedResults.Created(uri, createdTour.Id);
-        }
-        catch (TourAlreadyExistsException e)
-        {
-            return TypedResults.Conflict(e.Message);
         }
         catch (Exception e)
         {

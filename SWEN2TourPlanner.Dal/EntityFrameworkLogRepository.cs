@@ -49,6 +49,7 @@ public class EntityFrameworkLogRepository : ILogRepository
             log.Tour = tour;
             await _dbContext.Logs.AddAsync(log);
             await _dbContext.SaveChangesAsync();
+            await CalculateTourAttributes(username, log.TourId);
         }
         catch (Exception e) when(e is DbUpdateException || e is ArgumentException)
         {
@@ -70,6 +71,7 @@ public class EntityFrameworkLogRepository : ILogRepository
         }
         _dbContext.Entry(existingLog).CurrentValues.SetValues(log);
         await _dbContext.SaveChangesAsync();
+        await CalculateTourAttributes(username, log.TourId);
     }
 
     public async Task<bool> DeleteLogAsync(string username, int logId)
@@ -84,6 +86,25 @@ public class EntityFrameworkLogRepository : ILogRepository
         }
         _dbContext.Logs.Remove(log);
         await _dbContext.SaveChangesAsync();
+        await CalculateTourAttributes(username, log.TourId);
         return true;
+    }
+
+    private async Task CalculateTourAttributes(string username, int tourId)
+    {
+        var toursCount = await _dbContext.Tours.Where(t => t.User.Username == username).CountAsync();
+        var logs = await GetAllLogsForTourAsync(username, tourId);
+        var logsCount = logs.Count;
+        
+        var popularity = logsCount / (float) toursCount;
+        _dbContext.Tours.Single(t => t.Id == tourId && t.User.Username == username).Popularity = popularity;
+        await _dbContext.SaveChangesAsync();
+        
+        var avgDifficulty = logs.Count > 0 ? logs.Average(l => l.Difficulty) : 0;
+        var totalTimes = (float)logs.Sum(l => l.TotalTime.TotalHours);
+        var totalDistance = (logs.Sum(l => l.TotalDistance) / (float)1000);
+        var childFriendliness = (avgDifficulty + totalTimes + totalDistance) / 30;
+        _dbContext.Tours.Single(t => t.Id == tourId && t.User.Username == username).ChildFriendliness = childFriendliness;
+        await _dbContext.SaveChangesAsync();
     }
 }
