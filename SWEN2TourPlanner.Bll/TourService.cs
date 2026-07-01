@@ -8,11 +8,13 @@ public class TourService : ITourService
 {
     private readonly ITourRepository _tourRepository;
     private readonly ILogRepository _logRepository;
-    
-    public TourService(ITourRepository tourRepository, ILogRepository logRepository)
+    private readonly ILogService _logService;
+
+    public TourService(ITourRepository tourRepository, ILogRepository logRepository, ILogService logService)
     {
         _tourRepository = tourRepository;
         _logRepository = logRepository;
+        _logService = logService;
     }
     
     public async Task<Tour> GetTourAsync(string username, int tourId)
@@ -120,6 +122,19 @@ public class TourService : ITourService
     public async Task<bool> ImportToursAsync(string username, List<Tour> tours)
     {
         var importResult = await _tourRepository.ImportToursAsync(username, tours);
+        await RefreshTourAttributesAsync(username);
         return importResult;
+    }
+
+    private async Task RefreshTourAttributesAsync(string username)
+    {
+        var tourIds = (await _tourRepository.GetAllToursAsync(username)).Select(t => t.Id).ToList();
+        foreach (var tourId in tourIds)
+        {
+            if((await _logRepository.GetAllLogsForTourAsync(username, tourId)).Count > 0)
+            {
+                await _logService.CalculateTourAttributesAsync(username, tourId);
+            }
+        }
     }
 }
