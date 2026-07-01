@@ -9,7 +9,7 @@ public interface ITourService
     Task<Tour> CreateTourAsync(Tour tour,  string username);
     Task<bool> UpdateTourAsync(int tourId, Tour tour);
     Task<bool> RemoveTourAsync(string username, int tourId);
-    Task<IEnumerable<Tour>> FindMatchingToursAsync(string username, string? searchText = null);
+    Task<List<Tour>> FindMatchingToursAsync(string username, string? searchText = null);
     Task<List<Tour>> ExportToursAsync(string username);
     Task<bool> ImportToursAsync(string username, List<Tour> tours);
 }

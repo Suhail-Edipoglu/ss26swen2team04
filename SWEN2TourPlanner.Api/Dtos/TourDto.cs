@@ -11,7 +11,7 @@ public class TourDto
     public required string To { get; set; }
     public required TransportType TransportType { get; set; }
     public required int Distance { get; set; }
-    public required TimeOnly EstimatedTime { get; set; }
+    public required TimeSpan EstimatedTime { get; set; }
     public required string RouteInformation { get; set; }
     public int UserId { get; set; }
     public List<LogDto>? Logs { get; set; }

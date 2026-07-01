@@ -22,10 +22,6 @@ public static class AuthEndpoints
     public static async Task<Results<Created, Conflict<string>>> Register([FromBody] CredentialsDto credentials,
         IUserService userService, IPasswordHashingService passwordHashingService, ITokenService tokenService)
     {
-        // debug
-        Console.WriteLine($"Received registration request for username: {credentials.Username}");
-        Console.WriteLine($"Password: {credentials.Password}");
-
         var hashedPassword = passwordHashingService.Hash(credentials.Password);
         try
         {
@@ -41,10 +37,6 @@ public static class AuthEndpoints
     public static async Task<Results<Ok<TokenDto>, UnauthorizedHttpResult>> Login([FromBody] CredentialsDto credentials,
         IUserService userService, IPasswordHashingService passwordHashingService, ITokenService tokenService)
     {
-        // debug
-        Console.WriteLine($"Received login request for username: {credentials.Username}");
-        Console.WriteLine($"Password: {credentials.Password}");
-
         try
         {
             var user = await userService.GetUserByUsernameAsync(credentials.Username);
