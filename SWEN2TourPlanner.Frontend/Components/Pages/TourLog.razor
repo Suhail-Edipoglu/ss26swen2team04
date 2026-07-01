@@ -45,6 +45,11 @@
 		<MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="ViewModel.EnterEditModeCommand.Execute">
 			Edit
 		</MudButton>
+		@if (ViewModel.CurrentView != TourLogViewMode.Create) {
+			<MudButton Variant="Variant.Outlined" Color="Color.Error" OnClick="async () => await ViewModel.DeleteTourLogCommand.ExecuteAsync(null)">
+				Delete
+			</MudButton>
+		}
 	</MudStack>;
 
 	/// <summary>
@@ -57,6 +62,11 @@
 		<MudButton Variant="Variant.Outlined" Color="Color.Secondary" OnClick="ViewModel.CancelEditCommand.Execute">
 			Cancel
 		</MudButton>
+		@if (ViewModel.CurrentView != TourLogViewMode.Create) {
+			<MudButton Variant="Variant.Outlined" Color="Color.Error" OnClick="async () => await ViewModel.DeleteTourLogCommand.ExecuteAsync(null)">
+				Delete
+			</MudButton>
+		}
 	</MudStack>;
 
 	/// <summary>

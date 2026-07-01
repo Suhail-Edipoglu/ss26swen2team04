@@ -14,10 +14,11 @@ using SWEN2TourPlanner.Frontend.ViewModels.Interfaces;
 namespace SWEN2TourPlanner.Frontend.ViewModels;
 
 [ViewModelDefinition<ITourViewModel>]
-public sealed partial class TourViewModel(IApiService apiService, ICache cache, IMvvmNavigationManager mvvmNavigationManager) : ViewModelBase, ITourViewModel {
+public sealed partial class TourViewModel(IApiService apiService, ICache cache, IMvvmNavigationManager mvvmNavigationManager, ILoggerFactory loggerFactory) : ViewModelBase, ITourViewModel {
     private readonly IApiService _apiService = apiService;
     private readonly ICache _cache = cache;
     private readonly IMvvmNavigationManager _mvvmNavigationManager = mvvmNavigationManager;
+    private readonly ILogger _logger = loggerFactory.CreateLogger("TourViewModel");
 
     [ObservableProperty]
     private Tour _tourData = new() {
@@ -52,10 +53,12 @@ public sealed partial class TourViewModel(IApiService apiService, ICache cache, 
         if (_cache.CurrentTour is null) {
             TourData = CreateEmptyTour();
             CurrentView = TourViewMode.Create;
+            _logger.LogInformation("Create Mode");
         }
         else {
             TourData = CloneTour(_cache.CurrentTour);
             CurrentView = TourViewMode.Full;
+            _logger.LogInformation("View Mode");
             await LoadTourLogsAsync();
         }
 
@@ -68,38 +71,33 @@ public sealed partial class TourViewModel(IApiService apiService, ICache cache, 
         _originalTourData = CloneTour(TourData);
         SaveAlert = null;
         CurrentView = TourViewMode.Edit;
+        _logger.LogInformation("Edit Mode");
     }
 
     [RelayCommand]
     private void ToggleCompactView() {
         if (CurrentView == TourViewMode.Edit) {
             return;
+        } else if (CurrentView == TourViewMode.Compact) {
+            CurrentView = TourViewMode.Full;
+            _logger.LogInformation("View Mode");
+        } else if (CurrentView == TourViewMode.Full) {
+            CurrentView = TourViewMode.Compact;
+            _logger.LogInformation("Compact Mode");
         }
-
-        CurrentView = CurrentView == TourViewMode.Compact
-            ? TourViewMode.Full
-            : TourViewMode.Compact;
+        
     }
 
     [RelayCommand]
-    private async Task SearchTourLogs(string searchTerm) {
-        var normalizedSearchTerm = searchTerm.Trim();
-        if (!string.Equals(TourLogSearchTerm, normalizedSearchTerm, StringComparison.Ordinal)) {
-            TourLogSearchTerm = normalizedSearchTerm;
-            return;
-        }
-
+    private async Task UpdateSearchResults() {
         await LoadTourLogsAsync();
     }
-
-    partial void OnTourLogSearchTermChanged(string value) {
-        _ = SearchTourLogs(value);
-    }
-
+    
     [RelayCommand]
     private void OpenTourLog(TourLog tourLog) {
         _cache.CurrentTourLog = CloneTourLog(tourLog);
         _cache.CurrentTour = CloneTour(TourData);
+        _logger.LogInformation("Opening Tour Log");
         _mvvmNavigationManager.NavigateTo<ITourLogViewModel>();
     }
 
@@ -111,6 +109,7 @@ public sealed partial class TourViewModel(IApiService apiService, ICache cache, 
             var newTourId = await _apiService.CreateTourAsync(TourData);
             if (newTourId <= 0) {
                 SaveAlert = new Alert("Creating tour failed.", Severity.Error);
+                _logger.LogInformation("Creating Tour Failed");
                 return;
             }
 
@@ -127,7 +126,9 @@ public sealed partial class TourViewModel(IApiService apiService, ICache cache, 
             await LoadTourLogsAsync();
             _cache.CurrentTour = CloneTour(createdTour);
             SaveAlert = new Alert("Tour created successfully.", Severity.Success);
+            _logger.LogInformation("Tour created Successfully");
             CurrentView = TourViewMode.Full;
+            _logger.LogInformation("View Mode");
             _originalTourData = null;
             _mvvmNavigationManager.NavigateTo<ITourViewModel>();
             return;
@@ -142,6 +143,7 @@ public sealed partial class TourViewModel(IApiService apiService, ICache cache, 
         _cache.CurrentTour = CloneTour(TourData);
         SaveAlert = new Alert("Tour saved successfully.", Severity.Success);
         CurrentView = TourViewMode.Full;
+        _logger.LogInformation("View Mode");
         _originalTourData = null;
         await LoadTourLogsAsync();
     }
@@ -160,10 +162,12 @@ public sealed partial class TourViewModel(IApiService apiService, ICache cache, 
         var deleteSuccessful = await _apiService.DeleteTourAsync(TourData.Id.Value);
         if (!deleteSuccessful) {
             SaveAlert = new Alert("Deleting tour failed.", Severity.Error);
+            _logger.LogWarning("Deleting Tour Failed");
             return;
         }
 
         SaveAlert = new Alert("Tour deleted successfully.", Severity.Success);
+        _logger.LogInformation("Tour deleted");
         CurrentView = TourViewMode.Full;
         _originalTourData = null;
         _cache.CurrentTour = null;
@@ -186,14 +190,15 @@ public sealed partial class TourViewModel(IApiService apiService, ICache cache, 
     }
 
     private void RecalculateFrontendValues() {
-        // Placeholder front-end calculation until routing integration is connected.
-        TourData.Distance = 0;
-        TourData.EstimatedTime = new TimeSpan(0, 0, 0);
+        // TODO
+        TourData.Distance = null;
+        TourData.EstimatedTime = null;
     }
 
     [RelayCommand]
     private void CreateTourLog() {
         _cache.CurrentTourLog = null;
+        _logger.LogInformation("Creating Tour Log");
         _mvvmNavigationManager.NavigateTo<ITourLogViewModel>();
     }
 
@@ -208,6 +213,7 @@ public sealed partial class TourViewModel(IApiService apiService, ICache cache, 
             : await _apiService.SearchTourLogsAsync(TourData.Id.Value, TourLogSearchTerm);
 
         TourLogs = logs.OrderByDescending(l => l.Time).ToList();
+        _logger.LogInformation("Loaded Tour Logs");
     }
 
     private static Tour CloneTour(Tour source) => new() {

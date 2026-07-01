@@ -9,4 +9,5 @@ public interface IHomeViewModel : IViewModelBase {
     string TourSearchTerm { get; set; }
     IRelayCommand<Tour> OpenTourCommand { get; }
     IRelayCommand CreateTourCommand { get; }
+    IAsyncRelayCommand UpdateSearchResultsCommand { get; }
 }

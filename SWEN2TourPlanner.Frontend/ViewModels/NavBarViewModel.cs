@@ -18,14 +18,16 @@ public sealed partial class NavBarViewModel : RecipientViewModelBase, INavBarVie
     private  readonly ILoginManager _loginManager;
     public List<BreadcrumbItem> AppNavBarItems { get; set; }
     private readonly ICache _cache;
+    private readonly ILogger _logger;
 
-    public NavBarViewModel(IMvvmNavigationManager mvvmNavigationManager, ICache cache, ILoginManager loginManager)
+    public NavBarViewModel(IMvvmNavigationManager mvvmNavigationManager, ICache cache, ILoginManager loginManager, ILoggerFactory loggerFactory)
     {
         IsActive = true; // activates Message Receive
         _mvvmNavigationManager = mvvmNavigationManager;
         _loginManager = loginManager;
         AppNavBarItems = [new BreadcrumbItem("Loading", null, true)];
         _cache = cache;
+        _logger = loggerFactory.CreateLogger("NavBarViewModel");
     }
 
     [RelayCommand]

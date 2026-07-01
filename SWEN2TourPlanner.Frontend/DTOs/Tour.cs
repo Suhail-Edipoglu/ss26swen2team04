@@ -15,6 +15,8 @@ public class Tour
     public TimeSpan? EstimatedTime  { get; set; }
     public required string RouteInformation { get; set; }
     public required int UserId { get; set; }
-    public int? Popularity { get; set; }
-    public int? ChildFriendliness { get; set; }
+    [JsonIgnore(Condition=JsonIgnoreCondition.WhenWritingNull)]    
+    public float? Popularity { get; set; }
+    [JsonIgnore(Condition=JsonIgnoreCondition.WhenWritingNull)]
+    public float? ChildFriendliness { get; set; }
 }

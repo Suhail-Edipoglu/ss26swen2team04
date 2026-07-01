@@ -13,11 +13,12 @@ using SWEN2TourPlanner.Frontend.ViewModels.Interfaces;
 namespace SWEN2TourPlanner.Frontend.ViewModels;
 
 [ViewModelDefinition<IHomeViewModel>]
-public sealed partial class HomeViewModel(IApiService apiService, ICache cache, IMvvmNavigationManager mvvmNavigationManager) : ViewModelBase, IHomeViewModel {
+public sealed partial class HomeViewModel(IApiService apiService, ICache cache, IMvvmNavigationManager mvvmNavigationManager, ILoggerFactory loggerFactory) : ViewModelBase, IHomeViewModel {
     private readonly IApiService _apiService = apiService;
     private readonly ICache _cache = cache;
     private readonly IMvvmNavigationManager _mvvmNavigationManager = mvvmNavigationManager;
-
+    private readonly ILogger _logger = loggerFactory.CreateLogger("HomeViewModel");
+    
     [ObservableProperty]
     private List<Tour> _tours = [];
 
@@ -44,21 +45,14 @@ public sealed partial class HomeViewModel(IApiService apiService, ICache cache, 
             : await _apiService.SearchToursAsync(TourSearchTerm);
 
         Tours = tours.OrderBy(t => t.Name).ToList();
+        _logger.LogInformation("Loaded {Count} tours from API", Tours.Count);
     }
 
-    partial void OnTourSearchTermChanged(string value) {
-        _ = UpdateToursAsync(value);
-    }
-
-    private async Task UpdateToursAsync(string searchTerm) {
-        var normalizedSearchTerm = searchTerm.Trim();
-        if (!string.Equals(TourSearchTerm, normalizedSearchTerm, StringComparison.Ordinal)) {
-            TourSearchTerm = normalizedSearchTerm;
-            return;
-        }
-
+    [RelayCommand]
+    private async Task UpdateSearchResults() {
         await LoadToursAsync();
     }
+
 
     private static Tour CloneTour(Tour source) => new() {
         Id = source.Id,
