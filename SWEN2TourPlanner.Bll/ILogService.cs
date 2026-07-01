@@ -10,4 +10,5 @@ public interface ILogService
     Task<bool> UpdateLogAsync(Log log, string username);
     Task<bool> RemoveLogAsync(int logId, string username);
     Task<List<Log>> FindMatchingLogsAsync(string username, int tourId, string? searchText = null);
+    Task CalculateTourAttributesAsync(string username, int tourId);
 }

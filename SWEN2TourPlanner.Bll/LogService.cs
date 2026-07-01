@@ -30,6 +30,7 @@ public class LogService : ILogService
         try
         {
             await _logRepository.InsertLogAsync(username, log);
+            await CalculateTourAttributesAsync(username, log.TourId);
             return log; // maybe return log from db?
         }
         catch (DuplicateKeyException)
@@ -43,6 +44,7 @@ public class LogService : ILogService
         try
         {
             await _logRepository.UpdateLogAsync(username, log);
+            await CalculateTourAttributesAsync(username, log.TourId);
             return true;
         }
         catch (LogNotFoundException)
@@ -56,6 +58,7 @@ public class LogService : ILogService
         try
         {
             await _logRepository.DeleteLogAsync(username, logId);
+            await CalculateTourAttributesAsync(username, logId);
             return true;
         }
         catch (LogNotFoundException)
@@ -77,5 +80,21 @@ public class LogService : ILogService
                        l.Difficulty.ToString().Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
                        l.Rating.ToString().Contains(searchText, StringComparison.OrdinalIgnoreCase))
                         .ToList();
+    }
+    
+    public async Task CalculateTourAttributesAsync(string username, int tourId)
+    {
+        var allLogsCount = await _logRepository.GetLogsCountAsync(username);
+        var logs = await _logRepository.GetAllLogsForTourAsync(username, tourId);
+        var logsCount = logs.Count() > 0 ? logs.Count() : 0;
+        
+        var popularity = allLogsCount > 0 ? ((float)logsCount / (float)allLogsCount) * 100 : 0;
+        
+        var avgDifficulty = logs.Average(l => l.Difficulty);
+        var totalTimes = (float)logs.Sum(l => l.TotalTime.TotalHours);
+        var totalDistance = (float)logs.Sum(l => l.TotalDistance) / 1000;
+        var childFriendliness = (avgDifficulty + totalTimes + totalDistance) / 30;
+
+        await _logRepository.UpdateTourAttributesAsync(username, tourId, popularity, childFriendliness);
     }
 }
