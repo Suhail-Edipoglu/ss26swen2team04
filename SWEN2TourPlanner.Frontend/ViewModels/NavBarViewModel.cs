@@ -58,6 +58,8 @@ public sealed partial class NavBarViewModel : RecipientViewModelBase, INavBarVie
             ],
             _ => AppNavBarItems
         };
+        OnPropertyChanged(nameof(AppNavBarItems));
+
     }
     
 }
