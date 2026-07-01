@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using SWEN2TourPlanner.Dal;
@@ -11,9 +12,11 @@ using SWEN2TourPlanner.Dal;
 namespace SWEN2TourPlanner.Dal.Migrations
 {
     [DbContext(typeof(SWEN2TourPlannerDbContext))]
-    partial class SWEN2TourPlannerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260701132926_VarFix")]
+    partial class VarFix
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -67,9 +70,6 @@ namespace SWEN2TourPlanner.Dal.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<float>("ChildFriendliness")
-                        .HasColumnType("real");
-
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("text");
@@ -87,9 +87,6 @@ namespace SWEN2TourPlanner.Dal.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
-
-                    b.Property<float>("Popularity")
-                        .HasColumnType("real");
 
                     b.Property<string>("RouteInformation")
                         .IsRequired()

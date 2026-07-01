@@ -1,6 +1,6 @@
 @HostAddress = http://localhost:5283
-@Token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6InRlc3R1c2VyIiwibmJmIjoxNzgyOTEwMzE4LCJleHAiOjE3ODI5MTM5MTgsImlhdCI6MTc4MjkxMDMxOCwiaXNzIjoiU1dFTjJUb3VyUGxhbm5lci5BcGkiLCJhdWQiOiJTV0VOMlRvdXJQbGFubmVyLkZyb250ZW5kIn0.UvXotVgn1ygae9nvMBesJuxZbC20mEyFbBVMXny5pXk
-@TourId = 9
+@Token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6InRlc3R1c2VyIiwibmJmIjoxNzgyOTE1NTM3LCJleHAiOjE3ODI5MTkxMzcsImlhdCI6MTc4MjkxNTUzNywiaXNzIjoiU1dFTjJUb3VyUGxhbm5lci5BcGkiLCJhdWQiOiJTV0VOMlRvdXJQbGFubmVyLkZyb250ZW5kIn0.GmpE-c1Ao8LpH6knsfdtq9D_hICWwmDGaOdye2DaVNI
+@TourId = 16
 @LogId = 2
 
 POST {{HostAddress}}/api/auth/register
@@ -60,8 +60,8 @@ Content-Type: application/json
   "from": "Berlin",
   "to": "Hamburg",
   "transportType": 2,
-  "distance": 289,
-  "estimatedTime": "03:00:00",
+  "distance": null,
+  "estimatedTime": null,
   "routeInformation": "https://www.google.com/maps/dir/Berlin/Hamburg/@52.4416976,10.4899138,7z/data=!3m1!4b1!4m13!4m12!1m5!1m1!1s0x47a84e9caa9fbbf3:0x420d2cbbd8e5e7c!2m2!1d13.404954!2d52.5200066!1m5!1m1!1s0x47b18eaaea9a7b71:0x422cbbd8e5e7c!2m2!1d9.9936824!2d53.5510846"
 }
 

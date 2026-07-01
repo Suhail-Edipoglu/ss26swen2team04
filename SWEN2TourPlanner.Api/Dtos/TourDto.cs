@@ -10,9 +10,11 @@ public class TourDto
     public required string From { get; set; }
     public required string To { get; set; }
     public required TransportType TransportType { get; set; }
-    public required int Distance { get; set; }
-    public required TimeSpan EstimatedTime { get; set; }
+    public required int? Distance { get; set; }
+    public required TimeSpan? EstimatedTime { get; set; }
     public required string RouteInformation { get; set; }
+    public float Popularity { get; set; } = 0;
+    public float ChildFriendliness { get; set; } = 0;
     public int UserId { get; set; }
     public List<LogDto>? Logs { get; set; }
 }
@@ -32,6 +34,8 @@ public static class TourDtoExtensions
             Distance = tour.Distance,
             EstimatedTime = tour.EstimatedTime,
             RouteInformation = tour.RouteInformation,
+            Popularity = tour.Popularity,
+            ChildFriendliness = tour.ChildFriendliness,
             UserId = tour.UserId,
             Logs = tour.Logs?.Select(l => l.ToDto()).ToList()
         };
@@ -50,6 +54,8 @@ public static class TourDtoExtensions
             Distance = tourDto.Distance,
             EstimatedTime = tourDto.EstimatedTime,
             RouteInformation = tourDto.RouteInformation,
+            Popularity = tourDto.Popularity,
+            ChildFriendliness = tourDto.ChildFriendliness,
             UserId = tourDto.UserId,
             Logs = tourDto.Logs?.Select(l => l.ToLog()).ToList()
         };

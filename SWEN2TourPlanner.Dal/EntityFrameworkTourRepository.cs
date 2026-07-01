@@ -17,19 +17,13 @@ public class EntityFrameworkTourRepository : ITourRepository
     
     public async Task<List<Tour>> GetAllToursAsync(string username)
     {
-        try
-        {
-            var tours = await _dbContext.Tours
-                .Include(t => t.User)
-                .AsNoTracking()
-                .Where(t => t.User.Username == username)
-                .ToListAsync();
-            return tours;
-        }
-        catch (Exception e) when(e is DbUpdateException || e is ArgumentException)
-        {
-            return null;
-        }
+        var tours = await _dbContext.Tours
+            .Include(t => t.User)
+            .AsNoTracking()
+            .Where(t => t.User.Username == username)
+            .ToListAsync();
+            
+        return tours;
     }
 
     public async Task<Tour?> GetTourByIdAsync(string username, int tourId)
@@ -53,8 +47,6 @@ public class EntityFrameworkTourRepository : ITourRepository
         catch (Exception e) when(e is DbUpdateException || e is ArgumentException)
         {
             _logger.LogWarning(e, "Failed to insert tour with name '{tour.Name}' for user '{username}'.",  tour.Name, username);
-            
-            throw new DuplicateKeyException($"Tour with name '{tour.Name}' already exists for user '{username}'.", e);
         }
     }
 
@@ -84,7 +76,7 @@ public class EntityFrameworkTourRepository : ITourRepository
         }
         catch (Exception e) when(e is DbUpdateException || e is ArgumentException)
         {
-            throw new DuplicateKeyException($"Tour with name '{tour.Name}' already exists for user '{username}'.", e);
+            throw new Exception($"Failed to update tour with id '{tour.Id}' for user '{username}': {e.Message}", e);
         }
     }
 
@@ -96,6 +88,8 @@ public class EntityFrameworkTourRepository : ITourRepository
             _logger.LogWarning("Delete Tour failed: Tour with id '{tourId}' not found for user '{username}'.", tourId, username);
             return false;
         }
+        var logs = await _dbContext.Logs.Where(l => l.TourId == tourId).ToListAsync();
+        _dbContext.Logs.RemoveRange(logs);
         
         _dbContext.Tours.Remove(tour);
         await _dbContext.SaveChangesAsync();

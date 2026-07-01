@@ -32,9 +32,9 @@ public class TourService : ITourService
             await _tourRepository.InsertTourAsync(username, tour);
             return tour; // maybe return tour from db?
         }
-        catch (DuplicateKeyException)
+        catch (Exception e)
         {
-            throw new DuplicateKeyException($"Tour with name '{tour.Name}' already exists for user '{username}'.");
+            throw new Exception($"Failed to create tour for user '{username}': {e.Message}", e);
         }
     }
 

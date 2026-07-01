@@ -7,10 +7,12 @@ namespace SWEN2TourPlanner.Bll;
 public class LogService : ILogService
 {
     private readonly ILogRepository _logRepository;
+    private readonly ITourRepository _tourRepository;
     
-    public LogService(ILogRepository logRepository)
+    public LogService(ILogRepository logRepository, ITourRepository tourRepository)
     {
         _logRepository = logRepository;
+        _tourRepository = tourRepository;
     }
     
     public async Task<Log> GetLogAsync(int logId, string username)

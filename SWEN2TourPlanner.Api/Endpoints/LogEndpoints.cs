@@ -30,7 +30,7 @@ public static class LogEndpoints
         return TypedResults.Ok(logs);
     }
 
-    private static async Task<Results<Created<int>, Conflict<string>, InternalServerError<string>>> CreateLog(
+    private static async Task<Results<Created<int>, InternalServerError<string>>> CreateLog(
         [FromBody] LogDto logDto, ILogService logService, ClaimsPrincipal user)
     {
         var username = user.Identity!.Name!;
@@ -39,10 +39,6 @@ public static class LogEndpoints
             var createdLog = (await logService.CreateLogAsync(logDto.ToLog(), username)).ToDto();
             string? uri = null; // TODO: generate URI for the created resource
             return TypedResults.Created(uri, createdLog.Id);
-        }
-        catch (LogAlreadyExistsException e)
-        {
-            return TypedResults.Conflict(e.Message);
         }
         catch (Exception e)
         {
