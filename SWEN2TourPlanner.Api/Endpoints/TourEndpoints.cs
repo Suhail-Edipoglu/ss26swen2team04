@@ -22,10 +22,12 @@ public static class TourEndpoints
         group.MapPost("/import", ImportTours);
     }
 
-    private static async Task<IEnumerable<TourDto>> GetAllTours([FromQuery] string? search, ITourService tourService, ClaimsPrincipal user)
+    private static async Task<Results<Ok<List<TourDto>>, NotFound<string>>> GetAllTours([FromQuery] string? search, ITourService tourService, ClaimsPrincipal user)
     {
         var username = user.Identity!.Name!;
-        return (await tourService.FindMatchingToursAsync(username, search)).Select(t => t.ToDto()); // todo
+        var tours = ((await tourService.FindMatchingToursAsync(username, search)).Select(t => t.ToDto())).ToList(); // todo
+        if (tours == null || !tours.Any()) return TypedResults.NotFound("No tours found");
+        return TypedResults.Ok(tours);
     }
 
     private static async Task<Results<Created<int>, Conflict<string>, InternalServerError<string>>> CreateTour(

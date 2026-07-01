@@ -9,5 +9,5 @@ public interface ILogService
     Task<Log> CreateLogAsync(Log log, string username);
     Task<bool> UpdateLogAsync(Log log, string username);
     Task<bool> RemoveLogAsync(int logId, string username);
-    Task<IEnumerable<Log>> FindMatchingLogsAsync(string username, int tourId, string? searchText = null);
+    Task<List<Log>> FindMatchingLogsAsync(string username, int tourId, string? searchText = null);
 }

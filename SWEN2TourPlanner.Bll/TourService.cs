@@ -65,7 +65,7 @@ public class TourService : ITourService
         }
     }
 
-    public async Task<IEnumerable<Tour>> FindMatchingToursAsync(string username, string? searchText = null)
+    public async Task<List<Tour>> FindMatchingToursAsync(string username, string? searchText = null)
     {
         var tours = await _tourRepository.GetAllToursAsync(username);
         
@@ -77,7 +77,8 @@ public class TourService : ITourService
         return tours.Where(t => t.Name.Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
                         t.Description.Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
                         t.From.Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
-                        t.To.Contains(searchText, StringComparison.OrdinalIgnoreCase));
+                        t.To.Contains(searchText, StringComparison.OrdinalIgnoreCase))
+                        .ToList();
     }
 
     public async Task<List<Tour>> ExportToursAsync(string username)

@@ -6,11 +6,11 @@ public class LogDto
 {
     public int Id { get; set; }
     public required int TourId { get; set; }
-    public required DateTime Time { get; set; }
+    public required DateTimeOffset Time { get; set; }
     public required string Comment { get; set; }
     public required float Difficulty { get; set; }
     public required int TotalDistance { get; set; }
-    public required TimeOnly TotalTime { get; set; }
+    public required TimeSpan TotalTime { get; set; }
     public required float Rating { get; set; }
 }
 
