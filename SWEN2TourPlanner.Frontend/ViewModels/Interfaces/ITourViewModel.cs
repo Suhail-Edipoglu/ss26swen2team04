@@ -7,15 +7,17 @@ namespace SWEN2TourPlanner.Frontend.ViewModels.Interfaces;
 
 public interface ITourViewModel : IViewModelBase {
     Tour TourData { get; set; }
+    List<TourLog> TourLogs { get; set;  }
     TourViewMode CurrentView { get; set; }
     string TourLogSearchTerm { get; set; }
     Alert? SaveAlert { get; }
     IRelayCommand EnterEditModeCommand { get; }
     IRelayCommand ToggleCompactViewCommand { get; }
     IAsyncRelayCommand<string> SearchTourLogsCommand { get; }
-    IAsyncRelayCommand<TourLog> OpenTourLogCommand { get; }
+    IRelayCommand<TourLog> OpenTourLogCommand { get; }
     IAsyncRelayCommand SaveChangesCommand { get; }
     IAsyncRelayCommand DeleteTourCommand { get; }
     IRelayCommand CancelEditCommand { get; }
     IRelayCommand CreateTourLogCommand { get; }
+    IRelayCommand CloseAlertCommand { get; }
 }

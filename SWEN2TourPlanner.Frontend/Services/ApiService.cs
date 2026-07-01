@@ -119,6 +119,7 @@ public class ApiService(HttpClient httpClient, ILoginManager loginManager) : IAp
     }
 
     public async Task<int> CreateTourLogAsync(TourLog tourLogData) {
+        tourLogData.Time = tourLogData.Time.ToUniversalTime();
         try {
             await SetAuthAsync();
             var response = await httpClient.PostAsJsonAsync("api/logs", tourLogData);
@@ -131,6 +132,7 @@ public class ApiService(HttpClient httpClient, ILoginManager loginManager) : IAp
     }
 
     public async Task<bool> UpdateTourLogAsync(TourLog tourLogData) {
+        tourLogData.Time = tourLogData.Time.ToUniversalTime();
         try {
             await SetAuthAsync();
             var response = await httpClient.PutAsJsonAsync($"api/logs/{tourLogData.Id}", tourLogData);

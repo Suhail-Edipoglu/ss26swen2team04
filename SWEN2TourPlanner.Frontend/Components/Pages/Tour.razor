@@ -17,8 +17,9 @@
 
 	<!-- Feedback Alert -->
 	@if (ViewModel.SaveAlert is not null) {
-		<MudAlert Class="mt-3" Severity="ViewModel.SaveAlert.Severity">
-			@ViewModel.SaveAlert.Message
+		var alertmsg = ViewModel.SaveAlert.Message;
+		<MudAlert Class="mt-3" Severity="ViewModel.SaveAlert.Severity" ShowCloseIcon="true" CloseIconClicked="ViewModel.CloseAlertCommand.Execute">
+			@alertmsg
 		</MudAlert>
 	}
 
@@ -192,9 +193,9 @@
 					</tr>
 				</thead>
 				<tbody>
-				@if (ViewModel.TourData.Logs.Any()) {
-					@foreach (var log in ViewModel.TourData.Logs) {
-						<tr @onclick="async () => await ViewModel.OpenTourLogCommand.ExecuteAsync(log)">
+				@if (ViewModel.TourLogs.Any()) {
+					@foreach (var log in ViewModel.TourLogs) {
+						<tr @onclick="async () => ViewModel.OpenTourLogCommand.Execute(log)">
 							<td>@log.Time.ToString("g")</td>
 							<td>@log.Comment</td>
 							<td>@log.Difficulty</td>

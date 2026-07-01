@@ -7,6 +7,6 @@ namespace SWEN2TourPlanner.Frontend.ViewModels.Interfaces;
 public interface IHomeViewModel : IViewModelBase {
     List<Tour> Tours { get; set; }
     string TourSearchTerm { get; set; }
-    IAsyncRelayCommand<Tour> OpenTourCommand { get; }
+    IRelayCommand<Tour> OpenTourCommand { get; }
     IRelayCommand CreateTourCommand { get; }
 }

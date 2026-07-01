@@ -1,0 +1,7 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Frontend + Api" type="CompoundRunConfigurationType">
+    <toRun name="Frontend: http" type="LaunchSettings" />
+    <toRun name="SWEN2TourPlanner.Api: http" type="LaunchSettings" />
+    <method v="2" />
+  </configuration>
+</component>

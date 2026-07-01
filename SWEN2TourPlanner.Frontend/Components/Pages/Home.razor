@@ -39,7 +39,7 @@
 		<tbody>
 			@if (ViewModel.Tours.Any()) {
 				@foreach (var tour in ViewModel.Tours) {
-					<tr style="cursor:pointer;" @onclick="async () => await ViewModel.OpenTourCommand.ExecuteAsync(tour)">
+					<tr style="cursor:pointer;" @onclick="() => ViewModel.OpenTourCommand.Execute(tour)">
 						<td>@tour.Name</td>
 						<td>@tour.From</td>
 						<td>@tour.To</td>

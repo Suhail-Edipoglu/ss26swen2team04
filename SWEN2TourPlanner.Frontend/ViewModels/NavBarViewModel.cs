@@ -51,7 +51,7 @@ public sealed partial class NavBarViewModel : RecipientViewModelBase, INavBarVie
             NavbarState.TourLog => [
                 new BreadcrumbItem("Home", _mvvmNavigationManager.GetUri<IHomeViewModel>()),
                 new BreadcrumbItem(_cache.CurrentTour?.Name ?? "Tour", _mvvmNavigationManager.GetUri<ITourViewModel>()),
-                new BreadcrumbItem(_cache.CurrentTourLog?.Time.ToShortDateString() ?? "Tour Log",
+                new BreadcrumbItem(_cache.CurrentTourLog?.Time.ToString("dd.MM.yyyy") ?? "Tour Log",
                     _mvvmNavigationManager.GetUri<ITourLogViewModel>(), true)
             ],
             _ => AppNavBarItems

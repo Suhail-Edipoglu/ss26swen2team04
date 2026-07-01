@@ -32,10 +32,9 @@ public sealed partial class HomeViewModel(IApiService apiService, ICache cache, 
     }
 
     [RelayCommand]
-    private async Task OpenTour(Tour tour) {
+    private void OpenTour(Tour tour) {
         _cache.CurrentTour = CloneTour(tour);
         _cache.CurrentTourLog = null;
-        await Task.Yield();
         _mvvmNavigationManager.NavigateTo<ITourViewModel>();
     }
 
@@ -74,16 +73,6 @@ public sealed partial class HomeViewModel(IApiService apiService, ICache cache, 
         UserId = source.UserId,
         Popularity = source.Popularity,
         ChildFriendliness = source.ChildFriendliness,
-        Logs = source.Logs.Select(log => new TourLog {
-            Id = log.Id,
-            Time = log.Time,
-            Comment = log.Comment,
-            Difficulty = log.Difficulty,
-            TotalDistance = log.TotalDistance,
-            TotalTime = log.TotalTime,
-            Rating = log.Rating,
-            TourId = log.TourId
-        }).ToList()
     };
     
     [RelayCommand]

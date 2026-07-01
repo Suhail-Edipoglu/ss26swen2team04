@@ -1,8 +1,11 @@
+using System.Text.Json.Serialization;
+
 namespace SWEN2TourPlanner.Frontend.DTOs;
 
 public class TourLog {
+    [JsonIgnore(Condition=JsonIgnoreCondition.WhenWritingNull)]
     public int? Id { get; set; }
-    public DateTime Time { get; set; }
+    public DateTimeOffset Time { get; set; }
     public required string Comment { get; set; }
     public float Difficulty { get; set; }
     public int TotalDistance { get; set; }
